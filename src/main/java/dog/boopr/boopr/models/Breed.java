@@ -18,5 +18,27 @@ public class Breed {
 
     @ManyToMany(mappedBy = "breeds")
     private String breed;
+
+
+
+    public Breed() {
+    }
+
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getBreed() {
+        return this.breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
     
 }
