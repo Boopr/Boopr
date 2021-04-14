@@ -12,11 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
+import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
 import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
+import dog.boopr.boopr.repositories.ImageRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 
 @RestController
@@ -30,6 +33,9 @@ public class RestDogController {
 
     @Autowired
     private UserRepository userDao;
+
+    @Autowired
+    private ImageRepository imageDao;
 
 
     @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -90,7 +96,7 @@ public class RestDogController {
         return dogs.toString();
     }
 
-    @RequestMapping(value="/api/owner/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/api/dogs/owner/{id}/", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getDogsByOwner(@PathVariable Long id) throws JSONException{
 
 
@@ -160,5 +166,66 @@ public class RestDogController {
         
         return dogs.toString();
     }
+
+    @RequestMapping(value="/api/owner/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getPicsByOwnerID(@PathVariable Long id) throws JSONException{
+
+
+        JSONArray pics = new JSONArray();
+
+
+        List<Image> images = imageDao.findAllByUser(userDao.findByIdEquals(id).get(0));
+
+        for( Image i : images){
+
+            JSONObject boops = new JSONObject();
+            for(Boop b : i.getBoops()){
+                boops.put("id",b.getId());
+                boops.put("userId",b.getUser().getId());
+            }
+
+            JSONObject picture = new JSONObject();
+            picture.put("id", i.getId());
+            picture.put("url", i.getUrl());
+            picture.put("boops",boops);
+            picture.put("dog_id",i.getDog().getId());
+            picture.put("user_id",i.getUser().getId());
+            pics.put(picture);
+
+        }
+        
+        return pics.toString();
+    }
+
+    @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getPicsByDogID(@PathVariable Long id) throws JSONException{
+
+
+        JSONArray pics = new JSONArray();
+
+
+        List<Image> images = imageDao.findAllByDog(dogDao.getOne(id));
+
+        for( Image i : images){
+
+            JSONObject boops = new JSONObject();
+            for(Boop b : i.getBoops()){
+                boops.put("id",b.getId());
+                boops.put("userId",b.getUser().getId());
+            }
+
+            JSONObject picture = new JSONObject();
+            picture.put("id", i.getId());
+            picture.put("url", i.getUrl());
+            picture.put("boops",boops);
+            picture.put("dog_id",i.getDog().getId());
+            picture.put("user_id",i.getUser().getId());
+            pics.put(picture);
+
+        }
+        
+        return pics.toString();
+    }
+
 
 }
