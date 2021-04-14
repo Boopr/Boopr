@@ -17,6 +17,7 @@
 		<java.version>11</java.version>
 	</properties>
 	<dependencies>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -62,6 +63,12 @@
 			<artifactId>validation-api</artifactId>
 			<version>2.0.1.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+		
 		<!-- Thymeleaf plugins -->
 		<dependency>
             <groupId>nz.net.ultraq.thymeleaf</groupId>
