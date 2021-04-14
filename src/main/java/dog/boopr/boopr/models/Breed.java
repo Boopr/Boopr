@@ -1,11 +1,9 @@
 package dog.boopr.boopr.models;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -16,14 +14,17 @@ public class Breed {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToMany(mappedBy = "breeds")
+    //we dont need to specify anymore because you made the join table in the dog model. 
+    //it takes care of the assoication here
     private String breed;
-
-
 
     public Breed() {
     }
-
+    
+    public Breed(String breed) {
+        this.breed = breed;
+    }
+    
 
     public long getId() {
         return this.id;
@@ -40,5 +41,6 @@ public class Breed {
     public void setBreed(String breed) {
         this.breed = breed;
     }
-    
+
+   
 }

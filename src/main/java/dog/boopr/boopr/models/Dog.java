@@ -53,7 +53,7 @@ public class Dog {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
-    private  User owner;
+    private User owner;
 
     public Dog(){}
 
