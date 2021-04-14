@@ -7,14 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
+import dog.boopr.boopr.models.User;
 import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
+import dog.boopr.boopr.repositories.UserRepository;
 
 @RestController
 public class RestDogController {
@@ -24,6 +27,9 @@ public class RestDogController {
 
     @Autowired
     private DogRepository dogDao;
+
+    @Autowired
+    private UserRepository userDao;
 
 
     @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -57,6 +63,44 @@ public class RestDogController {
         List<Dog> dogData = dogDao.findAll();
 
         for( Dog d : dogData){
+
+            JSONArray breeds = new JSONArray();
+            for(Breed b: d.getBreeds()){
+                breeds.put(b.getBreed());
+            }
+            JSONObject owner = new JSONObject();
+            owner.put("id",d.getOwner().getId());
+            owner.put("username",d.getOwner().getUsername());
+            owner.put("id",d.getOwner().getEmail());
+            JSONObject dog = new JSONObject();
+            dog.put("id", d.getId());
+            dog.put("name", d.getName());
+            dog.put("bio",d.getBio());
+            dog.put("breed",breeds);
+            dog.put("owner",owner);
+            dog.put("sex",d.getSex());
+            dog.put("lat",d.getLat());
+            dog.put("lon",d.getLon());
+
+
+            dogs.put(dog);
+
+        }
+        
+        return dogs.toString();
+    }
+
+    @RequestMapping(value="/api/owner/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getDogsByOwner(@PathVariable Long id) throws JSONException{
+
+
+        JSONArray dogs = new JSONArray();
+
+        User user = userDao.findByIdEquals(id).get(0);
+
+        List<Dog> userDogs = user.getDogs();
+
+        for( Dog d : userDogs){
 
             JSONArray breeds = new JSONArray();
             for(Breed b: d.getBreeds()){
