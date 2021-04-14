@@ -29,7 +29,7 @@ public class AuthenticationController {
         Model model
     ){
 
-        model.addAttribute(new User());
+        model.addAttribute("User",new User());
         return "user/registration";
     }
 

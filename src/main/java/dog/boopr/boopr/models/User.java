@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import javax.websocket.OnMessage;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +26,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @Table(name = "users")
 public class User implements UserDetails{
     //implements userdetails so that we dont need a user principal when we do a service call on it
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5434055910893228134L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -119,17 +123,17 @@ public class User implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
