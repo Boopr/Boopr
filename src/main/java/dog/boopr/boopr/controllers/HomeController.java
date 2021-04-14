@@ -8,17 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping("/")
-    public String index(
-        Model model
-    ){
+    public String index(Model model) {
         return "index";
     }
 
-    @GetMapping("/main")
-    public String home(
-        Model model
-    ){
-        return "main";
+    @GetMapping("/home")
+    public String homePage(Model model) {
+        return "/main";
     }
-    
+
 }
