@@ -4,30 +4,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table( name = "auth_groups")
-public class AuthGroup {
+@Table(name="boops")
+public class Boop {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name="image_id")
+    private Image image;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
-    
-    private String authGroup;
-
-    public AuthGroup() {
-    }
-
-    public AuthGroup(User user, String authGroup) {
-
-        this.user = user;
-        this.authGroup = authGroup;
-    }
 
 
     public long getId() {
@@ -38,6 +34,14 @@ public class AuthGroup {
         this.id = id;
     }
 
+    public Image getImage() {
+        return this.image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
     public User getUser() {
         return this.user;
     }
@@ -46,12 +50,12 @@ public class AuthGroup {
         this.user = user;
     }
 
-    public String getAuthGroup() {
-        return this.authGroup;
+    public Boop() {
     }
 
-    public void setAuthGroup(String authGroup) {
-        this.authGroup = authGroup;
+    public Boop(Image image, User user) {
+        this.image = image;
+        this.user = user;
     }
 
 
