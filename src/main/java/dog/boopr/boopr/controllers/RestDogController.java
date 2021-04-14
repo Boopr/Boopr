@@ -128,4 +128,37 @@ public class RestDogController {
         return dogs.toString();
     }
 
+    @RequestMapping(value="/api/dogs/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getDogsByID(@PathVariable Long id) throws JSONException{
+
+
+        JSONArray dogs = new JSONArray();
+
+        Dog dog = dogDao.getOne(id);
+
+            JSONArray breeds = new JSONArray();
+            for(Breed b: dog.getBreeds()){
+                breeds.put(b.getBreed());
+            }
+            JSONObject owner = new JSONObject();
+            owner.put("id",dog.getOwner().getId());
+            owner.put("username",dog.getOwner().getUsername());
+            owner.put("id",dog.getOwner().getEmail());
+            JSONObject jsondog = new JSONObject();
+            jsondog.put("id", dog.getId());
+            jsondog.put("name", dog.getName());
+            jsondog.put("bio",dog.getBio());
+            jsondog.put("breed",breeds);
+            jsondog.put("owner",owner);
+            jsondog.put("sex",dog.getSex());
+            jsondog.put("lat",dog.getLat());
+            jsondog.put("lon",dog.getLon());
+
+
+            dogs.put(dog);
+
+        
+        return dogs.toString();
+    }
+
 }
