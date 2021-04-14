@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+<body>
+<head>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css' integrity='sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q==' 
+    crossorigin='anonymous'/>
+</head>
+    <header>
+        <nav class="navbar bg-dark text-white">
+            <div class="container">
+                <div class="d-flex justify-content-between align-items-center w-100">
+
+                    <div class="nav-brand p-2">
+                        <h2>Boopr</h2>
+                    </div>
+
+                    <div>
+                        <ul class="navbar-nav d-flex flex-row">
+                            <li class="nav-item p-2">
+                                Home
+                            </li>
+                            <li class="nav-item p-2">
+                                About
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+    </header>
+
+    <main layout:fragment="content">
+        <!-- content goes here -->
+    </main>
+
+</body>
+</html>
