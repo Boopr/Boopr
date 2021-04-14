@@ -10,59 +10,63 @@
 <main layout:fragment="content">
 
 
-    <div>
+    <div class="container">
+        <div class="card-deck-wrapper">
+            <div class="card-deck">
+                <div class="card card-inverse col-12 col-lg-6 col-md-8 mx-auto mt-4 row">
+                    <td th:each="dog : ${dogs}">
 
-        <td th:each="dog : ${dogs}">
 
-
-            <div class="card m-3" style="width: 18rem; min-height: 20rem;">
-                <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <a class="card-text d-flex justify-content-between align-items-flex-end w-100"><h4>Name</h4><h4>Total boops</h4></a>
+                        <div class="card m-3" style="width: 18rem; min-height: 20rem;">
+                            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <a class="card-text d-flex justify-content-between align-items-flex-end w-100"><h4
+                                        th:text="${dog.name}">Name</h4><h4>
+                                    Total boops</h4></a>
+                            </div>
+                        </div>
                 </div>
+
+                <div>
+
+                </div>
+
+                </td>
             </div>
-
-            <div th:text="${dog.name}">
-
-
-                
-            </div>
-
-        </td>
-
+        </div>
     </div>
 
 
-    <div class="container col-12 col-lg-6 col-md-8 mx-auto mt-4 row ">
-        <div class="card m-3" style="width: 18rem; min-height: 20rem;">
-            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <a class="card-text d-flex justify-content-between align-items-flex-end w-100"><h4>Name</h4><h4>Total boops</h4></a>
-            </div>
-        </div>
+    <!--    <div class="container col-12 col-lg-6 col-md-8 mx-auto mt-4 row ">-->
+    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
+    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
+    <!--            <div class="card-body">-->
+    <!--                <a class="card-text d-flex justify-content-between align-items-flex-end w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
+    <!--            </div>-->
+    <!--        </div>-->
 
-        <div class="card m-3" style="width: 18rem; min-height: 20rem;">
-            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>
-            </div>
-        </div>
+    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
+    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
+    <!--            <div class="card-body">-->
+    <!--                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
+    <!--            </div>-->
+    <!--        </div>-->
 
-        <div class="card m-3" style="width: 18rem; min-height: 20rem;">
-            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>
-            </div>
-        </div>
+    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
+    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
+    <!--            <div class="card-body">-->
+    <!--                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
+    <!--            </div>-->
+    <!--        </div>-->
 
-        <div class="card m-3" style="width: 18rem; min-height: 20rem;">
-            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>
-            </div>
-        </div>
+    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
+    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
+    <!--            <div class="card-body">-->
+    <!--                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
+    <!--            </div>-->
+    <!--        </div>-->
 
-    </div>
+    <!--    </div>-->
 </main>
 </body>
 </html>

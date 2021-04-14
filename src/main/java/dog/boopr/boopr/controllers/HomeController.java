@@ -28,7 +28,7 @@ public class HomeController {
         List<Dog> dogs = dogDao.findAll();
         //and pushing to the frontend
         model.addAttribute("dogs", dogs);
-        return "/main";
+        return "main";
     }
 
 }
