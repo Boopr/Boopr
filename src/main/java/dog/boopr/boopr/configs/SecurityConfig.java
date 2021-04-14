@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.authority.GrantedAuthoritiesContainer;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,15 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserServices userService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-
-        http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/**").permitAll();
-
-    }
+    
 
     //create the authorities mapper so we can have defaults on how permissions are handled without information 
     @Bean
@@ -54,6 +45,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
         //we are getting authetnicationmanagerBuilder and passing it the bean we just created
         auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception{
+
+        http
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/**").permitAll()
+            .and()
+            .formLogin()
+            .loginPage("/login")
+            .permitAll();
+
     }
 
 }
