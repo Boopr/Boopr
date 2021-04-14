@@ -12,13 +12,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import dog.boopr.boopr.models.Breed;
+import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.repositories.BreedRespository;
+import dog.boopr.boopr.repositories.DogRepository;
 
 @RestController
 public class RestDogController {
     
     @Autowired
     private BreedRespository breedDao;
+
+    @Autowired
+    private DogRepository dogDao;
+
 
     @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getBreeds() throws JSONException{
@@ -40,6 +46,42 @@ public class RestDogController {
         }
         
         return breeds.toString();
+    }
+
+    @RequestMapping(value="/api/dogs", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getDogs() throws JSONException{
+
+
+        JSONArray dogs = new JSONArray();
+
+        List<Dog> dogData = dogDao.findAll();
+
+        for( Dog d : dogData){
+
+            JSONArray breeds = new JSONArray();
+            for(Breed b: d.getBreeds()){
+                breeds.put(b.getBreed());
+            }
+            JSONObject owner = new JSONObject();
+            owner.put("id",d.getOwner().getId());
+            owner.put("username",d.getOwner().getUsername());
+            owner.put("id",d.getOwner().getEmail());
+            JSONObject dog = new JSONObject();
+            dog.put("id", d.getId());
+            dog.put("name", d.getName());
+            dog.put("bio",d.getBio());
+            dog.put("breed",breeds);
+            dog.put("owner",owner);
+            dog.put("sex",d.getSex());
+            dog.put("lat",d.getLat());
+            dog.put("lon",d.getLon());
+
+
+            dogs.put(dog);
+
+        }
+        
+        return dogs.toString();
     }
 
 }
