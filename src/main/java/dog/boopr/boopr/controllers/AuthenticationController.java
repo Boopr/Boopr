@@ -35,7 +35,6 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String registerHandler(
-        
         Model model,
         @Valid User newUser,
         BindingResult bindingResult
