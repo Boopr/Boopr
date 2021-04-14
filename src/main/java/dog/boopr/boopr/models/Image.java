@@ -24,5 +24,49 @@ public class Image {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "image")
     private List<Boop> boops;
+
+    public Image() {
+    }
+
+    public Image(String url, List<Boop> boops) {
+
+        this.url = url;
+        this.boops = boops;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " id='" + id + "'" +
+            ", url='" + url + "'" +
+            ", boops='" + boops + "'" +
+            "}";
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public List<Boop> getBoops() {
+        return this.boops;
+    }
+
+    public void setBoops(List<Boop> boops) {
+        this.boops = boops;
+    }
+
+
     
 }

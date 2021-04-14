@@ -21,7 +21,11 @@ public class Breed {
 
     public Breed() {
     }
-
+    
+    public Breed(String breed) {
+        this.breed = breed;
+    }
+    
 
     public long getId() {
         return this.id;
@@ -38,5 +42,6 @@ public class Breed {
     public void setBreed(String breed) {
         this.breed = breed;
     }
-    
+
+   
 }
