@@ -9,9 +9,16 @@ public class HomeController {
 
     @GetMapping("/")
     public String index(
-        Model model 
+        Model model
     ){
         return "index";
+    }
+
+    @GetMapping("/main")
+    public String home(
+        Model model
+    ){
+        return "main";
     }
     
 }
