@@ -9,30 +9,180 @@
 
 <main layout:fragment="content">
     
-    <div>
+    <div class="container">
 
-        <form th:action="@{breed/edit}">
+        <div class="col-12 ">
+            
+            <div class="row p-2 align-items-center mt-4">
+                <div class="col-md-auto col-8 mb-2 mb-md-0 order-1">
+                  <h3 class="m-0 ">Add Breed</h3>
+                </div>
+                <div class="col-md col-12 mb-2 mb-md-0 order-last order-md-2">
+                  <input type="text" class="form-control">
+                </div>
+                <div class="col-md-auto col-4 mb-md-0 order-2 order-md-3">
+                  <button class="btn btn-primary w-100 mb-2 mb-md-0">+ Add</button>
+                </div>
+            </div>
 
-            <div class="col-12 row pb-3 m-0">
+            <hr>
+
+            <div id="breedList">
 
             </div>
 
-            <div class="col-12 row pb-3 m-0">
-               
-            </div>
+            
+            
 
-            <div class="col-12 row pb-3 m-0 mt-3">
-                    
-            </div>
-
-        </form>
+        </div>
+        
 
 
     </div>
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete <span id="deleteTitle">Value?</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+            </div>
+        </div>
+        </div>
+    </div>
 </main>
 
 
 </body>
+<script layout:fragment="script">
+
+    let breedSections = Array.from(document.getElementsByClassName("breed-section"));
+    let deleteTitle = document.getElementById("deleteTitle");
+    let deleteButton = document.getElementById("deleteButton");
+    let breedList = document.getElementById("breedList");
+    let deleteTarget = -1;
+
+    let data;
+
+    function refreshBreeds(){
+        axios.get("/api/breeds").then( res =>{
+            console.log(res.data)
+            data = res.data
+            drawBreeds();
+        });
+    }
+
+    function drawBreeds(){
+        data.forEach( breed =>{
+
+            let breedSection = document.createElement("div");
+            let firstSection = document.createElement("div");
+            let secondSection = document.createElement("div");
+            let thirdSection = document.createElement("div");
+            let forthSection = document.createElement("div");
+
+            //set classes
+            breedSection.setAttribute("class","row py-4 px-2 align-items-center mt-4 border rounded breed-section");
+            firstSection.setAttribute("class","col-md-auto col-4 mb-2 mb-md-0 order-1");
+            secondSection.setAttribute("class","row col-md col-8 mb-2 mb-md-0 order-2 order-md-2 invisible");
+            thirdSection.setAttribute("class","col-md-auto col-6 mb-md-0 order-3 order-md-3");
+            forthSection.setAttribute("class","col-md-auto col-6 mb-md-0 order-last");
+
+            let breedName = document.createElement("h3");
+            let breedInput = document.createElement("input");
+            let breedEditConfirm = document.createElement("button")
+            let breedEditBtn = document.createElement("button");
+            let breedDeleteBtn = document.createElement("button");
+
+            breedName.innerHTML = breed.name;
+            breedName.classList.add("m-0");
+
+            firstSection.appendChild(breedName);
+
+            breedInput.type = "text";
+            breedInput.classList.add("d");
+            breedInput.classList.add("col-6");
+            breedInput.placeholder = "New Breed Name";
+
+            breedEditConfirm.innerHTML = "Confirm";
+            breedEditConfirm.setAttribute("class","col-6 btn btn-primary mb-2 mb-md-0");
+
+            secondSection.appendChild(breedInput);
+            secondSection.appendChild(breedEditConfirm);
+
+            breedEditBtn.setAttribute("class","btn btn-primary w-100 mb-2 mb-md-0");
+            breedEditBtn.innerHTML = "Edit";
+
+            thirdSection.appendChild(breedEditBtn);
+            breedDeleteBtn.setAttribute("class","btn btn-danger w-100 mb-2 mb-md-0");
+            breedDeleteBtn.setAttribute("data-bs-toggle","modal");
+            breedDeleteBtn.setAttribute("data-bs-target","#deleteConfirm");
+            breedDeleteBtn.innerHTML = "Delete";
+
+            forthSection.appendChild(breedDeleteBtn);
+
+            let id = document.createElement("input");
+            id.type = "hidden";
+            id.value = breed.id;
+
+            forthSection.appendChild(id)
+
+            breedSection.appendChild(firstSection);
+            breedSection.appendChild(secondSection);
+            breedSection.appendChild(thirdSection);
+            breedSection.appendChild(forthSection);
+
+            breedList.appendChild(breedSection)
+            
+        })
+
+
+        breedSections = Array.from(document.getElementsByClassName("breed-section"));
+
+        breedSections.forEach( section =>{
+
+            let title = section.children[0];
+            let input = section.children[1];
+            let editBtn = section.children[2];
+            let deleteBtn = section.children[3];
+
+            editBtn.addEventListener('click', ()=>{
+                input.classList.toggle("invisible");
+            });
+
+            deleteBtn.addEventListener('click', ()=>{
+                deleteTitle.innerHTML = title.innerHTML;
+                deleteTarget = deleteBtn.children[1].value
+            });
+
+        });
+    }
+    
+    refreshBreeds()
+
+    deleteButton.addEventListener('click', ()=>{
+
+        //move this in the axios and display a message from the backend
+        Toastify({
+        text: "Deleted Succesfully",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        gravity: "bottom",
+        className: "info",
+        }).showToast();
+
+        axios.post("/api/breed/delete/"+ deleteTarget).then( res =>{
+            
+        })
+    })
+
+    
+    
+
+</script>
 </html>
