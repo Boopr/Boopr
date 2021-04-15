@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -96,7 +98,7 @@ public class RestDogController {
         return dogs.toString();
     }
 
-    @RequestMapping(value="/api/dogs/owner/{id}/", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/api/dogs/owner/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getDogsByOwner(@PathVariable Long id) throws JSONException{
 
 
@@ -226,6 +228,47 @@ public class RestDogController {
         
         return pics.toString();
     }
+
+
+    @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String postNewDog(@ModelAttribute Dog dog){
+        try{
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            dog.setOwner(user);
+            dogDao.save(dog); 
+        }catch(Exception e){
+            e.printStackTrace();
+            return " { 'error' : '" + e.toString() + " ' }";
+        }  
+        return "{ 'message': 'Pup Posted!' }"; 
+        }
+
+    @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String postNewPicture(@ModelAttribute Image image, @PathVariable Long id){
+        try{
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            image.setUser(user);
+            image.setDog(dogDao.getOne(id));
+            imageDao.save(image);
+        }catch(Exception e){
+            e.printStackTrace();
+            return " { 'error' : '" + e.toString() + " ' }";
+        }  
+        return "{ 'message': 'Image Posted!' }"; 
+        }
+
+    @RequestMapping(value="/api/breed/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String deleteBreed(
+        @PathVariable Long id){
+            try{
+                Breed breed = breedDao.getOne(id);
+                breedDao.delete(breed);
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }
+            return "{ 'message': 'Deleted Breed!' }";       
+        }
 
 
 }
