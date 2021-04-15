@@ -19,7 +19,7 @@ public class HomeController {
     private DogRepository dogDao;
 
     @Autowired
-    private UserRepository userDao;
+    private UserRepository users;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -40,6 +40,7 @@ public class HomeController {
     public String profilePage(Model model, @PathVariable String id) {
         List<Dog> dogs = dogDao.findDogsByOwnerId(Long.parseLong(id));
         model.addAttribute("dogs", dogs);
+        model.addAttribute("owner", users.getOne(Long.parseLong(id)));
         return "user/profile";
     }
 }
