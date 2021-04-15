@@ -205,8 +205,13 @@
 
     mapboxgl.accessToken = apiKey;
     var map = new mapboxgl.Map({
+        center:[
+        -100.46642296086831,
+        40.55721084162846
+        ],
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11'
+        style: 'mapbox://styles/mapbox/streets-v11',
+        zoom: 2
     });
 
     let marker = new mapboxgl.Marker({
