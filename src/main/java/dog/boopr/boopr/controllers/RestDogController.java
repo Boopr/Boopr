@@ -233,18 +233,43 @@ public class RestDogController {
         return pics.toString();
     }
 
-    @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewDog(@ModelAttribute Dog dog){
+    @RequestMapping(value="/api/user/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String postNewUser(@ModelAttribute User user){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                dog.setOwner(user);
-                dogDao.save(dog); 
+                userDao.save(user);
             }catch(Exception e){
                 e.printStackTrace();
                 return " { 'error' : '" + e.toString() + " ' }";
             }  
-            return "{ 'message': 'Pup Posted!' }"; 
+            return "{ 'message': 'Welcome to Boopr!!' }"; 
         }
+
+    @RequestMapping(value="/api/user/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String editUser(@ModelAttribute User userUpdate){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                userUpdate.setId(user.getId());
+                userDao.save(userUpdate); 
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'User Edited!' }"; 
+    }
+
+    @RequestMapping(value="/api/user/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String deleteUser(){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                userDao.delete(user);
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'User deleted, Sorry to see you go!' }"; 
+        }
+
+
 
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String postNewDog(@ModelAttribute Dog dog){
