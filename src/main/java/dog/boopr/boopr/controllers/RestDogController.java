@@ -246,6 +246,19 @@ public class RestDogController {
             return "{ 'message': 'Pup Posted!' }"; 
         }
 
+    @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String postNewDog(@ModelAttribute Dog dog){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                dog.setOwner(user);
+                dogDao.save(dog); 
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'Pup Posted!' }"; 
+    }
+
     @RequestMapping(value="/api/dogs/{id}/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String editDog(@ModelAttribute Dog dogUpdate, @PathVariable Long id){
             try{
@@ -312,6 +325,30 @@ public class RestDogController {
             }  
             return "{ 'message': 'Booped!' }"; 
             }
+
+    @RequestMapping(value="/api/pics/{id}/boop/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String deleteBoop(@PathVariable Long id){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                Image image = imageDao.getOne(id);
+                Boop boop = null;
+                List<Boop> boops = boopDao.findByImageId(image);
+                for(Boop b: boops ){
+                    if(b.getUser().equals(user)){
+                        boop = b;
+                    }
+                }
+                if(boop==null){
+                    return "{ 'message': 'Boop doesn't exist!' }";
+                }
+                boopDao.delete(boop);
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'De-Booped!' }"; 
+            }
+
 
     @RequestMapping(value="/api/breed/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String deleteBreed(
