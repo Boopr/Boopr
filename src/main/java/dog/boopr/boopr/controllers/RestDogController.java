@@ -233,18 +233,43 @@ public class RestDogController {
         return pics.toString();
     }
 
-
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String postNewDog(@ModelAttribute Dog dog){
-        try{
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            dog.setOwner(user);
-            dogDao.save(dog); 
-        }catch(Exception e){
-            e.printStackTrace();
-            return " { 'error' : '" + e.toString() + " ' }";
-        }  
-        return "{ 'message': 'Pup Posted!' }"; 
+        public String postNewDog(@ModelAttribute Dog dog){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                dog.setOwner(user);
+                dogDao.save(dog); 
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'Pup Posted!' }"; 
+        }
+
+    @RequestMapping(value="/api/dogs/{id}/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String editDog(@ModelAttribute Dog dogUpdate, @PathVariable Long id){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                dogUpdate.setOwner(user);
+                dogUpdate.setId(id);
+                dogDao.save(dogUpdate); 
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'Pup Edited!' }"; 
+        }
+
+    @RequestMapping(value="/api/dogs/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String deleteDog(@PathVariable Long id){
+            try{
+                Dog dog = dogDao.getOne(id);
+                dogDao.delete(dog);
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'Pup Edited!' }"; 
         }
 
     @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -261,6 +286,18 @@ public class RestDogController {
         return "{ 'message': 'Image Posted!' }"; 
         }
 
+    @RequestMapping(value="/api/dogs/pics/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String deletePicture(@PathVariable Long id){
+        try{
+            Image image = imageDao.getOne(id);
+            imageDao.delete(image);
+        }catch(Exception e){
+            e.printStackTrace();
+            return " { 'error' : '" + e.toString() + " ' }";
+        }  
+        return "{ 'message': 'Image Deleted!' }"; 
+        }
+
     @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String postNewBoop(@PathVariable Long id){
             try{
@@ -273,7 +310,7 @@ public class RestDogController {
                 e.printStackTrace();
                 return " { 'error' : '" + e.toString() + " ' }";
             }  
-            return "{ 'message': 'Image Posted!' }"; 
+            return "{ 'message': 'Booped!' }"; 
             }
 
     @RequestMapping(value="/api/breed/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
