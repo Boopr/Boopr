@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Location Page</title>
 </head>
 <body>
 
+<main layout:fragment="content">
+
+    <div class="container">
+    <section class="container">
+        <div id="geocoder" class="geocoder"></div>
+        <div class="d-flex shadow-lg p-3 mb-5 bg-white" id="map" style="height: 400px; width: 100%;"></div>
+    </section>
+    </div>
+    <script src="/js/keys.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+    <script src="/js/mapbox-api.js"></script>
+    <script src="/js/mapbox-geocoder-utils.js"></script>
+</main>
 </body>
 </html>

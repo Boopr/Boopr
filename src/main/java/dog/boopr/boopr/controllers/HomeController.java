@@ -42,4 +42,11 @@ public class HomeController {
         model.addAttribute("dog", dog);
         return "user/profile";
     }
+
+    @GetMapping("/location/{id}")
+    public String locationPage(Model model, @PathVariable String id) {
+        Dog dog = dogDao.getOne(Long.parseLong(id));
+        model.addAttribute("dog", dog);
+        return "user/map-location";
+    }
 }

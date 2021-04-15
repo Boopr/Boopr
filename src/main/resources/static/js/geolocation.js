@@ -7,4 +7,4 @@ const successCallback = (position) => {
 const errorCallback = (error) => {
     console.error(error);
 }
-navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+const watchId = navigator.geolocation.watchPosition(successCallback, errorCallback);
