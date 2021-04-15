@@ -11,59 +11,96 @@
 
 
     <div class="container">
+        <h1 class="text-center p-3">Dogs in your area</h1>
+        <div class="row justify-content-center mt-5" id="dogsList">
 
-        <div class="d-flex flex-wrap w-100 justify-content-center">
-
-            <td th:each="dog : ${dogs}">
-
-                <div class="card m-3" style="min-width:320px; max-width:400px; min-height: 20rem;">
-                    <img src="https://media.istockphoto.com/photos/mixed-breed-dog-playing-at-grass-picture-id1207792024?s=612x612" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <a class="card-text d-flex justify-content-between align-items-flex-end w-100"><h4
-                                th:text="${dog.name}">Name</h4><h4>
-                            Total boops</h4></a>
-                        <h2></h2>
-                    </div>
-                </div>
-
-            </td>
-            
+           
         </div>
     </div>
 
-
-    <!--    <div class="container col-12 col-lg-6 col-md-8 mx-auto mt-4 row ">-->
-    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
-    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
-    <!--            <div class="card-body">-->
-    <!--                <a class="card-text d-flex justify-content-between align-items-flex-end w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
-    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
-    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
-    <!--            <div class="card-body">-->
-    <!--                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
-    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
-    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
-    <!--            <div class="card-body">-->
-    <!--                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
-    <!--        <div class="card m-3" style="width: 18rem; min-height: 20rem;">-->
-    <!--            <img src="../static/img/smartest-dog-breeds-1553287693.jpeg" class="card-img-top" alt="...">-->
-    <!--            <div class="card-body">-->
-    <!--                <a class="card-text d-flex justify-content-between align-items-center w-100"><h4>Name</h4><h4>Total boops</h4></a>-->
-    <!--            </div>-->
-    <!--        </div>-->
-
-    <!--    </div>-->
 </main>
 </body>
+<script layout:fragment="script">
+
+    //Grabing the doglist element on the page for later writing
+    let dogsList = document.getElementById("dogsList");
+    let data = null
+
+    axios.get("/api/dogs").then( res =>{
+        if(res.status == 200){
+            data = res.data;
+            drawDogs();
+        }else{
+            console.err("Something went wrong");
+        }
+    })
+
+    function drawDogs(){
+        dogsList.innerHTML = "";
+        data.forEach( dog =>{
+
+            let dogContainer = document.createElement("div")
+
+            dogContainer.setAttribute("class","border rounded m-2 p-0");
+            dogContainer.style.maxWidth = "20rem";
+
+            //Top row start
+            let topRow = document.createElement("div");
+            topRow.setAttribute("class","row justify-content-between p-2 position-relative");
+            topRow.style.top = "0rem";
+            topRow.style.marginBottom = "-3rem";
+
+            let sex = document.createElement("h5");
+            sex.setAttribute("class","col-4")
+            if(dog.sex){
+                sex.innerHTML = "♀"
+            }else{
+                sex.innerHTML = "♂"
+            }
+            let distance = document.createElement("div")
+            distance.innerHTML = "5km"
+            distance.setAttribute("class","col text-end");
+
+
+            topRow.appendChild(sex);
+            topRow.appendChild(distance);
+            //Top row End
+            //Image Start
+            let image = document.createElement("div");
+            image.style.background = `url('https://via.placeholder.com/200x300')`;
+            image.style.height = "300px";
+            image.style.backgroundPosition = "50%";
+            image.style.backgroundSize = "120%";
+            //Image End
+
+            let bottomRow = document.createElement("div");
+            bottomRow.setAttribute("class","row justify-content-between p-2");
+            
+            let name = document.createElement("h5");
+            name.innerHTML = dog.name;
+            name.setAttribute("class","col-6")
+
+            let boops = document.createElement("div");
+            boops.innerHTML = 100
+            boops.setAttribute("class","col-6 text-end")
+
+            bottomRow.appendChild(name);
+            bottomRow.appendChild(boops);
+
+            dogContainer.appendChild(topRow);
+            dogContainer.appendChild(image);
+            dogContainer.appendChild(bottomRow)
+            
+
+            dogsList.appendChild(dogContainer);            
+
+        })
+
+
+    }
+    
+
+</script>
 </html>
 
 
