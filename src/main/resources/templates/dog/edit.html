@@ -185,11 +185,21 @@
                     s.coords.longitude,
                     s.coords.latitude
                 ],
-                essential: true 
+                essential: true,
+                zoom: 10
             });
+
+            marker
+            .setLngLat(
+                [
+                s.coords.longitude,
+                s.coords.latitude
+            ])
+        .addTo(map);
         })
 
     })
+
 
     
 
@@ -198,6 +208,10 @@
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11'
     });
+
+    let marker = new mapboxgl.Marker({
+    draggable: true
+})
 
     
 </script>
