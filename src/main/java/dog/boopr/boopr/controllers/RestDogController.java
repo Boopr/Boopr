@@ -287,7 +287,7 @@ public class RestDogController {
                 dog.setOwner(user);
                 if(!uploadedFile.isEmpty()){
                     dogDao.save(dog);
-                    Image image = FileUtil.uploadImage(uploadedFile, user);
+                    Image image = FileUtil.uploadImage(uploadedFile, user, dog);
                     List<Image> images = dog.getImages();
                     if(images == null){
                         images = new ArrayList<Image>();
@@ -339,7 +339,7 @@ public class RestDogController {
                 //we save the dog just in case for any potential errors
                 dogDao.save(dog);
                 //using our file util we give it the file and user to create the image and write the image to disk
-                Image image = FileUtil.uploadImage(uploadedFile, user);
+                Image image = FileUtil.uploadImage(uploadedFile, user, dog);
                 //grab the list of existing images
                 List<Image> images = dog.getImages();
                 //check if its empty or the first image

@@ -67,10 +67,15 @@
             //Top row End
             //Image Start
             let image = document.createElement("div");
-            image.style.background = `url('https://via.placeholder.com/200x300')`;
+            if(dog.images[0] == undefined){
+                image.style.background = `url('https://via.placeholder.com/200x300')`;
+            }else{
+                image.style.background = `url(${dog.images[0]})`;
+            }
+            
             image.style.height = "300px";
             image.style.backgroundPosition = "50%";
-            image.style.backgroundSize = "120%";
+            image.style.backgroundSize = "150%";
             //Image End
 
             let bottomRow = document.createElement("div");
@@ -91,7 +96,6 @@
             dogContainer.appendChild(image);
             dogContainer.appendChild(bottomRow)
             
-
             dogsList.appendChild(dogContainer);            
 
         })

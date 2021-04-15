@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
 import dog.boopr.boopr.repositories.ImageRepository;
@@ -35,7 +36,7 @@ public class FileUtil {
         UPLOAD_PATH = this.uploadPath;
     }
 
-    public static Image uploadImage(MultipartFile uploadedImage, User user){
+    public static Image uploadImage(MultipartFile uploadedImage, User user, Dog dog){
 
         String filename = uploadedImage.getOriginalFilename();
         Path path = Paths.get(UPLOAD_PATH);
@@ -58,6 +59,7 @@ public class FileUtil {
 
         Image image = new Image(
             user,
+            dog,
             UPLOAD_PATH + filename
         );
         

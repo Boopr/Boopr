@@ -38,8 +38,9 @@ public class Image {
     public Image() {
     }
 
-    public Image(User user, String url) {
+    public Image(User user, Dog dog, String url) {
         this.url = url;
+        this.dog = dog;
         this.user = user;
     }
 
