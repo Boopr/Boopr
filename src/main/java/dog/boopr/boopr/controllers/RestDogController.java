@@ -286,7 +286,7 @@ public class RestDogController {
         return "{ 'message': 'Image Posted!' }"; 
         }
 
-    @RequestMapping(value="/api/dogs/pics/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/api/dogs/pics/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String deletePicture(@PathVariable Long id){
         try{
             Image image = imageDao.getOne(id);
