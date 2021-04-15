@@ -19,6 +19,7 @@ import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
+import dog.boopr.boopr.repositories.BoopRepository;
 import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
 import dog.boopr.boopr.repositories.ImageRepository;
@@ -38,6 +39,9 @@ public class RestDogController {
 
     @Autowired
     private ImageRepository imageDao;
+
+    @Autowired
+    private BoopRepository boopDao;
 
 
     @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -256,6 +260,21 @@ public class RestDogController {
         }  
         return "{ 'message': 'Image Posted!' }"; 
         }
+
+    @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String postNewBoop(@PathVariable Long id){
+            try{
+                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                Boop boop = new Boop();
+                boop.setImage(imageDao.getOne(id));
+                boop.setUser(user);
+                boopDao.save(boop);
+            }catch(Exception e){
+                e.printStackTrace();
+                return " { 'error' : '" + e.toString() + " ' }";
+            }  
+            return "{ 'message': 'Image Posted!' }"; 
+            }
 
     @RequestMapping(value="/api/breed/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String deleteBreed(
