@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}" lang="en">
+      layout:decorate="~{admin.html}" lang="en">
 <head>
     <title>Home</title>
 </head>
@@ -97,7 +97,7 @@
             thirdSection.setAttribute("class","col-md-auto col-6 mb-md-0 order-3 order-md-3");
             forthSection.setAttribute("class","col-md-auto col-6 mb-md-0 order-last");
 
-            let breedName = document.createElement("h3");
+            let breedName = document.createElement("h5");
             let breedInput = document.createElement("input");
             let breedEditConfirm = document.createElement("button")
             let breedEditBtn = document.createElement("button");

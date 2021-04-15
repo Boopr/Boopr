@@ -50,7 +50,26 @@
                             <li class="nav-item p-2">
                                 About
                             </li>
+
                         </ul>
+
+                        <div class="d-block d-md-none col-12 bg-dark rounded text-white justify-content-center text-center">
+                            <h3 class="py-3">
+                                Admin Panel
+                            </h3>
+                            <ul class="navbar-nav pt-3 d-flex flex-column justify-content-center ">
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="/breed/edit">Breed Editor</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="/breed/edit">User List</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="/breed/edit">Dog List</a>
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                     
                </div>
@@ -60,9 +79,33 @@
 
     </header>
 
-    <main layout:fragment="content">
-        <!-- content goes here -->
-    </main>
+    <div class="container-fluid row m-0 p-0 navbar-expand-md">
+
+        <div class="col-auto bg-dark collapse navbar-collapse text-white align-items-start  justify-content-center" style="max-width: 300px;">
+            <div class=" d-flex flex-column">
+                <h3 class="py-3">
+                    Admin Panel
+                </h3>
+                <ul class="navbar-nav pt-3 d-flex flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/breed/edit">Breed Editor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/breed/edit">User List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/breed/edit">Dog List</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <main class="col-12 col-md-10" layout:fragment="content">
+            <!-- content goes here -->
+        </main>
+    </div>
+
+    
 
 </body>
 
