@@ -338,6 +338,7 @@ public class RestDogController {
             }
             //and finally save the dog 🐶
             dogDao.save(dog);
+            
         }catch(Exception e){
             e.printStackTrace();
             return " { 'error' : '" + e.toString() + " ' }";
