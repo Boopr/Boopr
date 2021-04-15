@@ -276,10 +276,27 @@ public class RestDogController {
 
 
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewDog(@ModelAttribute Dog dog){
+        public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile){
             try{
                 User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 dog.setOwner(user);
+                if(!uploadedFile.isEmpty()){
+                    //we save the dog just in case for any potential errors
+                    dogDao.save(dog);
+                    //using our file util we give it the file and user to create the image and write the image to disk
+                    Image image = FileUtil.uploadImage(uploadedFile, user);
+                    //grab the list of existing images
+                    List<Image> images = dog.getImages();
+                    //check if its empty or the first image
+                    if(images == null){
+                        images = new ArrayList<Image>();
+                    }
+                    //add the image to the list
+                    images.add(image);
+                    //and then save the list to the dog
+                    dog.setImages(images); 
+                }
+                //and finally save the dog 🐶
                 dogDao.save(dog); 
             }catch(Exception e){
                 e.printStackTrace();
