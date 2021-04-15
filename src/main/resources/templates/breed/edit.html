@@ -90,7 +90,7 @@
             //set classes
             breedSection.setAttribute("class","row py-4 px-2 align-items-center mt-4 border rounded breed-section");
             firstSection.setAttribute("class","col-md-auto col-4 mb-2 mb-md-0 order-1");
-            secondSection.setAttribute("class","row col-md col-8 mb-2 mb-md-0 order-2 order-md-2 invisible");
+            secondSection.setAttribute("class","d-flex align-items-center justify-content-between col-md col-8 mb-2 mb-md-0 order-2 order-md-2 invisible");
             thirdSection.setAttribute("class","col-md-auto col-6 mb-md-0 order-3 order-md-3");
             forthSection.setAttribute("class","col-md-auto col-6 mb-md-0 order-last");
 
@@ -106,12 +106,11 @@
             firstSection.appendChild(breedName);
 
             breedInput.type = "text";
-            breedInput.classList.add("d");
-            breedInput.classList.add("col-6");
+            breedInput.setAttribute("class","form-control mx-2")
             breedInput.placeholder = "New Breed Name";
 
             breedEditConfirm.innerHTML = "Confirm";
-            breedEditConfirm.setAttribute("class","col-6 btn btn-primary mb-2 mb-md-0");
+            breedEditConfirm.setAttribute("class","btn btn-primary ");
 
             secondSection.appendChild(breedInput);
             secondSection.appendChild(breedEditConfirm);
@@ -146,14 +145,27 @@
         breedSections = Array.from(document.getElementsByClassName("breed-section"));
 
         breedSections.forEach( section =>{
+            
 
             let title = section.children[0];
-            let input = section.children[1];
-            let editBtn = section.children[2];
+            let inputSection = section.children[1];
+            let input = section.children[1].children[0];
+            let editConfirmBtn = section.children[1].children[1];
+            let editBtn = section.children[2].children[0];
             let deleteBtn = section.children[3];
 
+            editConfirmBtn.addEventListener('click', (e)=>{
+                e.preventDefault()
+                axios.post("/api/breed/edit/" + deleteBtn.children[1].value, {
+                    breed : input.value
+                }).then( res =>{
+                    console.log(res.data)
+                    //play a toast here
+                })
+            })
+
             editBtn.addEventListener('click', ()=>{
-                input.classList.toggle("invisible");
+                inputSection.classList.toggle("invisible");
             });
 
             deleteBtn.addEventListener('click', ()=>{
