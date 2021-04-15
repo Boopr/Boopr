@@ -27,6 +27,15 @@ public class DogController {
         return "breed/edit";
     }
 
+    @GetMapping("/dog/add")
+    public String dogAdd(
+        Model model
+    ){
+        List<Breed> breeds = breedDao.findAll();
+        model.addAttribute("breeds", breeds);
+        return "dog/edit";
+    }
+
 
 }
 

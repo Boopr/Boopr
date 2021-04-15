@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+   
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 d-flex flex-wrap w-100 justify-content-center">
+
+                <div class="col-12 col-lg-6">
+
+                    <h1 class="text-center my-4">
+                        New Dog
+                    </h1>
+    
+                    <div class="p-2">
+                    
+                        <h5>Name</h5>
+                        <input type="text" class="form-control" placeholder="Name" id="name">
+    
+                    </div>
+    
+                    <div class="p-2">
+                        <h5>Breed</h5>
+                        <select id="" class="form-select"  size="8" multiple>
+                            <td th:each="breed : ${breeds}">
+                                <option th:value="${breed.id}" th:text="${breed.breed}"></option>
+                            </td>
+        
+                        </select>
+                    </div>
+
+                </div>
+
+                
+
+                <div class="col-12 col-lg-6">
+
+                    <div class="p-2">
+                        <h5>
+                            Bio
+                        </h5>
+                        <textarea name="" id="" class="col-12 form-control" rows="10" style="resize: none;"></textarea>
+                    </div>
+    
+                    <div class="p-2">
+                        <h5>
+                            Profile Picture
+                        </h5>
+                        <input class="form-control" type="file" id="file">
+                    </div>
+    
+                    <div class="p-2 row">
+                        <h5 class="col-2 ">
+                            Sex
+                        </h5>
+                        <div class="col-4 ">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                            <label class="form-check-label" for="sex">
+                                Male
+                            </label>
+                        </div>
+                        
+                        <div class="col-4 ">
+                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                            <label class="form-check-label" for="sex">
+                                Female
+                            </label>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div>
+                    <button class="btn btn-primary" id="submit">Submit</button>
+                </div>
+
+                
+
+
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</main>
+</body>
+<script  layout:fragment="script">
+    //
+    window.onmousedown = function (e) {
+        var el = e.target;
+        if (el.tagName.toLowerCase() == 'option' && el.parentNode.hasAttribute('multiple')) {
+            e.preventDefault();
+
+            // toggle selection
+            if (el.hasAttribute('selected')) el.removeAttribute('selected');
+            else el.setAttribute('selected', '');
+
+            // hack to correct buggy behavior
+            var select = el.parentNode.cloneNode(true);
+            el.parentNode.parentNode.replaceChild(select, el.parentNode);
+        }
+    }
+</script>
+</html>
