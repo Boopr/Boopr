@@ -24,7 +24,7 @@
         },{
             "label": "run",
             "type": "shell",
-            "command": "java -jar target/boopr-0.0.1-SNAPSHOT.jar",
+            "command": "./mvnw spring-boot:run",
             "group": "build",
             "problemMatcher": []
         }
