@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -35,6 +36,9 @@ public class Dog {
         inverseJoinColumns={@JoinColumn(name="breed_id")}
     )
     private List<Breed> breeds;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dog")
+    private List<Image> images;
 
     //0 for female, 1 for male
     @NotBlank(message = "Please enter your dog's sex")
@@ -64,6 +68,14 @@ public class Dog {
         this.bio = bio;
     }
 
+
+    public List<Image> getImages() {
+        return this.images;
+    }
+
+    public void setImages(List<Image> images) {
+        this.images = images;
+    }
 
     public long getId() {
         return this.id;

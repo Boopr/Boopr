@@ -38,6 +38,11 @@ public class Image {
     public Image() {
     }
 
+    public Image(User user, String url) {
+        this.url = url;
+        this.user = user;
+    }
+
     public Image(String url, List<Boop> boops) {
 
         this.url = url;
