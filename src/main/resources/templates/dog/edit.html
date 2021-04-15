@@ -4,6 +4,8 @@
       layout:decorate="~{layout.html}" lang="en">
 <head>
     <title>Home</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
 </head>
 <body>
 
@@ -47,7 +49,16 @@
                         <h5>
                             Bio
                         </h5>
-                        <textarea name="bio" id="bio" class="col-12 form-control" rows="10" style="resize: none;"></textarea>
+                        <textarea name="bio" id="bio" class="col-12 form-control" rows="4" style="resize: none;"></textarea>
+                    </div>
+
+                    <div class="m-2 border rounded" style="height: 300px"  id='map'>
+
+                    </div>
+                    <div class="p-2">
+                        <button id="loc" class="btn btn-primary">
+                            Get my Location
+                        </button>
                     </div>
     
                     <div class="p-2">
@@ -98,7 +109,7 @@
         </div>
 
     </div>
-
+    <script src="/js/keys.js"></script>
 </main>
 </body>
 <script  layout:fragment="script">
@@ -119,7 +130,7 @@
     }
 
     let submit = document.getElementById("submit");
-    
+    let locationBtn = document.getElementById("loc")
     
 
     submit.addEventListener('click', (e)=>{
@@ -135,6 +146,9 @@
         data.set("breeds", breedsData)
         data.set("bio", bio.value);
         data.set("file", file.files[0]);
+        data.set("lon", null) //TODO add cords to the form data sent from mapbox pin
+        data.set("lat", null)
+        
 
         if(document.getElementById("male").checked){
             data.set("sex",true)
@@ -162,5 +176,29 @@
 
         
     })
+
+    locationBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        navigator.geolocation.getCurrentPosition((s)=>{
+            map.flyTo({
+                center: [
+                    s.coords.longitude,
+                    s.coords.latitude
+                ],
+                essential: true 
+            });
+        })
+
+    })
+
+    
+
+    mapboxgl.accessToken = apiKey;
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11'
+    });
+
+    
 </script>
 </html>
