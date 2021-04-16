@@ -34,6 +34,7 @@ import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
 import dog.boopr.boopr.repositories.ImageRepository;
 import dog.boopr.boopr.repositories.UserRepository;
+import dog.boopr.boopr.services.UserServices;
 import dog.boopr.boopr.utils.FileUtil;
 
 @RestController
@@ -56,6 +57,9 @@ public class RestDogController {
 
     @Value("$(mapbox_key")
     private String mapboxApiKey;
+
+    @Autowired
+    private UserServices userService;
 
 
     @RequestMapping(path = "/keys.js", produces ="application/javascript")
@@ -283,7 +287,7 @@ public class RestDogController {
     @RequestMapping(value="/api/user/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String editUser(@ModelAttribute User userUpdate){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userService.getCurrentUser();
                 userUpdate.setId(user.getId());
                 userDao.save(userUpdate); 
             }catch(Exception e){
@@ -296,7 +300,7 @@ public class RestDogController {
     @RequestMapping(value="/api/user/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String deleteUser(){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userService.getCurrentUser();
                 userDao.delete(user);
             }catch(Exception e){
                 e.printStackTrace();
@@ -310,7 +314,7 @@ public class RestDogController {
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userService.getCurrentUser();
                 dog.setOwner(user);
                 if(!uploadedFile.isEmpty()){
                     dogDao.save(dog);
@@ -333,7 +337,7 @@ public class RestDogController {
     @RequestMapping(value="/api/dogs/{id}/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String editDog(@ModelAttribute Dog dogUpdate, @PathVariable Long id){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userService.getCurrentUser();
                 dogUpdate.setOwner(user);
                 dogUpdate.setId(id);
                 dogDao.save(dogUpdate); 
@@ -359,7 +363,7 @@ public class RestDogController {
     @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String postNewPicture(@PathVariable Long id, @RequestParam(name = "file") MultipartFile uploadedFile){
         try{
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user = userService.getCurrentUser();
             Dog dog = dogDao.getOne(id);
 
             if(!uploadedFile.isEmpty()){
@@ -403,7 +407,7 @@ public class RestDogController {
     @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String postNewBoop(@PathVariable Long id){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userService.getCurrentUser();
                 Boop boop = new Boop();
                 boop.setImage(imageDao.getOne(id));
                 boop.setUser(user);
@@ -418,7 +422,7 @@ public class RestDogController {
     @RequestMapping(value="/api/pics/{id}/boop/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String deleteBoop(@PathVariable Long id){
             try{
-                User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                User user = userService.getCurrentUser();
                 Image image = imageDao.getOne(id);
                 Boop boop = null;
                 List<Boop> boops = boopDao.findByImageId(image);

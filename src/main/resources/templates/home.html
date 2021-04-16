@@ -64,10 +64,10 @@
 
             let sex = document.createElement("h5");
             sex.setAttribute("class","col-4")
-            if(dog.sex){
-                sex.innerHTML = "♀"
+            if(!dog.sex){
+                sex.innerHTML = '<i class="fas fa-venus"></i>'
             }else{
-                sex.innerHTML = "♂"
+                sex.innerHTML = '<i class="fas fa-mars"></i>'
             }
             let dist = document.createElement("div")
             dist.innerHTML = distance(
