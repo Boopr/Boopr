@@ -30,18 +30,21 @@
     let userId = document.getElementById("user").value;
     let yourDog = null
 
-    axios.get("/api/dogs").then( res =>{
-        if(res.status == 200){
-            data = res.data;
-            axios.get("/api/dogs/owner/" + userId).then( res =>{
-                yourDog = res.data[0];
-                drawDogs();
-            })
-            
-        }else{
-            console.err("Something went wrong");
-        }
-    })
+    if(userId != undefined){
+        axios.get("/api/dogs").then( res =>{
+            if(res.status == 200){
+                data = res.data;
+                axios.get("/api/dogs/owner/" + userId).then( res =>{
+                    yourDog = res.data[0];
+                    drawDogs();
+                })
+                
+            }else{
+                console.err("Something went wrong");
+            }
+        })
+    }
+    
 
     
     
