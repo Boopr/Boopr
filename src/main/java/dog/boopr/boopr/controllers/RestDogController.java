@@ -446,7 +446,8 @@ public class RestDogController {
                 Breed breed = breedDao.getOne(id);
                 breedDao.delete(breed);
                 JSONObject response = new JSONObject();
-                response.put("message","Deleted Breed!")
+                response.put("message","Deleted Breed!");
+                return response.toString();
             }catch(Exception e){
                 e.printStackTrace();
                 return " { 'error' : '" + e.toString() + " ' }";
