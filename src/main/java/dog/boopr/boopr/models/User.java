@@ -98,6 +98,16 @@ public class User implements UserDetails{
         this.password = password;
     }
 
+
+    public List<Dog> getDogs() {
+        return this.dogs;
+    }
+
+    public void setDogs(List<Dog> dogs) {
+        this.dogs = dogs;
+    }
+
+
     public List<AuthGroup> getAuthGroups() {
         return this.authGroups;
     }

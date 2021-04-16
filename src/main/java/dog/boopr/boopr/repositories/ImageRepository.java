@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
 
@@ -12,7 +13,7 @@ import dog.boopr.boopr.models.User;
 public interface ImageRepository extends JpaRepository<Image, Long> {
     
     List<Image> findAllByUser(User user);
-    List<Image> findAllByDog(User user);
+    List<Image> findAllByDog(Dog dog);
     Image getOne(long id);
  
 }

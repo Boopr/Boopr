@@ -33,3 +33,5 @@ build/
 .vscode/settings.json
 
 application.properties
+images/
+keys.js
