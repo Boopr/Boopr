@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import dog.boopr.boopr.models.User;
+import dog.boopr.boopr.models.AuthGroup;
+import dog.boopr.boopr.repositories.AuthGroupRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 
 @Controller
@@ -18,6 +20,9 @@ public class AuthenticationController {
 
     @Autowired
     UserRepository userDao;
+
+    @Autowired
+    AuthGroupRepository authGroupDao;
     
     @GetMapping("/login") 
     public String indexPage(){
@@ -35,6 +40,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String registerHandler(
+
         Model model,
         @Valid User newUser,
         BindingResult bindingResult
@@ -50,6 +56,7 @@ public class AuthenticationController {
         //put that new password back into the user object
         newUser.setPassword(hash);
         //save that object to the database
+        authGroupDao.save(new AuthGroup(newUser.getUsername(), "USER"));
         userDao.save(newUser);
         //return success!
         return "redirect:/login?success";
