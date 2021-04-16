@@ -63,11 +63,12 @@
             topRow.style.marginBottom = "-3rem";
 
             let sex = document.createElement("h5");
-            sex.setAttribute("class","col-4")
-            if(dog.sex){
-                sex.innerHTML = "♀"
+            sex.setAttribute("class","col-4 text-white fw-bold")
+            sex.style.webkitTextStroke = "1px black"
+            if(!dog.sex){
+                sex.innerHTML = '<i class="fas fa-venus"></i>'
             }else{
-                sex.innerHTML = "♂"
+                sex.innerHTML = '<i class="fas fa-mars"></i>'
             }
             let dist = document.createElement("div")
             dist.innerHTML = distance(
@@ -77,7 +78,8 @@
                 dog.lon,
                 "M"
             ).toFixed(2) + " Miles"
-            dist.setAttribute("class","col text-end");
+            dist.setAttribute("class","col text-end text-white fw-bold");
+            dist.style.webkitTextStroke = "1px black"
 
 
             topRow.appendChild(sex);

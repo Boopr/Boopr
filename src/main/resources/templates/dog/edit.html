@@ -11,7 +11,11 @@
 
 <main layout:fragment="content">
    
-    <div class="container">
+    <div class="container mb-4">
+
+        <div th:if="${param.first}">
+            <p class="alert alert-success  m-2">Please add your first dog to continue</p>
+        </div>
 
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 d-flex flex-wrap w-100 justify-content-center">
