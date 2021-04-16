@@ -196,7 +196,13 @@
         }).showToast();
 
         axios.post("/api/breed/delete/"+ deleteTarget).then( res =>{
-            
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+            refreshBreeds();
         })
     })
 
