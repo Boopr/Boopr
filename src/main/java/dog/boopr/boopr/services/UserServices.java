@@ -1,6 +1,10 @@
 package dog.boopr.boopr.services;
 
+import dog.boopr.boopr.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,5 +28,18 @@ public class UserServices implements UserDetailsService{
         }
 
         return user;
+    }
+
+    public boolean isLoggedIn(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return !(auth instanceof AnonymousAuthenticationToken);
+    }
+
+    public User getCurrentUser(){
+        if(!isLoggedIn()) return null;
+        //grabs the user principle that has these methods
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //then abstracts the user and gets it from the DB
+        return userDao.getOne(user.getId());
     }
 }

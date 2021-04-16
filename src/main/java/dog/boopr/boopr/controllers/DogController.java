@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.repositories.BreedRespository;
@@ -26,6 +25,15 @@ public class DogController {
         model.addAttribute("breeds", breeds);
 
         return "breed/edit";
+    }
+
+    @GetMapping("/dog/add")
+    public String dogAdd(
+        Model model
+    ){
+        List<Breed> breeds = breedDao.findAll();
+        model.addAttribute("breeds", breeds);
+        return "dog/edit";
     }
 
 

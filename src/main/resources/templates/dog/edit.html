@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
+<head>
+    <title>Home</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+
+<main layout:fragment="content">
+   
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6 d-flex flex-wrap w-100 justify-content-center">
+
+                <div class="col-12 col-lg-6">
+
+                    <h1 class="text-center my-4">
+                        New Dog
+                    </h1>
+    
+                    <div class="p-2">
+                    
+                        <h5>Name</h5>
+                        <input type="text" class="form-control" placeholder="Name" id="name">
+    
+                    </div>
+    
+                    <div class="p-2">
+                        <h5>Breed</h5>
+                        <select id="breeds" class="form-select"  size="8" multiple>
+                            <td th:each="breed : ${breeds}">
+                                <option th:value="${breed.id}" th:text="${breed.breed}"></option>
+                            </td>
+        
+                        </select>
+                    </div>
+
+                </div>
+
+                
+
+                <div class="col-12 col-lg-6">
+
+                    <div class="p-2">
+                        <h5>
+                            Bio
+                        </h5>
+                        <textarea name="bio" id="bio" class="col-12 form-control" rows="4" style="resize: none;"></textarea>
+                    </div>
+
+                    <div class="m-2 border rounded" style="height: 300px"  id='map'>
+
+                    </div>
+                    <div class="p-2">
+                        <button id="loc" class="btn btn-primary">
+                            Get my Location
+                        </button>
+                    </div>
+    
+                    <div class="p-2">
+                        <h5>
+                            Profile Picture
+                        </h5>
+                        <input class="form-control" type="file" id="file">
+                    </div>
+    
+                    <div class="p-2 row">
+                        <h5 class="col-2 ">
+                            Sex
+                        </h5>
+                        <div class="col-4 ">
+                            <input class="form-check-input" type="radio" name="sex" id="male" value="male" checked>
+                            <label class="form-check-label" for="sex">
+                                Male
+                            </label>
+                        </div>
+                        
+                        <div class="col-4 ">
+                            <input class="form-check-input" type="radio" name="sex" id="female" value="female">
+                            <label class="form-check-label" for="sex">
+                                Female
+                            </label>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div>
+                    <button class="btn btn-primary" id="submit">Submit</button>
+                </div>
+
+                
+
+
+
+
+
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+    <script src="/js/keys.js"></script>
+</main>
+</body>
+<script  layout:fragment="script">
+    //
+    window.onmousedown = function (e) {
+        var el = e.target;
+        if (el.tagName.toLowerCase() == 'option' && el.parentNode.hasAttribute('multiple')) {
+            e.preventDefault();
+
+            // toggle selection
+            if (el.hasAttribute('selected')) el.removeAttribute('selected');
+            else el.setAttribute('selected', '');
+
+            // hack to correct buggy behavior
+            var select = el.parentNode.cloneNode(true);
+            el.parentNode.parentNode.replaceChild(select, el.parentNode);
+        }
+    }
+
+    let submit = document.getElementById("submit");
+    let locationBtn = document.getElementById("loc")
+    
+
+    submit.addEventListener('click', (e)=>{
+        let name = document.getElementById("name");
+        let breeds = document.getElementById("breeds");
+        let bio = document.getElementById("bio");
+        let file = document.getElementById("file");
+
+        let breedsData = Array.from(breeds.options).filter(option => option.selected).map(option => option.value)
+
+        let data = new FormData();
+        data.set("name", name.value);
+        data.set("breeds", breedsData)
+        data.set("bio", bio.value);
+        data.set("file", file.files[0]);
+        data.set("lon", null) //TODO add cords to the form data sent from mapbox pin
+        data.set("lat", null)
+        
+
+        if(document.getElementById("male").checked){
+            data.set("sex",true)
+        }else{
+            data.set("sex",false)
+        }
+
+        try{
+            axios.post("/api/dogs/add",data).then( res=>{
+
+                window.location.href = "/home";
+            
+            })
+        }catch(e){
+            console.log(e)
+            Toastify({
+                text: e,
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                className: "info",
+            }).showToast();
+        }
+        
+
+        
+
+        
+    })
+
+    locationBtn.addEventListener('click', (e)=>{
+        e.preventDefault();
+        navigator.geolocation.getCurrentPosition((s)=>{
+            map.flyTo({
+                center: [
+                    s.coords.longitude,
+                    s.coords.latitude
+                ],
+                essential: true 
+            });
+        })
+
+    })
+
+    
+
+    mapboxgl.accessToken = apiKey;
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11'
+    });
+
+    
+</script>
+</html>

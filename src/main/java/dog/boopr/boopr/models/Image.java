@@ -38,6 +38,12 @@ public class Image {
     public Image() {
     }
 
+    public Image(User user, Dog dog, String url) {
+        this.url = url;
+        this.dog = dog;
+        this.user = user;
+    }
+
     public Image(String url, List<Boop> boops) {
 
         this.url = url;
@@ -77,6 +83,20 @@ public class Image {
         this.boops = boops;
     }
 
+    public Dog getDog() {
+        return this.dog;
+    }
 
+    public void setDog(Dog dog) {
+        this.dog = dog;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     
 }

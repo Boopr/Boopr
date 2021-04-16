@@ -32,5 +32,10 @@ build/
 ### VS Code ###
 .vscode/settings.json
 
+
+images/
+keys.js
+
 #Needed for docker env
 #application.properties
+

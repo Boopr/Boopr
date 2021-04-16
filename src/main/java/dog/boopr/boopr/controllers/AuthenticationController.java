@@ -30,7 +30,7 @@ public class AuthenticationController {
     ){
 
         model.addAttribute("User",new User());
-        return "user/registration";
+        return "user/register";
     }
 
     @PostMapping("/register")
