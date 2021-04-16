@@ -4,6 +4,7 @@
       layout:decorate="~{layout.html}" lang="en">
 <head>
     <title>Main Page</title>
+
 </head>
 <body>
 
@@ -42,9 +43,11 @@
         }
     })
 
+    
+    
     function drawDogs(){
-
-
+                
+        
         dogsList.innerHTML = "";
         data.forEach( dog =>{
 
@@ -81,17 +84,27 @@
             topRow.appendChild(dist);
             //Top row End
             //Image Start
+            let anchor = document.createElement("a");
+            anchor.href = "/profile/" + dog.id;
             let image = document.createElement("div");
             if(dog.images[0] == undefined){
-                image.style.background = `url('https://via.placeholder.com/200x300')`;
+                image.style.backgroundImage = `url('https://via.placeholder.com/200x300')`;
             }else{
-                image.style.background = `url(${dog.images[0]})`;
+                image.style.backgroundImage = `url(${dog.images[0]})`;
             }
             
-            image.style.height = "300px";
-            image.style.backgroundPosition = "50%";
-            image.style.backgroundSize = "150%";
+            image.classList.add("dog-section-image")
+
+            image.addEventListener('mouseover', (e)=>{
+                image.classList.toggle("zoom")
+                image.classList.toggle("dog-section-image")
+            })
+            image.addEventListener('mouseleave', (e)=>{
+                image.classList.toggle("zoom")
+                image.classList.toggle("dog-section-image")
+            })
             //Image End
+            anchor.appendChild(image);
 
             let bottomRow = document.createElement("div");
             bottomRow.setAttribute("class","row justify-content-between p-2");
@@ -108,7 +121,7 @@
             bottomRow.appendChild(boops);
 
             dogContainer.appendChild(topRow);
-            dogContainer.appendChild(image);
+            dogContainer.appendChild(anchor);
             dogContainer.appendChild(bottomRow)
             
             dogsList.appendChild(dogContainer);            

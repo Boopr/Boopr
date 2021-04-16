@@ -23,9 +23,6 @@ public class HomeController {
     private DogRepository dogDao;
 
     @Autowired
-    private UserRepository users;
-
-    @Autowired
     private UserServices userService;
 
     @GetMapping("/")
