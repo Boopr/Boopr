@@ -3,6 +3,8 @@ package dog.boopr.boopr.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ public class DogController {
     private BreedRespository breedDao;
 
     @GetMapping("/breed/edit")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String breedScreen(
         Model model
     ){
@@ -28,6 +31,7 @@ public class DogController {
     }
 
     @GetMapping("/dog/add")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String dogAdd(
         Model model
     ){
