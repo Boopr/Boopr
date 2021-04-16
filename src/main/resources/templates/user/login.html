@@ -9,40 +9,64 @@
 <body>
 
 <main layout:fragment="content">
-    <form class="container" th:action="@{/login}" method="POST">
-        <div class="card col-12 col-lg-6 col-md-8 mx-auto mt-4">
-            <div class="card-body">
+    <div class="container">
+        <form th:action="@{/login}" method="POST">
+            <div class="card col-12 col-lg-6 col-md-8 mx-auto mt-4">
+                <div class="card-body">
+    
+                    <div class="col-12">
+                        <h1 class="text-center p-3">
+                            Login
+                        </h1>
+                    </div>
 
-                <div class="col-12">
-                    <h1 class="text-center p-3">
-                        Login
-                    </h1>
-                </div>
-
-                <div th:if="${param.error}">
-                    <p class="alert alert-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
-                </div>
-
-                <div th:if="${param.logout}">
-                    <p class="alert alert-success">You have been logged out.</p>
-                </div>
-                
-                <div class="col-12 row pb-3 m-0">
-                    <label class="py-2 font-weight-bold" for="username">Username</label>
-                    <input name="username" class="form-control col-12 p-2" placeholder="Username" required>
-                </div>
-
-                <div class="col-12 row pb-3 m-0">
-                    <label class="py-2 font-weight-bold" for="password">Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="Password">
-                </div>
-
-                <div class="col-12 row pb-3 m-0 mt-3">
-                        <button type="submit" class="btn btn-primary">Sign in</button>
+                    <div th:if="${param.success}">
+                        <p class="alert alert-success">You can login with your new account</p>
+                    </div>
+    
+                    <div th:if="${param.error}">
+                        <p class="alert alert-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+                    </div>
+    
+                    <div th:if="${param.logout}">
+                        <p class="alert alert-success">You have been logged out.</p>
+                    </div>
+                    
+                    <div class="col-12 row pb-3 m-0">
+                        <label class="py-2 font-weight-bold" for="username">Username</label>
+                        <input name="username" class="form-control col-12 p-2" placeholder="Username" required>
+                    </div>
+    
+                    <div class="col-12 row pb-3 m-0">
+                        <label class="py-2 font-weight-bold" for="password">Password</label>
+                        <input name="password" type="password" class="form-control" placeholder="Password">
+                    </div>
+    
+                    <div class="col-12 row pb-3 m-0 mt-3">
+                            <button type="submit" class="btn btn-primary">Sign in</button>
+                    </div>
                 </div>
             </div>
+        </form>
+
+        <div class="card col-12 col-lg-6 col-md-8 mx-auto mt-4">
+            <div class="card-body">
+                <h4 class="p-2">
+                    New to Boopr? Make an account for your dog today!
+                </h4>
+                <a href="/register" class="btn btn-success align-self-end m-2">
+                    Register
+                </a>
+    
+            </div>
         </div>
-    </form>
+    </div>
+    
+    
+        
+        
+        
+    
 </main>
 </body>
 </html>
