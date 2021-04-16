@@ -8,6 +8,53 @@
 <body>
 
 <main layout:fragment="content">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-8 row p-2">
+
+                <div class="col-12 row align-items-center p-2 justify-content-center">
+
+                    <input class="col-1"type="checkbox">
+
+                    <div class="col-4" >
+                        Username
+                    </div>
+                    <div class="col-4">
+                        Email
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <td th:each=" user : ${users}">
+
+                    <div class="col-12 row align-items-center p-2 justify-content-center">
+
+                        <input class="col-1"type="checkbox">
+
+                        <div class="col-4" th:text="${user.username}">
+
+                        </div>
+                        <div class="col-4" th:text="${user.email}">
+                            
+                        </div>
+
+                    </div>
+
+
+                </td>
+
+            </div>
+            
+
+
+        </div>
+
+    </div>
    
 </main>
 </body>

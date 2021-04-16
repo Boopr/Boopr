@@ -19,6 +19,10 @@
                             Login
                         </h1>
                     </div>
+
+                    <div th:if="${param.success}">
+                        <p class="alert alert-success">You can login with your new account</p>
+                    </div>
     
                     <div th:if="${param.error}">
                         <p class="alert alert-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>

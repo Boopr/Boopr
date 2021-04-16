@@ -22,6 +22,9 @@ public class HomeController {
     @Autowired
     private DogRepository dogDao;
 
+    @Autowired 
+    private UserRepository userDao;
+
     @Autowired
     private UserServices userService;
 
@@ -55,4 +58,12 @@ public class HomeController {
         model.addAttribute("totalDogs", totalDogs);
         return "user/profile";
     }
+
+    @GetMapping("/user/manage")
+    public String userManage(Model model) {
+        List<User> users = userDao.findAll();
+        model.addAttribute("users", users);
+        return "user/manage";
+    }
+
 }

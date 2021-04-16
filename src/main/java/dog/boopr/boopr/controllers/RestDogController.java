@@ -2,6 +2,9 @@ package dog.boopr.boopr.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,8 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -440,12 +445,37 @@ public class RestDogController {
             try{
                 Breed breed = breedDao.getOne(id);
                 breedDao.delete(breed);
+                JSONObject response = new JSONObject();
+                response.put("message","Deleted Breed!")
             }catch(Exception e){
                 e.printStackTrace();
                 return " { 'error' : '" + e.toString() + " ' }";
-            }
-            return "{ 'message': 'Deleted Breed!' }";       
+            }      
+        }
+        
+    @RequestMapping(value="/api/breed/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String AddBreed(
+        HttpServletRequest request
+    ) throws JSONException{
+        //TODO: Add validation
+        try{
+
+            String breedName = request.getParameter("breed");
+            
+            
+            Breed breed = new Breed(breedName);
+            breedDao.save(breed);
+            JSONObject response = new JSONObject();
+            response.put("message","New breed added!");
+            return response.toString();
+        }catch(Exception e){
+            e.printStackTrace();
+            JSONObject err = new JSONObject();
+            err.put("error", "Something went wrong" );
+            return err.toString();
         }
 
+
+    }
 
 }
