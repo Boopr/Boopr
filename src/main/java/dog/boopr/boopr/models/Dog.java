@@ -1,5 +1,6 @@
 package dog.boopr.boopr.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -70,6 +71,14 @@ public class Dog {
 
 
     public List<Image> getImages() {
+        if(this.images.isEmpty()){
+
+            List<Image> images = new ArrayList<Image>();
+            images.add(new Image("img/noDog.png"));
+            return images;
+
+        }
+
         return this.images;
     }
 

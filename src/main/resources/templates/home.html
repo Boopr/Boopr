@@ -9,6 +9,7 @@
 
 <main layout:fragment="content">
 
+    <input type="hidden" class="invisible" id="user" th:value="${user.id}">
 
     <div class="container">
         <h1 class="text-center p-3">Dogs in your area</h1>
@@ -25,17 +26,25 @@
     //Grabing the doglist element on the page for later writing
     let dogsList = document.getElementById("dogsList");
     let data = null
+    let userId = document.getElementById("user").value;
+    let yourDog = null
 
     axios.get("/api/dogs").then( res =>{
         if(res.status == 200){
             data = res.data;
-            drawDogs();
+            axios.get("/api/dogs/owner/" + userId).then( res =>{
+                yourDog = res.data[0];
+                drawDogs();
+            })
+            
         }else{
             console.err("Something went wrong");
         }
     })
 
     function drawDogs(){
+
+
         dogsList.innerHTML = "";
         data.forEach( dog =>{
 
@@ -57,13 +66,19 @@
             }else{
                 sex.innerHTML = "♂"
             }
-            let distance = document.createElement("div")
-            distance.innerHTML = "5km"
-            distance.setAttribute("class","col text-end");
+            let dist = document.createElement("div")
+            dist.innerHTML = distance(
+                yourDog.lat,
+                yourDog.lon,
+                dog.lat,
+                dog.lon,
+                "M"
+            ).toFixed(2) + " Miles"
+            dist.setAttribute("class","col text-end");
 
 
             topRow.appendChild(sex);
-            topRow.appendChild(distance);
+            topRow.appendChild(dist);
             //Top row End
             //Image Start
             let image = document.createElement("div");
@@ -102,6 +117,30 @@
 
 
     }
+
+
+    //Credit to GeoDataSource.com
+    function distance(lat1, lon1, lat2, lon2, unit) {
+	if ((lat1 == lat2) && (lon1 == lon2)) {
+		return 0;
+	}
+	else {
+		var radlat1 = Math.PI * lat1/180;
+		var radlat2 = Math.PI * lat2/180;
+		var theta = lon1-lon2;
+		var radtheta = Math.PI * theta/180;
+		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+		if (dist > 1) {
+			dist = 1;
+		}
+		dist = Math.acos(dist);
+		dist = dist * 180/Math.PI;
+		dist = dist * 60 * 1.1515;
+		if (unit=="K") { dist = dist * 1.609344 }
+		if (unit=="N") { dist = dist * 0.8684 }
+		return dist;
+	}
+}
     
 
 </script>

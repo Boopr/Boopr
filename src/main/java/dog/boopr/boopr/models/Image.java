@@ -50,6 +50,10 @@ public class Image {
         this.boops = boops;
     }
 
+    public Image(String url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -68,11 +72,11 @@ public class Image {
     }
 
     public String getUrl() {
-        return this.url;
+        return "/" + this.url;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.url =  url;
     }
 
     public List<Boop> getBoops() {

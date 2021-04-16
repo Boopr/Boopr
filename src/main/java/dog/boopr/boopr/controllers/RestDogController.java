@@ -153,8 +153,8 @@ public class RestDogController {
     public String getDogsByID(@PathVariable Long id) throws JSONException{
 
 
-        JSONArray dogs = new JSONArray();
-
+        
+        long totalDogs = dogDao.findAll().size()-1;
         Dog dog = dogDao.getOne(id);
 
             JSONArray breeds = new JSONArray();
@@ -165,6 +165,14 @@ public class RestDogController {
             owner.put("id",dog.getOwner().getId());
             owner.put("username",dog.getOwner().getUsername());
             owner.put("id",dog.getOwner().getEmail());
+            JSONArray jsonImages = new JSONArray();
+            List<Image> images = dog.getImages();
+            for( Image i : images){
+                JSONObject img = new JSONObject();
+                img.put("url",i.getUrl());
+                jsonImages.put(img);
+            }
+
             JSONObject jsondog = new JSONObject();
             jsondog.put("id", dog.getId());
             jsondog.put("name", dog.getName());
@@ -174,12 +182,14 @@ public class RestDogController {
             jsondog.put("sex",dog.getSex());
             jsondog.put("lat",dog.getLat());
             jsondog.put("lon",dog.getLon());
+            jsondog.put("images", jsonImages);
+            jsondog.put("totalDogs", totalDogs);
 
 
-            dogs.put(dog);
+            
 
         
-        return dogs.toString();
+        return jsondog.toString();
     }
 
     @RequestMapping(value="/api/owner/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
