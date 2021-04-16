@@ -146,8 +146,8 @@
         data.set("breeds", breedsData)
         data.set("bio", bio.value);
         data.set("file", file.files[0]);
-        data.set("lon", null) //TODO add cords to the form data sent from mapbox pin
-        data.set("lat", null)
+        data.set("lon", marker.getLngLat().lng) //TODO add cords to the form data sent from mapbox pin
+        data.set("lat", marker.getLngLat().lat)
         
 
         if(document.getElementById("male").checked){
@@ -185,19 +185,38 @@
                     s.coords.longitude,
                     s.coords.latitude
                 ],
-                essential: true 
+                essential: true,
+                zoom: 10
             });
+
+            marker
+            .setLngLat(
+                [
+                s.coords.longitude,
+                s.coords.latitude
+            ])
+        .addTo(map);
         })
 
     })
+
 
     
 
     mapboxgl.accessToken = apiKey;
     var map = new mapboxgl.Map({
+        center:[
+        -100.46642296086831,
+        40.55721084162846
+        ],
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11'
+        style: 'mapbox://styles/mapbox/streets-v11',
+        zoom: 2
     });
+
+    let marker = new mapboxgl.Marker({
+    draggable: true   
+    })
 
     
 </script>

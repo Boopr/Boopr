@@ -22,8 +22,8 @@ public class HomeController {
     @Autowired
     private DogRepository dogDao;
 
-    @Autowired
-    private UserRepository users;
+    @Autowired 
+    private UserRepository userDao;
 
     @Autowired
     private UserServices userService;
@@ -43,16 +43,27 @@ public class HomeController {
 
         //we're pull from the dog repo
         List<Dog> dogs = dogDao.findAll();
+        User user = userService.getCurrentUser();
         //and pushing to the frontend
+        model.addAttribute("user", user);
         model.addAttribute("dogs", dogs);
         return "home";
     }
 
     @GetMapping("/profile/{id}")
-    public String profilePage(Model model, @PathVariable String id) {
-        List<Dog> dogs = dogDao.findDogsByOwnerId(Long.parseLong(id));
-        model.addAttribute("dogs", dogs);
-        model.addAttribute("owner", users.getOne(Long.parseLong(id)));
+    public String profilePage(Model model, @PathVariable Long id) {
+        Dog dog = dogDao.getOne(id);
+        long totalDogs = dogDao.findAll().size()-1;
+        model.addAttribute("dog", dog);
+        model.addAttribute("totalDogs", totalDogs);
         return "user/profile";
     }
+
+    @GetMapping("/user/manage")
+    public String userManage(Model model) {
+        List<User> users = userDao.findAll();
+        model.addAttribute("users", users);
+        return "user/manage";
+    }
+
 }

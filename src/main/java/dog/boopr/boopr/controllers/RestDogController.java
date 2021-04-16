@@ -2,18 +2,25 @@ package dog.boopr.boopr.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +53,16 @@ public class RestDogController {
 
     @Autowired
     private BoopRepository boopDao;
+
+    @Value("$(mapbox_key")
+    private String mapboxApiKey;
+
+
+    @RequestMapping(path = "/keys.js", produces ="application/javascript")
+    @ResponseBody
+    public String apiKey(){
+        return "const apiKey = `"+mapboxApiKey+"`";
+    }
 
 
     @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -153,8 +170,8 @@ public class RestDogController {
     public String getDogsByID(@PathVariable Long id) throws JSONException{
 
 
-        JSONArray dogs = new JSONArray();
-
+        
+        long totalDogs = dogDao.findAll().size()-1;
         Dog dog = dogDao.getOne(id);
 
             JSONArray breeds = new JSONArray();
@@ -165,6 +182,14 @@ public class RestDogController {
             owner.put("id",dog.getOwner().getId());
             owner.put("username",dog.getOwner().getUsername());
             owner.put("id",dog.getOwner().getEmail());
+            JSONArray jsonImages = new JSONArray();
+            List<Image> images = dog.getImages();
+            for( Image i : images){
+                JSONObject img = new JSONObject();
+                img.put("url",i.getUrl());
+                jsonImages.put(img);
+            }
+
             JSONObject jsondog = new JSONObject();
             jsondog.put("id", dog.getId());
             jsondog.put("name", dog.getName());
@@ -174,12 +199,14 @@ public class RestDogController {
             jsondog.put("sex",dog.getSex());
             jsondog.put("lat",dog.getLat());
             jsondog.put("lon",dog.getLon());
+            jsondog.put("images", jsonImages);
+            jsondog.put("totalDogs", totalDogs);
 
 
-            dogs.put(dog);
+            
 
         
-        return dogs.toString();
+        return jsondog.toString();
     }
 
     @RequestMapping(value="/api/owner/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -418,12 +445,38 @@ public class RestDogController {
             try{
                 Breed breed = breedDao.getOne(id);
                 breedDao.delete(breed);
+                JSONObject response = new JSONObject();
+                response.put("message","Deleted Breed!");
+                return response.toString();
             }catch(Exception e){
                 e.printStackTrace();
                 return " { 'error' : '" + e.toString() + " ' }";
-            }
-            return "{ 'message': 'Deleted Breed!' }";       
+            }      
+        }
+        
+    @RequestMapping(value="/api/breed/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String AddBreed(
+        HttpServletRequest request
+    ) throws JSONException{
+        //TODO: Add validation
+        try{
+
+            String breedName = request.getParameter("breed");
+            
+            
+            Breed breed = new Breed(breedName);
+            breedDao.save(breed);
+            JSONObject response = new JSONObject();
+            response.put("message","New breed added!");
+            return response.toString();
+        }catch(Exception e){
+            e.printStackTrace();
+            JSONObject err = new JSONObject();
+            err.put("error", "Something went wrong" );
+            return err.toString();
         }
 
+
+    }
 
 }
