@@ -52,10 +52,8 @@ public class HomeController {
     @GetMapping("/user/userprofile")
     public String userprofilePage(Model model) {
 
-        //we're pull from the dog repo
         List<Dog> dogs = dogDao.findAll();
         User user = userService.getCurrentUser();
-        //and pushing to the frontend
         model.addAttribute("user", user);
         model.addAttribute("dogs", dogs);
         return "user/userprofile";
