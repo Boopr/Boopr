@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
+<head>
+    <title>Profile Page</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <input type="hidden" class="invisible" id="user" th:value="${user.id}">
+
+    <div class="container">
+        <h1 class="text-center p-3">User Profile</h1>
+        <div class="row justify-content-center mt-5" id="dogsList">
+
+           
+        </div>
+    </div>
+
+</main>
+</body>
+<script layout:fragment="script">
+
+    //Grabing the doglist element on the page for later writing
+    let dogsList = document.getElementById("dogsList");
+    let data = null
+    let userId = document.getElementById("user").value;
+    let yourDog = null
+
+    // if(userId != undefined){
+    //     axios.get("/api/dogs").then( res =>{
+    //         if(res.status == 200){
+    //             data = res.data;
+    //             axios.get("/api/dogs/owner/" + userId).then( res =>{
+    //                 yourDog = res.data[0];
+    //                 drawDogs();
+    //             })
+                
+    //         }else{
+    //             console.err("Something went wrong");
+    //         }
+    //     })
+    // }
+
+    if(userId != undefined){
+        axios.get("/api/dogs/owner/"+ userId).then( res =>{
+            if(res.status == 200){
+                data = res.data;
+                axios.get("/api/dogs/owner/" + userId).then( res =>{
+                    yourDog = res.data[0];
+                    drawDogs();
+                })
+                
+            }else{
+                console.err("Something went wrong");
+            }
+        })
+    }
+    
+
+    
+    
+    function drawDogs(){
+                
+        
+        dogsList.innerHTML = "";
+        data.forEach( dog =>{
+
+            let dogContainer = document.createElement("div")
+
+            dogContainer.setAttribute("class","border rounded m-2 p-0");
+            dogContainer.style.maxWidth = "20rem";
+
+            //Top row start
+            let topRow = document.createElement("div");
+            topRow.setAttribute("class","row justify-content-between p-2 position-relative");
+            topRow.style.top = "0rem";
+            topRow.style.marginBottom = "-3rem";
+
+            let sex = document.createElement("h5");
+            sex.setAttribute("class","col-4 text-white fw-bold")
+            sex.style.webkitTextStroke = "1px black"
+            if(!dog.sex){
+                sex.innerHTML = '<i class="fas fa-venus"></i>'
+            }else{
+                sex.innerHTML = '<i class="fas fa-mars"></i>'
+            }
+            let dist = document.createElement("div")
+            dist.innerHTML = "0"
+            // dist.innerHTML = distance(
+            //     yourDog.lat,
+            //     yourDog.lon,
+            //     dog.lat,
+            //     dog.lon,
+            //     "M"
+            // ).toFixed(2) + " Miles"
+            dist.setAttribute("class","col text-end text-white fw-bold");
+            dist.style.webkitTextStroke = "1px black"
+
+
+            topRow.appendChild(sex);
+            topRow.appendChild(dist);
+            //Top row End
+            //Image Start
+            let anchor = document.createElement("a");
+            anchor.href = "/editprofile/" + dog.id;
+            let image = document.createElement("div");
+            if(dog.images[0] == undefined){
+                image.style.backgroundImage = `url('https://via.placeholder.com/200x300')`;
+            }else{
+                image.style.backgroundImage = `url(${dog.images[0]})`;
+            }
+            
+            image.classList.add("dog-section-image")
+
+            image.addEventListener('mouseover', (e)=>{
+                image.classList.toggle("zoom")
+                image.classList.toggle("dog-section-image")
+            })
+            image.addEventListener('mouseleave', (e)=>{
+                image.classList.toggle("zoom")
+                image.classList.toggle("dog-section-image")
+            })
+            //Image End
+            anchor.appendChild(image);
+
+            let bottomRow = document.createElement("div");
+            bottomRow.setAttribute("class","row justify-content-between p-2");
+            
+            let name = document.createElement("h5");
+            name.innerHTML = dog.name;
+            name.setAttribute("class","col-6")
+
+            let boops = document.createElement("div");
+            boops.innerHTML = 100
+            boops.setAttribute("class","col-6 text-end")
+
+            bottomRow.appendChild(name);
+            bottomRow.appendChild(boops);
+
+            dogContainer.appendChild(topRow);
+            dogContainer.appendChild(anchor);
+            dogContainer.appendChild(bottomRow)
+            
+            dogsList.appendChild(dogContainer);            
+
+        })
+
+
+    }
+
+
+    //Credit to GeoDataSource.com
+//     function distance(lat1, lon1, lat2, lon2, unit) {
+// 	if ((lat1 == lat2) && (lon1 == lon2)) {
+// 		return 0;
+// 	}
+// 	else {
+// 		var radlat1 = Math.PI * lat1/180;
+// 		var radlat2 = Math.PI * lat2/180;
+// 		var theta = lon1-lon2;
+// 		var radtheta = Math.PI * theta/180;
+// 		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+// 		if (dist > 1) {
+// 			dist = 1;
+// 		}
+// 		dist = Math.acos(dist);
+// 		dist = dist * 180/Math.PI;
+// 		dist = dist * 60 * 1.1515;
+// 		if (unit=="K") { dist = dist * 1.609344 }
+// 		if (unit=="N") { dist = dist * 0.8684 }
+// 		return dist;
+// 	}
+// }
+    
+
+</script>
+</html>
+
+
