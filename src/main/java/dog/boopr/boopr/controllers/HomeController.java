@@ -6,7 +6,6 @@ import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +47,16 @@ public class HomeController {
         model.addAttribute("user", user);
         model.addAttribute("dogs", dogs);
         return "home";
+    }
+
+    @GetMapping("/user/userprofile")
+    public String userprofilePage(Model model) {
+
+        List<Dog> dogs = dogDao.findAll();
+        User user = userService.getCurrentUser();
+        model.addAttribute("user", user);
+        model.addAttribute("dogs", dogs);
+        return "user/userprofile";
     }
 
     @GetMapping("/profile/{id}")

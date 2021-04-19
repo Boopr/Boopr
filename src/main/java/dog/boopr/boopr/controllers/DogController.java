@@ -8,12 +8,18 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import dog.boopr.boopr.models.Breed;
+import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.repositories.BreedRespository;
+import dog.boopr.boopr.repositories.DogRepository;
 
 @Controller
 public class DogController {
+
+    @Autowired
+    private DogRepository dogDao;
 
     @Autowired
     private BreedRespository breedDao;
@@ -28,6 +34,15 @@ public class DogController {
         model.addAttribute("breeds", breeds);
 
         return "breed/edit";
+    }
+    
+    @GetMapping("/editprofile/{id}")
+    public String editprofilePage(Model model, @PathVariable Long id) {
+        Dog dog = dogDao.getOne(id);
+        long totalDogs = dogDao.findAll().size()-1;
+        model.addAttribute("dog", dog);
+        model.addAttribute("totalDogs", totalDogs);
+        return "dog/editprofile";
     }
 
     @GetMapping("/dog/add")
