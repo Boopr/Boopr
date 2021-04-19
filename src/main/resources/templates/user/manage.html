@@ -127,14 +127,14 @@
             let userEmail = document.createElement("div");
             let buttonGroup = document.createElement("div");
 
-            userContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center");
+            userContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center users");
             userName.setAttribute("class","col-4");
             userEmail.setAttribute("class","col-4");
             buttonGroup.setAttribute("class","col-3 btn-group");
 
             let input = document.createElement("input");
-            let editButton = document.createElement("button");
-            let deleteButton = document.createElement("button");
+            let editButton = document.createElement("a");
+            let deleteButton = document.createElement("a");
 
             input.setAttribute("class", "col-1")
             input.setAttribute("type","checkbox")
@@ -159,6 +159,14 @@
             tdcolumn.appendChild(userContainer)
             userList.appendChild(tdcolumn);
 
+        })
+
+        let buttons = Array.from(document.getElementsByClassName("btn-group"));
+        buttons.forEach(button =>{
+            let editButton = button.children[0];
+            let deleteButton = button.children[1];
+            let id = button.id;
+            editButton.href = "/user/userprofile/"+id
         })
 
     }
