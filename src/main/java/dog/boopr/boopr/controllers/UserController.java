@@ -27,7 +27,7 @@ public class UserController {
     private UserServices userService;
 
     @RequestMapping(value="/api/users", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String getDogs() throws JSONException{
+    public String getUsers() throws JSONException{
 
 
         JSONArray users = new JSONArray();

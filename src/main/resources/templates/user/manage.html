@@ -13,7 +13,7 @@
 
         <div class="row">
 
-            <div class="col-8 row p-2">
+            <div class="col-8 row p-2" id="userList">
 
                 <div class="col-12 row align-items-center p-2 justify-content-center">
 
@@ -33,9 +33,10 @@
 
                 <hr>
 
-                <td id="userList" th:each=" user : ${users}">
+                <!-- <td id="userList" th:each=" user : ${users}"> -->
+                <!-- <td id="userList"></td> -->
 
-                    <div class="col-12 row align-items-center p-2 justify-content-center">
+                    <!-- <div class="col-12 row align-items-center p-2 justify-content-center">
 
                         <input class="col-1"type="checkbox">
 
@@ -51,10 +52,10 @@
                             <button type="button" class="btn btn-danger" id="delete">Delete</button>
                         </div>
 
-                    </div>
+                    </div> -->
 
-
-                </td>
+<!-- 
+                </td> -->
 
             </div>
             
@@ -82,8 +83,9 @@
     </div>
 </main>
 </body>
-<script>
+<script layout:fragment="script">
     let userList = document.getElementById("userList");
+    let tdcolumn = document.createElement("td");
     let data;
 
     function refreshUsers(){
@@ -95,7 +97,29 @@
     }
     function drawUsers(){
         userList.innerHTML = "";
-        data.reverse();
+        let topicsTop = document.createElement("div")
+        let topInput = document.createElement("input");
+        let topUsername = document.createElement("div");
+        let topEmail = document.createElement("div");
+        let topInspect = document.createElement("div");
+        let linebreak = document.createElement("hr")
+
+        topicsTop.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center");
+        topInput.setAttribute("class", "col-1");
+        topInput.setAttribute("type","checkbox");
+        topUsername.setAttribute("class","col-4");
+        topUsername.innerHTML = "Username";
+        topEmail.setAttribute("class","col-4" );
+        topEmail.innerHTML = "E-mail";
+        topInspect.setAttribute("class", "col-3");
+        topInspect.innerHTML = "Inspect";
+
+        topicsTop.appendChild(topInput);
+        topicsTop.appendChild(topUsername);
+        topicsTop.appendChild(topEmail);
+        topicsTop.appendChild(topInspect);
+        userList.appendChild(topicsTop);
+        userList.appendChild(linebreak);
         data.forEach(user =>{
 
             let userContainer = document.createElement("div");
@@ -105,22 +129,39 @@
 
             userContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center");
             userName.setAttribute("class","col-4");
-            userEmail = document.setAttribute("class","col-4");
+            userEmail.setAttribute("class","col-4");
             buttonGroup.setAttribute("class","col-3 btn-group");
 
             let input = document.createElement("input");
             let editButton = document.createElement("button");
             let deleteButton = document.createElement("button");
 
+            input.setAttribute("class", "col-1")
+            input.setAttribute("type","checkbox")
+            buttonGroup.setAttribute("id",user.id);
+            editButton.innerHTML = "Edit";
+            deleteButton.innerHTML = "Delete";
+            editButton.setAttribute("class", "btn btn-primary");
+            deleteButton.setAttribute("class", "btn btn-danger");
+            deleteButton.setAttribute("data-bs-toggle","modal")
+            deleteButton.setAttribute("data-bs-target","#deleteConfirm")
+        
+
             userContainer.appendChild(input);
             userContainer.appendChild(userName);
             userContainer.appendChild(userEmail);
             userContainer.appendChild(buttonGroup);
+            buttonGroup.appendChild(editButton);
+            buttonGroup.appendChild(deleteButton);
 
-
+            userName.innerHTML = user.username;
+            userEmail.innerHTML = user.email;
+            tdcolumn.appendChild(userContainer)
+            userList.appendChild(tdcolumn);
 
         })
 
     }
+    refreshUsers();
 </script>
 </html>
