@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,10 +74,10 @@ public class UserController {
             return "{ 'message': 'User Edited!' }"; 
     }
 
-    @RequestMapping(value="/api/user/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String deleteUser(){
+    @RequestMapping(value="/api/user/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String deleteUser(@PathVariable Long id){
             try{
-                User user = userService.getCurrentUser();
+                User user = userDao.getOne(id);
                 userDao.delete(user);
             }catch(Exception e){
                 e.printStackTrace();

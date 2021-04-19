@@ -86,6 +86,8 @@
 <script layout:fragment="script">
     let userList = document.getElementById("userList");
     let tdcolumn = document.createElement("td");
+    let modalDelete = document.getElementById("deleteButton");
+    let deletTarget = 0;
     let data;
 
     function refreshUsers(){
@@ -97,6 +99,7 @@
     }
     function drawUsers(){
         userList.innerHTML = "";
+        tdcolumn.innerHTML = "";
         let topicsTop = document.createElement("div")
         let topInput = document.createElement("input");
         let topUsername = document.createElement("div");
@@ -167,9 +170,32 @@
             let deleteButton = button.children[1];
             let id = button.id;
             editButton.href = "/user/userprofile/"+id
-        })
 
+            deleteButton.addEventListener('click',()=>{
+                deleteTarget = id;
+            })
+        })
     }
     refreshUsers();
+
+    modalDelete.addEventListener('click',()=>{
+        
+        Toastify({
+        text: "Deleted Succesfully",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        gravity: "bottom",
+        className: "info",
+        }).showToast();
+
+        axios.post("/api/user/delete/"+ deleteTarget).then( res =>{
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+            refreshUsers();
+        })
+    })
 </script>
 </html>
