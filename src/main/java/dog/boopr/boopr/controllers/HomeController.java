@@ -98,4 +98,11 @@ public class HomeController {
         model.addAttribute("authGroups", authGroups);
         return "/admin";
     }
+
+    @GetMapping("/main")
+    public String mainPage(Model model) {
+        List<Dog> dog = dogDao.findAll();
+        model.addAttribute("dogs", dog);
+        return "/main";
+    }
 }
