@@ -34,7 +34,6 @@ build/
 
 application.properties
 
-### JavaScript ###
-
-static/js/keys.js
+images/
+keys.js
 

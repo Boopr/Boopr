@@ -38,10 +38,20 @@ public class Image {
     public Image() {
     }
 
+    public Image(User user, Dog dog, String url) {
+        this.url = url;
+        this.dog = dog;
+        this.user = user;
+    }
+
     public Image(String url, List<Boop> boops) {
 
         this.url = url;
         this.boops = boops;
+    }
+
+    public Image(String url) {
+        this.url = url;
     }
 
     @Override
@@ -62,11 +72,11 @@ public class Image {
     }
 
     public String getUrl() {
-        return this.url;
+        return "/" + this.url;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.url =  url;
     }
 
     public List<Boop> getBoops() {
