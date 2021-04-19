@@ -25,12 +25,15 @@
                     <div class="col-4">
                         Email
                     </div>
+                    <div class="col-3">
+                        Inspect
+                    </div>
 
                 </div>
 
                 <hr>
 
-                <td th:each=" user : ${users}">
+                <td id="userList" th:each=" user : ${users}">
 
                     <div class="col-12 row align-items-center p-2 justify-content-center">
 
@@ -41,6 +44,11 @@
                         </div>
                         <div class="col-4" th:text="${user.email}">
                             
+                        </div>
+
+                        <div class="col-3 btn-group">
+                            <button type="button" class="btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-danger" id="delete">Delete</button>
                         </div>
 
                     </div>
@@ -55,7 +63,64 @@
         </div>
 
     </div>
-   
+
+
+    <!-- delete modal -->
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete <span id="deleteTitle">Value?</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+            </div>
+        </div>
+        </div>
+    </div>
 </main>
 </body>
+<script>
+    let userList = document.getElementById("userList");
+    let data;
+
+    function refreshUsers(){
+        axios.get("/api/users").then(res=>{
+            console.log(res.data)
+            data = res.data
+            drawUsers();
+        })
+    }
+    function drawUsers(){
+        userList.innerHTML = "";
+        data.reverse();
+        data.forEach(user =>{
+
+            let userContainer = document.createElement("div");
+            let userName = document.createElement("div");
+            let userEmail = document.createElement("div");
+            let buttonGroup = document.createElement("div");
+
+            userContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center");
+            userName.setAttribute("class","col-4");
+            userEmail = document.setAttribute("class","col-4");
+            buttonGroup.setAttribute("class","col-3 btn-group");
+
+            let input = document.createElement("input");
+            let editButton = document.createElement("button");
+            let deleteButton = document.createElement("button");
+
+            userContainer.appendChild(input);
+            userContainer.appendChild(userName);
+            userContainer.appendChild(userEmail);
+            userContainer.appendChild(buttonGroup);
+
+
+
+        })
+
+    }
+</script>
 </html>

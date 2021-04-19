@@ -1,5 +1,10 @@
 package dog.boopr.boopr.controllers;
 
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +25,29 @@ public class UserController {
 
     @Autowired
     private UserServices userService;
+
+    @RequestMapping(value="/api/users", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getDogs() throws JSONException{
+
+
+        JSONArray users = new JSONArray();
+
+        List<User> userData = userDao.findAll();
+
+        for( User u : userData){
+
+            JSONObject user = new JSONObject();
+            user.put("id",u.getId());
+            user.put("username",u.getUsername());
+            user.put("email",u.getEmail());
+
+
+            users.put(user);
+
+        }
+        
+        return users.toString();
+    }
 
     @RequestMapping(value="/api/user/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String postNewUser(@ModelAttribute User user){
