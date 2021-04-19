@@ -73,7 +73,7 @@ public class RestDogController {
             JSONObject owner = new JSONObject();
             owner.put("id",d.getOwner().getId());
             owner.put("username",d.getOwner().getUsername());
-            owner.put("id",d.getOwner().getEmail());
+            owner.put("email",d.getOwner().getEmail());
             JSONObject dog = new JSONObject();
             dog.put("id", d.getId());
             dog.put("name", d.getName());
