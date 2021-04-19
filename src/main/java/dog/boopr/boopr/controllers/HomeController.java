@@ -2,6 +2,8 @@ package dog.boopr.boopr.controllers;
 
 import java.util.List;
 
+import dog.boopr.boopr.models.AuthGroup;
+import dog.boopr.boopr.repositories.AuthGroupRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 
@@ -26,6 +28,9 @@ public class HomeController {
 
     @Autowired
     private UserServices userService;
+
+    @Autowired
+    private AuthGroupRepository authGroupDao;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -88,9 +93,9 @@ public class HomeController {
     }
 
     @GetMapping("/admin")
-    public String adminPage(Model model, @PathVariable Long id) {
-        User user = userDao.getOne(id);
-        model.addAttribute("user", user);
+    public String adminPage(Model model, String authGroup) {
+        List<AuthGroup> authGroups = authGroupDao.findByUsername(authGroup);
+        model.addAttribute("authGroups", authGroups);
         return "/admin";
     }
 }
