@@ -44,6 +44,10 @@
                         </select>
                     </div>
 
+                    <div class="p-2" id="dogImages">
+
+                    </div>
+
                 </div>
 
                 
@@ -136,7 +140,7 @@
     <script src="/js/keys.js"></script>
 </main>
 </body>
-<script  layout:fragment="script">
+<script type="module" layout:fragment="script">
     //
     let lon = document.getElementById("lon");
     let lat = document.getElementById("lat");
@@ -249,6 +253,9 @@
             lat.value
         ]).addTo(map);
 
+    import ImageCarouselUploader from '/js/ImageCarouselUploader.js';
     
+    let imageCarousel = new ImageCarouselUploader("dogImages",id);
+        
 </script>
 </html>
