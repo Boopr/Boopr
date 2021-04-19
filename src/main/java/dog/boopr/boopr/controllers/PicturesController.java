@@ -81,7 +81,6 @@ public class PicturesController {
 
         JSONArray pics = new JSONArray();
 
-
         List<Image> images = imageDao.findAllByDog(dogDao.getOne(id));
 
         for( Image i : images){
@@ -134,7 +133,7 @@ public class PicturesController {
             e.printStackTrace();
             return " { 'error' : '" + e.toString() + " ' }";
         }  
-        return "{ 'message': 'Image Posted!' }"; 
+            return "{ 'message': 'Image Posted!' }"; 
         }
 
     @RequestMapping(value="/api/dogs/pics/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -185,6 +184,6 @@ public class PicturesController {
                 return " { 'error' : '" + e.toString() + " ' }";
             }  
             return "{ 'message': 'De-Booped!' }"; 
-            }
+            } 
 
 }
