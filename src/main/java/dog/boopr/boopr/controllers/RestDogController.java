@@ -176,6 +176,7 @@ public class RestDogController {
             List<Image> images = dog.getImages();
             for( Image i : images){
                 JSONObject img = new JSONObject();
+                img.put("id",i.getId());
                 img.put("url",i.getUrl());
                 jsonImages.put(img);
             }
