@@ -12,13 +12,19 @@
         <div class="card col-12 col-lg-6 col-md-8 mx-auto mt-4">
             <div class="card-body">
                 <div class="">
+
+                    <div th:if="${errors}">
+                        <td th:each="error : ${errors}">
+                            <p class="alert alert-danger" th:text="${error}"></p>
+                        </td>
+                    </div>
     
                     <div class="col-12">
                         <h1 class="text-center p-3">
                             Register
                         </h1>
                     </div>
-    
+
                     <div class="col-12 row pb-3 m-0">
                         <label class="py-2 font-weight-bold" >Email</label>
                         <input th:field="*{email}" class="form-control col-12 p-2" placeholder="Email@example.com" required>

@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @EnableWebSecurity
@@ -44,6 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
         //we are getting authetnicationmanagerBuilder and passing it the bean we just created
         auth.authenticationProvider(authenticationProvider());
+    }
+
+    @Bean
+    public javax.validation.ValidatorFactory localValidatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
     }
 
     @Override

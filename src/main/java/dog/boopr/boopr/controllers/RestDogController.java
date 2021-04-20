@@ -2,6 +2,11 @@ package dog.boopr.boopr.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +34,9 @@ import dog.boopr.boopr.utils.FileUtil;
 
 @RestController
 public class RestDogController {
+
+    @Autowired
+    private ValidatorFactory vFactory;
 
     @Autowired
     private DogRepository dogDao;
@@ -197,6 +205,8 @@ public class RestDogController {
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
             try{
+                Validator validator = vFactory.getValidator();
+
                 User user = userService.getCurrentUser();
 
                 //stop if the user is not logged in 
@@ -220,6 +230,21 @@ public class RestDogController {
                     dog.setImages(images); 
                 }
 
+                Set<ConstraintViolation<Dog>> violations = validator.validate(dog);
+
+                if(!violations.isEmpty()){
+                    JSONObject response = new JSONObject();
+                    JSONArray errs = new JSONArray();
+
+                    for (ConstraintViolation<Dog> violation : violations) {
+                        JSONObject err = new JSONObject();
+                        err.put("error",violation.getMessage());
+                        errs.put(err);
+                    }
+                    response.put("errors",errs);
+                    return errs.toString();
+                }
+                
                 dogDao.save(dog); 
             }catch(Exception e){
                 e.printStackTrace();
@@ -242,6 +267,7 @@ public class RestDogController {
     @RequestMapping(value="/api/dogs/{id}/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String editDog(@ModelAttribute Dog dogUpdate, @PathVariable Long id) throws JSONException{
             try{
+                Validator validator = vFactory.getValidator();
                 User user = userService.getCurrentUser();
                 Dog dog = dogDao.getOne(id);
 
@@ -254,6 +280,21 @@ public class RestDogController {
                     dog.setSex(dogUpdate.getSex());
                     dog.setLon(dogUpdate.getLon());
                     dog.setLat(dogUpdate.getLat());
+
+                    Set<ConstraintViolation<Dog>> violations = validator.validate(dog);
+
+                    if(!violations.isEmpty()){
+                        JSONObject response = new JSONObject();
+                        JSONArray errs = new JSONArray();
+    
+                        for (ConstraintViolation<Dog> violation : violations) {
+                            JSONObject err = new JSONObject();
+                            err.put("error",violation.getMessage());
+                            errs.put(err);
+                        }
+                        response.put("errors",errs);
+                        return errs.toString();
+                    }
 
                     dogDao.save(dog);
                     JSONObject response = new JSONObject();
