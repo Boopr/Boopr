@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,11 @@ public class FileUtil {
 
     public static Image uploadImage(MultipartFile uploadedImage, User user, Dog dog){
 
-        String filename = uploadedImage.getOriginalFilename();
+        //increments the file name by one
+        
+        String extension = FilenameUtils.getExtension(uploadedImage.getOriginalFilename());
+
+        String filename = imageDao.findAll().size() + "." + extension;
         Path path = Paths.get(UPLOAD_PATH);
 
         if(Files.notExists(path)){
@@ -67,5 +72,5 @@ public class FileUtil {
 
         return image;
     }
-    
+
 }

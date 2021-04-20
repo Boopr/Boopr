@@ -21,10 +21,10 @@
                     <h3 class="m-0 ">Add Breed</h3>
                     </div>
                     <div class="col-md col-12 mb-2 mb-md-0 order-last order-md-2">
-                    <input type="text" class="form-control">
+                    <input id="addBreedInput" type="text" class="form-control">
                     </div>
                     <div class="col-md-auto col-4 mb-md-0 order-2 order-md-3">
-                    <button class="btn btn-primary w-100 mb-2 mb-md-0">+ Add</button>
+                    <button id="addBreedBtn" class="btn btn-primary w-100 mb-2 mb-md-0">+ Add</button>
                     </div>
                 </div>
 
@@ -70,6 +70,8 @@
     let deleteButton = document.getElementById("deleteButton");
     let breedList = document.getElementById("breedList");
     let deleteTarget = -1;
+    let addBreedInput = document.getElementById("addBreedInput");
+    let addBreedBtn = document.getElementById("addBreedBtn");
 
     let data;
 
@@ -82,6 +84,8 @@
     }
 
     function drawBreeds(){
+        breedList.innerHTML = "";
+        data.reverse();
         data.forEach( breed =>{
 
             let breedSection = document.createElement("div");
@@ -192,8 +196,32 @@
         }).showToast();
 
         axios.post("/api/breed/delete/"+ deleteTarget).then( res =>{
-            
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+            refreshBreeds();
         })
+    })
+
+    addBreedBtn.addEventListener('click', ()=>{
+
+        let formData = new FormData();
+        formData.set("breed", addBreedInput.value);
+        axios.post("/api/breed/add", formData ).then(res=>{
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+            refreshBreeds();
+        })
+        
+
+
     })
 
     

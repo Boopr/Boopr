@@ -10,12 +10,13 @@
 <body>
 
 <main layout:fragment="content">
+
+    <input type="hidden" th:value="${dog.lon}" id="lon" class="invisible">
+    <input type="hidden" th:value="${dog.lat}" id="lat" class="invisible">
+    <input type="hidden" th:value="${dog.id}" id="id" class="invisible">
+    <input type="hidden" th:value="${totalDogs}" id="totalDogs" class="invisible">
    
     <div class="container mb-4">
-
-        <div th:if="${param.first}">
-            <p class="alert alert-success  m-2">Please add your first dog to continue</p>
-        </div>
 
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 col-lg-6 d-flex flex-wrap w-100 justify-content-center">
@@ -29,7 +30,7 @@
                     <div class="p-2">
                     
                         <h5>Name</h5>
-                        <input type="text" class="form-control" placeholder="Name" id="name">
+                        <input type="text" class="form-control" th:placeholder="${dog.name}" id="name">
     
                     </div>
     
@@ -43,6 +44,10 @@
                         </select>
                     </div>
 
+                    <div class="p-2" id="dogImages">
+
+                    </div>
+
                 </div>
 
                 
@@ -53,7 +58,7 @@
                         <h5>
                             Bio
                         </h5>
-                        <textarea name="bio" id="bio" class="col-12 form-control" rows="4" style="resize: none;"></textarea>
+                        <textarea name="bio" id="bio" th:placeholder="${dog.bio}" class="col-12 form-control" rows="4" style="resize: none;"></textarea>
                     </div>
 
                     <div class="m-2 border rounded" style="height: 300px"  id='map'>
@@ -72,19 +77,38 @@
                         <input class="form-control" type="file" id="file">
                     </div>
     
-                    <div class="p-2 row">
+                    <div class="p-2 row" th:if="${dog.sex}">
                         <h5 class="col-2 ">
                             Sex
                         </h5>
-                        <div class="col-4 ">
+                        <div class="col-4">
                             <input class="form-check-input" type="radio" name="sex" id="male" value="male" checked>
                             <label class="form-check-label" for="sex">
                                 Male
                             </label>
                         </div>
                         
-                        <div class="col-4 ">
+                        <div class="col-4">
                             <input class="form-check-input" type="radio" name="sex" id="female" value="female">
+                            <label class="form-check-label" for="sex">
+                                Female
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="p-2 row" th:if="${!dog.sex}">
+                        <h5 class="col-2 ">
+                            Sex
+                        </h5>
+                        <div class="col-4">
+                            <input class="form-check-input" type="radio" name="sex" id="male" value="male">
+                            <label class="form-check-label" for="sex">
+                                Male
+                            </label>
+                        </div>
+                        
+                        <div class="col-4">
+                            <input class="form-check-input" type="radio" name="sex" id="female" value="female" checked>
                             <label class="form-check-label" for="sex">
                                 Female
                             </label>
@@ -116,8 +140,11 @@
     <script src="/js/keys.js"></script>
 </main>
 </body>
-<script  layout:fragment="script">
+<script type="module" layout:fragment="script">
     //
+    let lon = document.getElementById("lon");
+    let lat = document.getElementById("lat");
+    let id = document.getElementById("id").value;
     window.onmousedown = function (e) {
         var el = e.target;
         if (el.tagName.toLowerCase() == 'option' && el.parentNode.hasAttribute('multiple')) {
@@ -210,18 +237,25 @@
     mapboxgl.accessToken = apiKey;
     var map = new mapboxgl.Map({
         center:[
-        -100.46642296086831,
-        40.55721084162846
+        lon.value,
+        lat.value
         ],
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        zoom: 2
+        zoom: 10
     });
 
     let marker = new mapboxgl.Marker({
     draggable: true   
     })
+    marker.setLngLat([
+            lon.value,
+            lat.value
+        ]).addTo(map);
 
+    import ImageCarouselUploader from '/js/ImageCarouselUploader.js';
     
+    let imageCarousel = new ImageCarouselUploader("dogImages",id);
+        
 </script>
 </html>
