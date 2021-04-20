@@ -72,6 +72,18 @@ public class HomeController {
     }
 
     @GetMapping("/profile/{id}")
+    public String profilePage(Model model, @PathVariable String id) {
+        Dog dog = dogDao.getOne(Long.parseLong(id));
+        model.addAttribute("dog", dog);
+        return "user/profile";
+    }
+
+    @GetMapping("/location/{id}")
+    public String locationPage(Model model, @PathVariable String id) {
+        Dog dog = dogDao.getOne(Long.parseLong(id));
+        model.addAttribute("dog", dog);
+        return "user/map-location";
+    }
     public String profilePage(Model model, @PathVariable Long id) {
         Dog dog = dogDao.getOne(id);
         long totalDogs = dogDao.findAll().size()-1;
@@ -96,4 +108,10 @@ public class HomeController {
         return "dog/manageDogs";
     }
 
+    @GetMapping("/admin")
+    public String adminPage(Model model, @PathVariable Long id) {
+        User user = userDao.getOne(id);
+        model.addAttribute("user", user);
+        return "/admin";
+    }
 }

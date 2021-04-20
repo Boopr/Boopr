@@ -19,7 +19,9 @@ import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
+import dog.boopr.boopr.principles.UserPrincipal;
 import dog.boopr.boopr.repositories.BoopRepository;
+import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
 import dog.boopr.boopr.repositories.ImageRepository;
 import dog.boopr.boopr.repositories.UserRepository;
@@ -106,12 +108,16 @@ public class PicturesController {
     }
 
     @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String postNewPicture(@PathVariable Long id, @RequestParam(name = "file") MultipartFile uploadedFile){
+    public String postNewPicture(@PathVariable Long id, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
         try{
             User user = userService.getCurrentUser();
             Dog dog = dogDao.getOne(id);
 
-            if(!uploadedFile.isEmpty()){
+            //if user is logged in or is admin            
+            if( 
+                (!uploadedFile.isEmpty() && user != null) ||
+                (!uploadedFile.isEmpty() && userService.userIsRole(user, "admin"))
+                ){
                 //we save the dog just in case for any potential errors
                 dogDao.save(dog);
                 //using our file util we give it the file and user to create the image and write the image to disk
@@ -132,21 +138,29 @@ public class PicturesController {
             
         }catch(Exception e){
             e.printStackTrace();
-            return " { 'error' : '" + e.toString() + " ' }";
+            JSONObject response = new JSONObject();
+            response.put("error",e.toString());
+            return response.toString();
         }  
-        return "{ 'message': 'Image Posted!' }"; 
+            JSONObject response = new JSONObject();
+            response.put("message","Image Deleted!");
+            return response.toString();
         }
 
     @RequestMapping(value="/api/dogs/pics/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String deletePicture(@PathVariable Long id){
+    public String deletePicture(@PathVariable Long id) throws JSONException{
         try{
-            Image image = imageDao.getOne(id);
+            Image image = imageDao.getOne(id);   
             imageDao.delete(image);
         }catch(Exception e){
             e.printStackTrace();
-            return " { 'error' : '" + e.toString() + " ' }";
+            JSONObject response = new JSONObject();
+            response.put("error",e.toString());
+            return response.toString();
         }  
-        return "{ 'message': 'Image Deleted!' }"; 
+            JSONObject response = new JSONObject();
+            response.put("message","Image Deleted!");
+            return response.toString();
         }
 
     @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)

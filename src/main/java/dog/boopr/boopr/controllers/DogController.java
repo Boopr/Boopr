@@ -36,12 +36,14 @@ public class DogController {
     }
     
     @GetMapping("/editprofile/{id}")
-    public String editprofilePage(Model model, @PathVariable Long id) {
-        Dog dog = dogDao.getOne(id);
-        long totalDogs = dogDao.findAll().size()-1;
-        model.addAttribute("dog", dog);
-        model.addAttribute("totalDogs", totalDogs);
-        return "dog/editprofile";
+    public String editprofilePage(
+        Model model, 
+        @PathVariable Long id){
+            Dog dog = dogDao.getOne(id);
+            long totalDogs = dogDao.findAll().size()-1;
+            model.addAttribute("dog", dog);
+            model.addAttribute("totalDogs", totalDogs);
+            return "dog/editprofile";
     }
 
     @GetMapping("/dog/add")
@@ -54,6 +56,17 @@ public class DogController {
         return "dog/edit";
     }
 
+    @GetMapping("/dog/pic/add/{id}")
+    public String dogAddpic(
+        Model model,
+        @PathVariable Long id){
+            List<Breed> breeds = breedDao.findAll();
+            Dog dog = dogDao.getOne(id);
+            model.addAttribute("breeds", breeds);
+            model.addAttribute("dog", dog);
+            return "dog/image";
+    }
+    
 
 }
 

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" >
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,70 +12,83 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css' integrity='sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q==' 
-    crossorigin='anonymous'/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+          crossorigin="anonymous"/>
+    <link rel='stylesheet'
+          href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/css/bootstrap.min.css'
+          integrity='sha512-N415hCJJdJx+1UBfULt+i+ihvOn42V/kOjOpp1UTh4CZ70Hx5bDlKryWaqEKfY/8EYOu/C2MuyaluJryK1Lb5Q=='
+          crossorigin='anonymous'/>
     <link rel="stylesheet" href="/css/style.css">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/js/bootstrap.bundle.min.js' integrity='sha512-DSdiuNZtfUhehZHXtit9Sa/83i06YSnvT8Js8drwdkVCDMk3JwpIxdhf2oRUByUDB3wguN2iAzoTNfxFAuqGyA==' crossorigin='anonymous'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta3/js/bootstrap.bundle.min.js'
+            integrity='sha512-DSdiuNZtfUhehZHXtit9Sa/83i06YSnvT8Js8drwdkVCDMk3JwpIxdhf2oRUByUDB3wguN2iAzoTNfxFAuqGyA=='
+            crossorigin='anonymous'></script>
     <!-- Axios -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js' integrity='sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==' crossorigin='anonymous'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js'
+            integrity='sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=='
+            crossorigin='anonymous'></script>
     <!-- Toast JS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </head>
-    <header>
-        <nav class="navbar bg-navbar navbar-expand-md">
-            <div class="container">
+<header>
+    <nav class="navbar bg-navbar navbar-expand-md">
+        <div class="container">
 
-               <div class="col-12 col-md-2 navbar-brand ">
-                   <div class="d-flex justify-content-between w-100 ">
-                        <a href="/">
-                            <img class="w-100" style="max-width: 10rem;" src="/img/Logo.svg" alt="">
-                        </a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                   </div>
-               </div>
-
-               <div class="col-12 col-md-auto justify-content-center">
-                    
-                    <div class="collapse navbar-collapse" id="navCollapse">
-
-                        <ul class="navbar-nav col-12 text-center">
-                            <li class="nav-item ">
-                                <a class="nav-link text-muted" href="/">Home</a>
-                            </li>
-                            <li class="nav-item" sec:authorize="isAuthenticated()">
-                                <a class="nav-link text-muted" href="/user/userprofile">Profile</a>
-                            </li>
-                            <li class="nav-item" sec:authorize="isAuthenticated()">
-                                <a class="nav-link text-muted" href="/dog/add">New Dog</a>
-                            </li>
-                            <li class="nav-item" sec:authorize="isAuthenticated()">
-                                <a class="nav-link text-muted" href="/logout">Logout</a>
-                            </li>
-                            <li class="nav-item" sec:authorize="isAnonymous()">
-                                <a class="nav-link text-muted" href="/login">Sign In/Sign Up</a>
-                            </li>
-                        </ul>
-                    </div>
-                    
-               </div>
-                
+            <div class="col-12 col-md-2 navbar-brand ">
+                <div class="d-flex justify-content-between w-100 ">
+                    <a href="/">
+                        <img class="w-100" style="max-width: 10rem;" src="/img/Logo.svg" alt="">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse"
+                            aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
             </div>
-        </nav>
 
-    </header>
+            <div class="col-12 col-md-auto justify-content-center">
 
-    <main layout:fragment="content">
-        <!-- content goes here -->
-    </main>
+                <div class="collapse navbar-collapse" id="navCollapse">
+
+                    <ul class="navbar-nav col-12 text-center">
+                        <li class="nav-item ">
+                            <a class="nav-link text-muted" href="/">Home</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link text-muted" href="/admin">Admin</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link text-muted" href="/user/userprofile">Profile</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link text-muted" href="/dog/add">New Dog</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link text-muted" href="/logout">Logout</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAnonymous()">
+                            <a class="nav-link text-muted" href="/login">Sign In/Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+</header>
+
+<main layout:fragment="content">
+    <!-- content goes here -->
+</main>
 
 </body>
 
-<script layout:fragment="script">
+<script layout:fragment="script" >
+
 </script>
 
 </html>
