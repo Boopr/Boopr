@@ -64,14 +64,45 @@
                     <div class="p-2" id="bio" th:text="${dog.bio}" style="height:15rem; overflow-y: auto">
 
                     </div>
+<<<<<<< HEAD
+
                     
+                    
+=======
+                    <div class="p-2">
+                        <div id="boops">
+                            <button type="button" class="btn btn-success" id="boopBtn">Boop</button>
+                            <h4>No. of Boops</h4>
+                        </div>
+                    </div>
+>>>>>>> 6f09a53c7c84e718e2b05106bd479de7c7736437
 
                 </div>
 
             </div>
+
+            <div class="col-12 mt-5">
+                <h2>
+                    Other pics of this good dog
+                </h2>
+                <div class="row justify-content-center mt-2" id="dogImagePanel">
+
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+
+                </div>
+            </div>
         </div>
-        
-        
         
     </div>
     <script src="/js/keys.js"></script>
@@ -79,6 +110,36 @@
 </body>
 <script layout:fragment="script">
     mapboxgl.accessToken = apiKey;
+<<<<<<< HEAD
+
+    let dogImagePanel = document.getElementById("dogImagePanel")
+
+    function getImagesPanel(){
+        axios.get("/api/dogs/"+ id + " /pics").then(res =>{
+            drawImages(res.data)
+        })
+    }
+
+    function drawImages(data){
+        dogImagePanel.innerHTML = "";
+        data.forEach( imgData =>{
+            let imageContainer = document.createElement("div");
+            imageContainer.setAttribute("class","col-12 col-md-4 p-2 border rounded m-2")
+
+            let image = document.createElement("img");
+            image.setAttribute("class","w-100");
+            image.src = imgData.url;
+            image.id = "img-" + imgData.id
+
+            imageContainer.appendChild(image);
+            dogImagePanel.appendChild(imageContainer);
+        })
+    }
+    
+
+=======
+    let boopTarget = 0;
+>>>>>>> 6f09a53c7c84e718e2b05106bd479de7c7736437
     let lon = document.getElementById("lon");
     let lat = document.getElementById("lat");
     let id = document.getElementById("id").value;
@@ -115,6 +176,7 @@
                 id = res.data.id
                 totalDogs = res.data.totalDogs;
                 data = res.data
+                console.log(data)
                 changeDog()
             }
         })
@@ -132,6 +194,7 @@
         console.log(data.images[0].url)
         
         imagebg.style.backgroundImage = `url(${data.images[0].url})`
+        boopTarget = parseInt(data.images[0].id)
         image.src = data.images[0].url
         bio.innerHTML = data.bio;
         map.flyTo({
@@ -147,6 +210,25 @@
             data.lat
         ]).addTo(map);
     }
+
+    let boopButton = document.getElementById("boopBtn");
+    boopButton.addEventListener("click", ()=>{
+        Toastify({
+        text: "Boop!",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        gravity: "bottom",
+        className: "info",
+        }).showToast();
+
+        axios.post("/api/pics/"+boopTarget+"/boop").then( res =>{
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+        })
+    })
 
     next.addEventListener('click',(e)=>{
         e.preventDefault();
@@ -180,7 +262,7 @@
         window.history.replaceState(nextState, nextTitle, nextURL);
     })
     
-
+    getImagesPanel()
     
     
 </script>

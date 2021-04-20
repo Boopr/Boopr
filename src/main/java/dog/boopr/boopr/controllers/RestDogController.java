@@ -2,9 +2,11 @@ package dog.boopr.boopr.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,11 +14,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,24 +23,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
-import dog.boopr.boopr.repositories.BoopRepository;
-import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
-import dog.boopr.boopr.repositories.ImageRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 import dog.boopr.boopr.utils.FileUtil;
 
 @RestController
 public class RestDogController {
-    
+
     @Autowired
-    private BreedRespository breedDao;
+    private ValidatorFactory vFactory;
 
     @Autowired
     private DogRepository dogDao;
@@ -49,48 +44,26 @@ public class RestDogController {
     @Autowired
     private UserRepository userDao;
 
-    @Autowired
-    private ImageRepository imageDao;
-
-    @Autowired
-    private BoopRepository boopDao;
-
     @Value("${mapbox-key}")
     private String mapboxApiKey;
 
     @Autowired
     private UserServices userService;
 
-
+    /**
+     * This returns the mapbox api key from application.properties
+     * @return
+     */
     @RequestMapping(path = "/js/keys.js", produces ="application/javascript")
     @ResponseBody
     public String apiKey(){
         return "const apiKey = `"+mapboxApiKey+"`";
     }
 
-
-    @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String getBreeds() throws JSONException{
-
-
-        JSONArray breeds = new JSONArray();
-
-        List<Breed> breedData = breedDao.findAll();
-
-        for( Breed b : breedData){
-
-            JSONObject breed = new JSONObject();
-            breed.put("id", b.getId());
-            breed.put("name", b.getBreed());
-
-
-            breeds.put(breed);
-
-        }
-        
-        return breeds.toString();
-    }
-
+    /**
+     * This route gives back a list of all dogs in the database
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getDogs() throws JSONException{
 
@@ -112,7 +85,7 @@ public class RestDogController {
             JSONObject owner = new JSONObject();
             owner.put("id",d.getOwner().getId());
             owner.put("username",d.getOwner().getUsername());
-            owner.put("id",d.getOwner().getEmail());
+            owner.put("email",d.getOwner().getEmail());
             JSONObject dog = new JSONObject();
             dog.put("id", d.getId());
             dog.put("name", d.getName());
@@ -132,6 +105,11 @@ public class RestDogController {
         return dogs.toString();
     }
 
+    /**
+     * This route gives back a list of all dogs in the database under a owner/user
+     * @param id The id of the owner/user you are reciving all dogs about
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs/owner/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getDogsByOwner(@PathVariable Long id) throws JSONException{
 
@@ -148,6 +126,10 @@ public class RestDogController {
             for(Breed b: d.getBreeds()){
                 breeds.put(b.getBreed());
             }
+            JSONArray images = new JSONArray();
+            for(Image i: d.getImages()){
+                images.put(i.getUrl());
+            }
             JSONObject owner = new JSONObject();
             owner.put("id",d.getOwner().getId());
             owner.put("username",d.getOwner().getUsername());
@@ -156,6 +138,7 @@ public class RestDogController {
             dog.put("id", d.getId());
             dog.put("name", d.getName());
             dog.put("bio",d.getBio());
+            dog.put("images",images);
             dog.put("breed",breeds);
             dog.put("owner",owner);
             dog.put("sex",d.getSex());
@@ -170,11 +153,14 @@ public class RestDogController {
         return dogs.toString();
     }
 
+    /**
+     * This route gives back all information about a single dog by ID
+     * @param id The id of the dog you are retriveing 
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getDogsByID(@PathVariable Long id) throws JSONException{
 
-
-        
         long totalDogs = dogDao.findAll().size()-1;
         Dog dog = dogDao.getOne(id);
 
@@ -190,6 +176,7 @@ public class RestDogController {
             List<Image> images = dog.getImages();
             for( Image i : images){
                 JSONObject img = new JSONObject();
+                img.put("id",i.getId());
                 img.put("url",i.getUrl());
                 jsonImages.put(img);
             }
@@ -205,117 +192,34 @@ public class RestDogController {
             jsondog.put("lon",dog.getLon());
             jsondog.put("images", jsonImages);
             jsondog.put("totalDogs", totalDogs);
-
-
-            
-
-        
+  
         return jsondog.toString();
     }
 
-    @RequestMapping(value="/api/owner/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String getPicsByOwnerID(@PathVariable Long id) throws JSONException{
-
-
-        JSONArray pics = new JSONArray();
-
-
-        List<Image> images = imageDao.findAllByUser(userDao.findByIdEquals(id).get(0));
-
-        for( Image i : images){
-
-            JSONObject boops = new JSONObject();
-            for(Boop b : i.getBoops()){
-                boops.put("id",b.getId());
-                boops.put("userId",b.getUser().getId());
-            }
-
-            JSONObject picture = new JSONObject();
-            picture.put("id", i.getId());
-            picture.put("url", i.getUrl());
-            picture.put("boops",boops);
-            picture.put("dog_id",i.getDog().getId());
-            picture.put("user_id",i.getUser().getId());
-            pics.put(picture);
-
-        }
-        
-        return pics.toString();
-    }
-
-    @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String getPicsByDogID(@PathVariable Long id) throws JSONException{
-
-
-        JSONArray pics = new JSONArray();
-
-
-        List<Image> images = imageDao.findAllByDog(dogDao.getOne(id));
-
-        for( Image i : images){
-
-            JSONObject boops = new JSONObject();
-            for(Boop b : i.getBoops()){
-                boops.put("id",b.getId());
-                boops.put("userId",b.getUser().getId());
-            }
-
-            JSONObject picture = new JSONObject();
-            picture.put("id", i.getId());
-            picture.put("url", i.getUrl());
-            picture.put("boops",boops);
-            picture.put("dog_id",i.getDog().getId());
-            picture.put("user_id",i.getUser().getId());
-            pics.put(picture);
-
-        }
-        
-        return pics.toString();
-    }
-
-    @RequestMapping(value="/api/user/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewUser(@ModelAttribute User user){
-            try{
-                userDao.save(user);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Welcome to Boopr!!' }"; 
-        }
-
-    @RequestMapping(value="/api/user/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String editUser(@ModelAttribute User userUpdate){
-            try{
-                User user = userService.getCurrentUser();
-                userUpdate.setId(user.getId());
-                userDao.save(userUpdate); 
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'User Edited!' }"; 
-    }
-
-    @RequestMapping(value="/api/user/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String deleteUser(){
-            try{
-                User user = userService.getCurrentUser();
-                userDao.delete(user);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'User deleted, Sorry to see you go!' }"; 
-        }
-
-
-
+    /**
+     * 
+     * @param dog dog bound to the form though thymeleaf
+     * @param uploadedFile uploaded image for the dog initially, can be empty
+     * @return JSONObject with a message or error depending on success
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile){
+        public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
             try{
+                Validator validator = vFactory.getValidator();
+
                 User user = userService.getCurrentUser();
+
+                //stop if the user is not logged in 
+                if(user == null){
+                    JSONObject response = new JSONObject();
+                    response.put("error","You are not logged in!");
+                    return response.toString();
+                }
+
                 dog.setOwner(user);
+
+                //if there is not image uploaded with the dog skip this block
                 if(!uploadedFile.isEmpty()){
                     dogDao.save(dog);
                     Image image = FileUtil.uploadImage(uploadedFile, user, dog);
@@ -326,161 +230,127 @@ public class RestDogController {
                     images.add(image);
                     dog.setImages(images); 
                 }
+
+                Set<ConstraintViolation<Dog>> violations = validator.validate(dog);
+
+                if(!violations.isEmpty()){
+                    JSONObject response = new JSONObject();
+                    JSONArray errs = new JSONArray();
+
+                    for (ConstraintViolation<Dog> violation : violations) {
+                        JSONObject err = new JSONObject();
+                        err.put("error",violation.getMessage());
+                        errs.put(err);
+                    }
+                    response.put("errors",errs);
+                    return errs.toString();
+                }
+                
                 dogDao.save(dog); 
             }catch(Exception e){
                 e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Pup Posted!' }"; 
-    }
-
-    @RequestMapping(value="/api/dogs/{id}/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String editDog(@ModelAttribute Dog dogUpdate, @PathVariable Long id){
-            try{
-                User user = userService.getCurrentUser();
-                dogUpdate.setOwner(user);
-                dogUpdate.setId(id);
-                dogDao.save(dogUpdate); 
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Pup Edited!' }"; 
-        }
-
-    @RequestMapping(value="/api/dogs/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String deleteDog(@PathVariable Long id){
-            try{
-                Dog dog = dogDao.getOne(id);
-                dogDao.delete(dog);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Pup Edited!' }"; 
-        }
-
-    @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String postNewPicture(@PathVariable Long id, @RequestParam(name = "file") MultipartFile uploadedFile){
-        try{
-            User user = userService.getCurrentUser();
-            Dog dog = dogDao.getOne(id);
-
-            if(!uploadedFile.isEmpty()){
-                //we save the dog just in case for any potential errors
-                dogDao.save(dog);
-                //using our file util we give it the file and user to create the image and write the image to disk
-                Image image = FileUtil.uploadImage(uploadedFile, user, dog);
-                //grab the list of existing images
-                List<Image> images = dog.getImages();
-                //check if its empty or the first image
-                if(images == null){
-                    images = new ArrayList<Image>();
-                }
-                //add the image to the list
-                images.add(image);
-                //and then save the list to the dog
-                dog.setImages(images); 
-            }
-            //and finally save the dog 🐶
-            dogDao.save(dog);
-            
-        }catch(Exception e){
-            e.printStackTrace();
-            return " { 'error' : '" + e.toString() + " ' }";
-        }  
-        return "{ 'message': 'Image Posted!' }"; 
-        }
-
-    @RequestMapping(value="/api/dogs/pics/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String deletePicture(@PathVariable Long id){
-        try{
-            Image image = imageDao.getOne(id);
-            imageDao.delete(image);
-        }catch(Exception e){
-            e.printStackTrace();
-            return " { 'error' : '" + e.toString() + " ' }";
-        }  
-        return "{ 'message': 'Image Deleted!' }"; 
-        }
-
-    @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewBoop(@PathVariable Long id){
-            try{
-                User user = userService.getCurrentUser();
-                Boop boop = new Boop();
-                boop.setImage(imageDao.getOne(id));
-                boop.setUser(user);
-                boopDao.save(boop);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Booped!' }"; 
-            }
-
-    @RequestMapping(value="/api/pics/{id}/boop/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String deleteBoop(@PathVariable Long id){
-            try{
-                User user = userService.getCurrentUser();
-                Image image = imageDao.getOne(id);
-                Boop boop = null;
-                List<Boop> boops = boopDao.findByImageId(image);
-                for(Boop b: boops ){
-                    if(b.getUser().equals(user)){
-                        boop = b;
-                    }
-                }
-                if(boop==null){
-                    return "{ 'message': 'Boop doesn't exist!' }";
-                }
-                boopDao.delete(boop);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'De-Booped!' }"; 
-            }
-
-
-    @RequestMapping(value="/api/breed/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String deleteBreed(
-        @PathVariable Long id){
-            try{
-                Breed breed = breedDao.getOne(id);
-                breedDao.delete(breed);
                 JSONObject response = new JSONObject();
-                response.put("message","Deleted Breed!");
+                response.put("error",e.toString());
                 return response.toString();
+            }  
+            JSONObject response = new JSONObject();
+            response.put("message","Pup Posted!");
+            return response.toString();
+    }
+
+    /**
+     * 
+     * @param dogUpdate The new dog from the bound form on thymeleaf
+     * @param id the id of the dog you are going to change
+     * @return JSONObject with a message or error depending on success
+     * @throws JSONException
+     */
+    @RequestMapping(value="/api/dogs/{id}/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String editDog(@ModelAttribute Dog dogUpdate, @PathVariable Long id) throws JSONException{
+            try{
+                Validator validator = vFactory.getValidator();
+                User user = userService.getCurrentUser();
+                Dog dog = dogDao.getOne(id);
+
+                if(dog.getOwner().equals(user) || userService.userIsRole(user, "admin")){
+
+                    //change attributes of the dog
+                    dog.setBio(dogUpdate.getBio());
+                    dog.setName(dogUpdate.getName());
+                    dog.setBreeds(dogUpdate.getBreeds());
+                    dog.setSex(dogUpdate.getSex());
+                    dog.setLon(dogUpdate.getLon());
+                    dog.setLat(dogUpdate.getLat());
+
+                    Set<ConstraintViolation<Dog>> violations = validator.validate(dog);
+
+                    if(!violations.isEmpty()){
+                        JSONObject response = new JSONObject();
+                        JSONArray errs = new JSONArray();
+    
+                        for (ConstraintViolation<Dog> violation : violations) {
+                            JSONObject err = new JSONObject();
+                            err.put("error",violation.getMessage());
+                            errs.put(err);
+                        }
+                        response.put("errors",errs);
+                        return errs.toString();
+                    }
+
+                    dogDao.save(dog);
+                    JSONObject response = new JSONObject();
+                    response.put("message","Pup Edited!");
+                    return response.toString();
+                }
+
+                JSONObject response = new JSONObject();
+                response.put("error","You do not own this dog!");
+                return response.toString();
+                 
             }catch(Exception e){
                 e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }      
-        }
-        
-    @RequestMapping(value="/api/breed/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String AddBreed(
-        HttpServletRequest request
-    ) throws JSONException{
-        //TODO: Add validation
-        try{
-
-            String breedName = request.getParameter("breed");
+                JSONObject response = new JSONObject();
+                response.put("error",e.toString());
+                return response.toString();
+            }  
             
-            
-            Breed breed = new Breed(breedName);
-            breedDao.save(breed);
-            JSONObject response = new JSONObject();
-            response.put("message","New breed added!");
-            return response.toString();
-        }catch(Exception e){
-            e.printStackTrace();
-            JSONObject err = new JSONObject();
-            err.put("error", "Something went wrong" );
-            return err.toString();
         }
 
+    /**
+     * 
+     * @param id ID of the dog you are requesting to delete
+     * @return JSONObject a message or error depdning on the success of the operation
+     * @throws JSONException
+     */
+    @RequestMapping(value="/api/dogs/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String deleteDog(@PathVariable Long id) throws JSONException{
+            try{
+                User user = userService.getCurrentUser();
+                Dog dog = dogDao.getOne(id);
+                if(dog.getOwner().equals(user) || userService.userIsRole(user, "admin")){
+                    
+                    dogDao.delete(dog);
 
-    }
+                    JSONObject response = new JSONObject();
+                    response.put("message","Pup Deleted!");
+                    return response.toString();
+                }
+
+                JSONObject response = new JSONObject();
+                response.put("admin","You do not own this dog!");
+                return response.toString();
+                
+            }catch(Exception e){
+                e.printStackTrace();
+                JSONObject response = new JSONObject();
+                response.put("error",e.toString());
+                return response.toString();
+            }  
+            
+        }
+
+    
+
+    
 
 }

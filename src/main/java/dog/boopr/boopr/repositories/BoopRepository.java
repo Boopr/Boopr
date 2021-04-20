@@ -14,5 +14,6 @@ public interface BoopRepository extends JpaRepository<Boop, Long> {
     
     List<Boop> findAllByUser(User user);
     List<Boop> findByImageId(Image image);
+    
 
 }

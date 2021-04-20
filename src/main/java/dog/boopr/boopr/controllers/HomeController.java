@@ -2,11 +2,13 @@ package dog.boopr.boopr.controllers;
 
 import java.util.List;
 
+import dog.boopr.boopr.models.AuthGroup;
+import dog.boopr.boopr.repositories.AuthGroupRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +30,16 @@ public class HomeController {
     @Autowired
     private UserServices userService;
 
+    @Autowired
+    private AuthGroupRepository authGroupDao;
+
     @GetMapping("/")
     public String index(Model model) {
 
         if(userService.getCurrentUser() == null){
-            return "index";
+            List<Dog> dog = dogDao.findAll();
+            model.addAttribute("dogs", dog);
+            return "main";
         }
         return "redirect:/home";
         
@@ -50,7 +57,40 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/user/userprofile")
+    public String userprofilePage(Model model) {
+
+        List<Dog> dogs = dogDao.findAll();
+        User user = userService.getCurrentUser();
+        model.addAttribute("user", user);
+        model.addAttribute("dogs", dogs);
+        return "user/userprofile";
+    }
+
+    @GetMapping("/user/userprofile/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String userprofileAdminPage(Model model, @PathVariable Long id) {
+
+        List<Dog> dogs = dogDao.findAll();
+        User user = userDao.getOne(id);
+        model.addAttribute("user", user);
+        model.addAttribute("dogs", dogs);
+        return "user/userprofile";
+    }
+
     @GetMapping("/profile/{id}")
+    public String profilePage(Model model, @PathVariable String id) {
+        Dog dog = dogDao.getOne(Long.parseLong(id));
+        model.addAttribute("dog", dog);
+        return "user/profile";
+    }
+
+    @GetMapping("/location/{id}")
+    public String locationPage(Model model, @PathVariable String id) {
+        Dog dog = dogDao.getOne(Long.parseLong(id));
+        model.addAttribute("dog", dog);
+        return "user/map-location";
+    }
     public String profilePage(Model model, @PathVariable Long id) {
         Dog dog = dogDao.getOne(id);
         long totalDogs = dogDao.findAll().size()-1;
@@ -60,10 +100,19 @@ public class HomeController {
     }
 
     @GetMapping("/user/manage")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String userManage(Model model) {
         List<User> users = userDao.findAll();
         model.addAttribute("users", users);
         return "user/manage";
+    }
+
+    @GetMapping("/dog/manage")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String dogAdmingManage(Model model) {
+        List<User> users = userDao.findAll();
+        model.addAttribute("users", users);
+        return "dog/manageDogs";
     }
 
 }

@@ -30,7 +30,7 @@ public class Dog {
     @Column
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
         name="dog_breeds",
         joinColumns={@JoinColumn(name="dog_id")},
