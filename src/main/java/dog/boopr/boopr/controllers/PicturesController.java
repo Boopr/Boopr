@@ -163,42 +163,4 @@ public class PicturesController {
             return response.toString();
         }
 
-    @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewBoop(@PathVariable Long id){
-            try{
-                User user = userService.getCurrentUser();
-                Boop boop = new Boop();
-                boop.setImage(imageDao.getOne(id));
-                boop.setUser(user);
-                boopDao.save(boop);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Booped!' }"; 
-            }
-
-    @RequestMapping(value="/api/pics/{id}/boop/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String deleteBoop(@PathVariable Long id){
-            try{
-                User user = userService.getCurrentUser();
-                Image image = imageDao.getOne(id);
-                Boop boop = null;
-                List<Boop> boops = boopDao.findByImageId(image);
-                for(Boop b: boops ){
-                    if(b.getUser().equals(user)){
-                        boop = b;
-                    }
-                }
-                if(boop==null){
-                    return "{ 'message': 'Boop doesn't exist!' }";
-                }
-                boopDao.delete(boop);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'De-Booped!' }"; 
-            }
-
 }
