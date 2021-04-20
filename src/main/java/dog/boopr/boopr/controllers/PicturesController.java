@@ -19,9 +19,6 @@ import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
-import dog.boopr.boopr.principles.UserPrincipal;
-import dog.boopr.boopr.repositories.BoopRepository;
-import dog.boopr.boopr.repositories.BreedRespository;
 import dog.boopr.boopr.repositories.DogRepository;
 import dog.boopr.boopr.repositories.ImageRepository;
 import dog.boopr.boopr.repositories.UserRepository;
@@ -40,8 +37,6 @@ public class PicturesController {
     @Autowired
     private ImageRepository imageDao;
 
-    @Autowired
-    private BoopRepository boopDao;
 
     @Autowired
     private UserServices userService;

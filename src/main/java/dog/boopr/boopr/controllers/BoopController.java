@@ -28,10 +28,17 @@ public class BoopController {
     @Autowired
     private ImageRepository imageDao;
 
+
     @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String postNewBoop(@PathVariable Long id){
         try{
             User user = userService.getCurrentUser();
+            List<Boop> imageBoops = boopDao.findByImageId(imageDao.getOne(id));
+            for(Boop b: imageBoops){
+                if(b.getUser().equals(user)){
+                    return "{ 'message': 'You've already Booped this Pup's Pic!' }";
+                }
+            } 
             Boop boop = new Boop();
             boop.setImage(imageDao.getOne(id));
             boop.setUser(user);
