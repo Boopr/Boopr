@@ -47,12 +47,16 @@ public class PicturesController {
     private UserServices userService;
     
 
+    /**
+     * 
+     * @param id The user's ID you are requesting information on
+     * @return A json array with all the images and subseqent information on
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/owner/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getPicsByOwnerID(@PathVariable Long id) throws JSONException{
 
-
         JSONArray pics = new JSONArray();
-
 
         List<Image> images = imageDao.findAllByUser(userDao.findByIdEquals(id).get(0));
 
@@ -77,6 +81,12 @@ public class PicturesController {
         return pics.toString();
     }
 
+    /**
+     * 
+     * @param id The dogs's ID you are requesting information on
+     * @return A json array with all the images and subseqent information on
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getPicsByDogID(@PathVariable Long id) throws JSONException{
 
@@ -107,9 +117,18 @@ public class PicturesController {
         return pics.toString();
     }
 
+    /**
+     * 
+     * @param id The ID of the dog you are submitting information on
+     * @param uploadedFile an image file you are going to upload to the website
+     * @return Json object with message attached if the operation was successful
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs/{id}/pics", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String postNewPicture(@PathVariable Long id, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
+
         try{
+            //get the current users information
             User user = userService.getCurrentUser();
             Dog dog = dogDao.getOne(id);
 
@@ -147,20 +166,43 @@ public class PicturesController {
             return response.toString();
         }
 
+    /**
+     * 
+     * @param id the id of the image you are going to delete
+     * @return  json object with a message or error depending on success or permissino
+     * @throws JSONException
+     */
     @RequestMapping(value="/api/dogs/pics/{id}/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String deletePicture(@PathVariable Long id) throws JSONException{
-        try{
-            Image image = imageDao.getOne(id);   
-            imageDao.delete(image);
-        }catch(Exception e){
-            e.printStackTrace();
-            JSONObject response = new JSONObject();
-            response.put("error",e.toString());
-            return response.toString();
-        }  
-            JSONObject response = new JSONObject();
-            response.put("message","Image Deleted!");
-            return response.toString();
+    public String deletePicture(
+        @PathVariable Long id) throws JSONException{
+            try{
+                User user = userService.getCurrentUser();
+                //get the image
+                Image image = imageDao.getOne(id);
+                //get the dog the picture belongs to
+                Dog dog = dogDao.getOne(image.getDog().getId());
+
+
+                //if you own the dog or if youre an admin you can delete the picture
+                if(dog.getOwner().equals(user) || userService.userIsRole(user, "admin")){
+
+                    imageDao.delete(image);
+                    JSONObject response = new JSONObject();
+                    response.put("message","Image Deleted!");
+                    return response.toString();
+                }
+
+                JSONObject response = new JSONObject();
+                response.put("error","You do not have permissions!");
+                return response.toString();
+                
+            }catch(Exception e){
+                e.printStackTrace();
+                JSONObject response = new JSONObject();
+                response.put("error",e.toString());
+                return response.toString();
+            }  
+            
         }
 
     @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
