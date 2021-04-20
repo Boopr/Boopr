@@ -165,11 +165,12 @@
         })
 
         let buttons = Array.from(document.getElementsByClassName("btn-group"));
+        console.log(buttons)
         buttons.forEach(button =>{
             let editButton = button.children[0];
             let deleteButton = button.children[1];
             let id = button.id;
-            editButton.href = "/user/userprofile/"+id
+            editButton.href = "/profile/"+id
 
             deleteButton.addEventListener('click',()=>{
                 deleteTarget = id;
@@ -187,7 +188,7 @@
         className: "info",
         }).showToast();
 
-        axios.post("/api/dog/delete/"+ deleteTarget).then( res =>{
+        axios.post("/api/dogs/"+deleteTarget+"/delete").then( res =>{
             Toastify({
                 text: res.data.message,
                 backgroundColor: "green",
