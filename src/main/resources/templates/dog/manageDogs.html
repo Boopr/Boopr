@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin.html}" lang="en">
+<head>
+    <title>Manage Dogs</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-8 row p-2" id="dogList">
+
+                <div class="col-12 row align-items-center p-2 justify-content-center">
+
+                    <input class="col-1"type="checkbox">
+
+                    <div class="col-4" >
+                        Dog Id
+                    </div>
+                    <div class="col-4">
+                        Dog Name
+                    </div>
+                    <div class="col-3">
+                        Inspect
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <!-- <td id="userList" th:each=" user : ${users}"> -->
+                <!-- <td id="userList"></td> -->
+
+                    <!-- <div class="col-12 row align-items-center p-2 justify-content-center">
+
+                        <input class="col-1"type="checkbox">
+
+                        <div class="col-4" th:text="${user.username}">
+
+                        </div>
+                        <div class="col-4" th:text="${user.email}">
+                            
+                        </div>
+
+                        <div class="col-3 btn-group">
+                            <button type="button" class="btn btn-primary">Edit</button>
+                            <button type="button" class="btn btn-danger" id="delete">Delete</button>
+                        </div>
+
+                    </div> -->
+
+<!-- 
+                </td> -->
+
+            </div>
+            
+
+
+        </div>
+
+    </div>
+
+
+    <!-- delete modal -->
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are you sure you want to delete <span id="deleteTitle">Value?</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</main>
+</body>
+<script layout:fragment="script">
+    let dogList = document.getElementById("dogList");
+    let tdcolumn = document.createElement("td");
+    let modalDelete = document.getElementById("deleteButton");
+    let deletTarget = 0;
+    let data;
+
+    function refreshDogs(){
+        axios.get("/api/dogs").then(res=>{
+            console.log(res.data)
+            data = res.data
+            drawDogs();
+        })
+    }
+    function drawDogs(){
+        dogList.innerHTML = "";
+        tdcolumn.innerHTML = "";
+        let topicsTop = document.createElement("div")
+        let topInput = document.createElement("input");
+        let topDogID = document.createElement("div");
+        let topDogName = document.createElement("div");
+        let topInspect = document.createElement("div");
+        let linebreak = document.createElement("hr")
+
+        topicsTop.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center");
+        topInput.setAttribute("class", "col-1");
+        topInput.setAttribute("type","checkbox");
+        topDogID.setAttribute("class","col-4");
+        topDogID.innerHTML = "Dog ID";
+        topDogName.setAttribute("class","col-4" );
+        topDogName.innerHTML = "Dog";
+        topInspect.setAttribute("class", "col-3");
+        topInspect.innerHTML = "Inspect";
+
+        topicsTop.appendChild(topInput);
+        topicsTop.appendChild(topDogID);
+        topicsTop.appendChild(topDogName);
+        topicsTop.appendChild(topInspect);
+        dogList.appendChild(topicsTop);
+        dogList.appendChild(linebreak);
+        data.forEach(dog =>{
+
+            let dogContainer = document.createElement("div");
+            let dogID = document.createElement("div");
+            let dogName = document.createElement("div");
+            let buttonGroup = document.createElement("div");
+
+            dogContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center users");
+            dogID.setAttribute("class","col-4");
+            dogName.setAttribute("class","col-4");
+            buttonGroup.setAttribute("class","col-3 btn-group");
+
+            let input = document.createElement("input");
+            let editButton = document.createElement("a");
+            let deleteButton = document.createElement("a");
+
+            input.setAttribute("class", "col-1")
+            input.setAttribute("type","checkbox")
+            buttonGroup.setAttribute("id",dog.id);
+            editButton.innerHTML = "Edit";
+            deleteButton.innerHTML = "Delete";
+            editButton.setAttribute("class", "btn btn-primary");
+            deleteButton.setAttribute("class", "btn btn-danger");
+            deleteButton.setAttribute("data-bs-toggle","modal")
+            deleteButton.setAttribute("data-bs-target","#deleteConfirm")
+        
+
+            dogContainer.appendChild(input);
+            dogContainer.appendChild(dogID);
+            dogContainer.appendChild(dogName);
+            dogContainer.appendChild(buttonGroup);
+            buttonGroup.appendChild(editButton);
+            buttonGroup.appendChild(deleteButton);
+
+            dogID.innerHTML = dog.id;
+            dogName.innerHTML = dog.name;
+            tdcolumn.appendChild(dogContainer)
+            dogList.appendChild(tdcolumn);
+
+        })
+
+        let buttons = Array.from(document.getElementsByClassName("btn-group"));
+        console.log(buttons)
+        buttons.forEach(button =>{
+            let editButton = button.children[0];
+            let deleteButton = button.children[1];
+            let id = button.id;
+            editButton.href = "/profile/"+id
+
+            deleteButton.addEventListener('click',()=>{
+                deleteTarget = id;
+            })
+        })
+    }
+    refreshDogs();
+
+    modalDelete.addEventListener('click',()=>{
+        
+        Toastify({
+        text: "Deleted Succesfully",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        gravity: "bottom",
+        className: "info",
+        }).showToast();
+
+        axios.post("/api/dogs/"+deleteTarget+"/delete").then( res =>{
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+            refreshDogs();
+        })
+    })
+</script>
+</html>
