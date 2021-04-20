@@ -2,6 +2,8 @@ package dog.boopr.boopr.controllers;
 
 import java.util.List;
 
+import dog.boopr.boopr.models.AuthGroup;
+import dog.boopr.boopr.repositories.AuthGroupRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 
@@ -28,11 +30,16 @@ public class HomeController {
     @Autowired
     private UserServices userService;
 
+    @Autowired
+    private AuthGroupRepository authGroupDao;
+
     @GetMapping("/")
     public String index(Model model) {
 
         if(userService.getCurrentUser() == null){
-            return "index";
+            List<Dog> dog = dogDao.findAll();
+            model.addAttribute("dogs", dog);
+            return "main";
         }
         return "redirect:/home";
         
