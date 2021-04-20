@@ -108,10 +108,4 @@ public class HomeController {
         return "dog/manageDogs";
     }
 
-    @GetMapping("/admin")
-    public String adminPage(Model model, @PathVariable Long id) {
-        User user = userDao.getOne(id);
-        model.addAttribute("user", user);
-        return "/admin";
-    }
 }
