@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import dog.boopr.boopr.models.Boop;
-import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
 import dog.boopr.boopr.repositories.BoopRepository;
 import dog.boopr.boopr.repositories.ImageRepository;
@@ -33,12 +32,14 @@ public class BoopController {
     public String postNewBoop(@PathVariable Long id){
         try{
             User user = userService.getCurrentUser();
-            List<Boop> imageBoops = boopDao.findByImageId(imageDao.getOne(id));
+            List<Boop> imageBoops = boopDao.findAllByImage(imageDao.getOne(id));
+            System.out.println(imageBoops.size());
             for(Boop b: imageBoops){
                 if(b.getUser().equals(user)){
+                    System.out.println("This means its caught");
                     return "{ 'message': 'You've already Booped this Pup's Pic!' }";
                 }
-            } 
+            }
             Boop boop = new Boop();
             boop.setImage(imageDao.getOne(id));
             boop.setUser(user);
@@ -54,9 +55,8 @@ public class BoopController {
         public String deleteBoop(@PathVariable Long id){
             try{
                 User user = userService.getCurrentUser();
-                Image image = imageDao.getOne(id);
                 Boop boop = null;
-                List<Boop> boops = boopDao.findByImageId(image);
+                List<Boop> boops = boopDao.findAllByImage(imageDao.getOne(id));
                 for(Boop b: boops ){
                     if(b.getUser().equals(user)){
                         boop = b;
