@@ -109,7 +109,7 @@ public class HomeController {
 
     @GetMapping("/dog/manage")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String dogAdmingManage(Model model) {
+    public String dogAdminManage(Model model) {
         List<User> users = userDao.findAll();
         model.addAttribute("users", users);
         return "dog/manageDogs";
