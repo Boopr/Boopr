@@ -42,7 +42,7 @@ public class Dog {
     private List<Image> images;
 
     //0 for female, 1 for male
-    @NotBlank(message = "Please enter your dog's sex")
+    // @NotBlank(message = "Please enter your dog's sex")
     @Column
     private boolean sex;
 
@@ -71,7 +71,7 @@ public class Dog {
 
 
     public List<Image> getImages() {
-        if(this.images.isEmpty()){
+        if(this.images == null){
 
             List<Image> images = new ArrayList<Image>();
             images.add(new Image("img/noDog.png"));
