@@ -42,7 +42,7 @@ public class Dog {
     private List<Image> images;
 
     //0 for female, 1 for male
-    @NotBlank(message = "Please enter your dog's sex")
+    //@NotBlank(message = "Please enter your dog's sex")
     @Column
     private boolean sex;
 
