@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @EnableWebSecurity
@@ -46,13 +47,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
+    @Bean
+    public javax.validation.ValidatorFactory localValidatorFactoryBean() {
+        return new LocalValidatorFactoryBean();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception{
 
         http
         .csrf().disable()
         .authorizeRequests()
-        .antMatchers("/**","/login","/register","/profile/*","/img/**","/images/**","/js/**","/css/**").permitAll()
+        .antMatchers("/","/login","/register","/profile/*","/img/**","/images/**","/js/**","/css/**").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin()

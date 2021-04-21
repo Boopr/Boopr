@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{admin.html}" lang="en">
 <head>
-    <title>Manage Users</title>
+    <title>Manage Dogs</title>
 </head>
 <body>
 
@@ -13,17 +13,17 @@
 
         <div class="row">
 
-            <div class="col-8 row p-2" id="userList">
+            <div class="col-8 row p-2" id="dogList">
 
                 <div class="col-12 row align-items-center p-2 justify-content-center">
 
                     <input class="col-1"type="checkbox">
 
                     <div class="col-4" >
-                        Username
+                        Dog Id
                     </div>
                     <div class="col-4">
-                        Email
+                        Dog Name
                     </div>
                     <div class="col-3">
                         Inspect
@@ -84,55 +84,55 @@
 </main>
 </body>
 <script layout:fragment="script">
-    let userList = document.getElementById("userList");
+    let dogList = document.getElementById("dogList");
     let tdcolumn = document.createElement("td");
     let modalDelete = document.getElementById("deleteButton");
     let deletTarget = 0;
     let data;
 
-    function refreshUsers(){
-        axios.get("/api/users").then(res=>{
+    function refreshDogs(){
+        axios.get("/api/dogs").then(res=>{
             console.log(res.data)
             data = res.data
-            drawUsers();
+            drawDogs();
         })
     }
-    function drawUsers(){
-        userList.innerHTML = "";
+    function drawDogs(){
+        dogList.innerHTML = "";
         tdcolumn.innerHTML = "";
         let topicsTop = document.createElement("div")
         let topInput = document.createElement("input");
-        let topUsername = document.createElement("div");
-        let topEmail = document.createElement("div");
+        let topDogID = document.createElement("div");
+        let topDogName = document.createElement("div");
         let topInspect = document.createElement("div");
         let linebreak = document.createElement("hr")
 
         topicsTop.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center");
         topInput.setAttribute("class", "col-1");
         topInput.setAttribute("type","checkbox");
-        topUsername.setAttribute("class","col-4");
-        topUsername.innerHTML = "Username";
-        topEmail.setAttribute("class","col-4" );
-        topEmail.innerHTML = "E-mail";
+        topDogID.setAttribute("class","col-4");
+        topDogID.innerHTML = "Dog ID";
+        topDogName.setAttribute("class","col-4" );
+        topDogName.innerHTML = "Dog";
         topInspect.setAttribute("class", "col-3");
         topInspect.innerHTML = "Inspect";
 
         topicsTop.appendChild(topInput);
-        topicsTop.appendChild(topUsername);
-        topicsTop.appendChild(topEmail);
+        topicsTop.appendChild(topDogID);
+        topicsTop.appendChild(topDogName);
         topicsTop.appendChild(topInspect);
-        userList.appendChild(topicsTop);
-        userList.appendChild(linebreak);
-        data.forEach(user =>{
+        dogList.appendChild(topicsTop);
+        dogList.appendChild(linebreak);
+        data.forEach(dog =>{
 
-            let userContainer = document.createElement("div");
-            let userName = document.createElement("div");
-            let userEmail = document.createElement("div");
+            let dogContainer = document.createElement("div");
+            let dogID = document.createElement("div");
+            let dogName = document.createElement("div");
             let buttonGroup = document.createElement("div");
 
-            userContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center users");
-            userName.setAttribute("class","col-4");
-            userEmail.setAttribute("class","col-4");
+            dogContainer.setAttribute("class", "col-12 row align-items-center p-2 justify-content-center users");
+            dogID.setAttribute("class","col-4");
+            dogName.setAttribute("class","col-4");
             buttonGroup.setAttribute("class","col-3 btn-group");
 
             let input = document.createElement("input");
@@ -141,7 +141,7 @@
 
             input.setAttribute("class", "col-1")
             input.setAttribute("type","checkbox")
-            buttonGroup.setAttribute("id",user.id);
+            buttonGroup.setAttribute("id",dog.id);
             editButton.innerHTML = "Edit";
             deleteButton.innerHTML = "Delete";
             editButton.setAttribute("class", "btn btn-primary");
@@ -150,33 +150,34 @@
             deleteButton.setAttribute("data-bs-target","#deleteConfirm")
         
 
-            userContainer.appendChild(input);
-            userContainer.appendChild(userName);
-            userContainer.appendChild(userEmail);
-            userContainer.appendChild(buttonGroup);
+            dogContainer.appendChild(input);
+            dogContainer.appendChild(dogID);
+            dogContainer.appendChild(dogName);
+            dogContainer.appendChild(buttonGroup);
             buttonGroup.appendChild(editButton);
             buttonGroup.appendChild(deleteButton);
 
-            userName.innerHTML = user.username;
-            userEmail.innerHTML = user.email;
-            tdcolumn.appendChild(userContainer)
-            userList.appendChild(tdcolumn);
+            dogID.innerHTML = dog.id;
+            dogName.innerHTML = dog.name;
+            tdcolumn.appendChild(dogContainer)
+            dogList.appendChild(tdcolumn);
 
         })
 
         let buttons = Array.from(document.getElementsByClassName("btn-group"));
+        console.log(buttons)
         buttons.forEach(button =>{
             let editButton = button.children[0];
             let deleteButton = button.children[1];
             let id = button.id;
-            editButton.href = "/user/userprofile/"+id
+            editButton.href = "/profile/"+id
 
             deleteButton.addEventListener('click',()=>{
                 deleteTarget = id;
             })
         })
     }
-    refreshUsers();
+    refreshDogs();
 
     modalDelete.addEventListener('click',()=>{
         
@@ -187,14 +188,14 @@
         className: "info",
         }).showToast();
 
-        axios.post("/api/user/delete/"+ deleteTarget).then( res =>{
+        axios.post("/api/dogs/"+deleteTarget+"/delete").then( res =>{
             Toastify({
                 text: res.data.message,
                 backgroundColor: "green",
                 gravity: "bottom",
                 className: "info",
             }).showToast();
-            refreshUsers();
+            refreshDogs();
         })
     })
 </script>
