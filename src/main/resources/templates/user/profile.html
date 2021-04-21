@@ -170,6 +170,10 @@
                 gravity: "bottom",
                 className: "info",
             }).showToast();
+            if(res.status == 200){
+                data = res.data
+                console.log(data)
+            }
         })
     })
 
