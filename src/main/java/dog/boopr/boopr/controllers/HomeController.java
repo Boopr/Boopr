@@ -8,6 +8,7 @@ import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,9 @@ public class HomeController {
     public String index(Model model) {
 
         if(userService.getCurrentUser() == null){
-            return "index";
+            List<Dog> dog = dogDao.findAll();
+            model.addAttribute("dogs", dog);
+            return "main";
         }
         return "redirect:/home";
         
@@ -64,6 +67,17 @@ public class HomeController {
         return "user/userprofile";
     }
 
+    @GetMapping("/user/userprofile/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String userprofileAdminPage(Model model, @PathVariable Long id) {
+
+        List<Dog> dogs = dogDao.findAll();
+        User user = userDao.getOne(id);
+        model.addAttribute("user", user);
+        model.addAttribute("dogs", dogs);
+        return "user/userprofile";
+    }
+
     @GetMapping("/profile/{id}")
     public String profilePage(Model model, @PathVariable String id) {
         Dog dog = dogDao.getOne(Long.parseLong(id));
@@ -86,23 +100,19 @@ public class HomeController {
     }
 
     @GetMapping("/user/manage")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String userManage(Model model) {
         List<User> users = userDao.findAll();
         model.addAttribute("users", users);
         return "user/manage";
     }
 
-    @GetMapping("/admin")
-    public String adminPage(Model model, String authGroup) {
-        List<AuthGroup> authGroups = authGroupDao.findByUsername(authGroup);
-        model.addAttribute("authGroups", authGroups);
-        return "/admin";
+    @GetMapping("/dog/manage")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String dogAdmingManage(Model model) {
+        List<User> users = userDao.findAll();
+        model.addAttribute("users", users);
+        return "dog/manageDogs";
     }
 
-    @GetMapping("/main")
-    public String mainPage(Model model) {
-        List<Dog> dog = dogDao.findAll();
-        model.addAttribute("dogs", dog);
-        return "/main";
-    }
 }

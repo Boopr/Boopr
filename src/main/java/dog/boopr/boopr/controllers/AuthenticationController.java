@@ -1,6 +1,13 @@
 package dog.boopr.boopr.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,8 +26,11 @@ import dog.boopr.boopr.repositories.UserRepository;
 public class AuthenticationController {
 
     @Autowired
-    UserRepository userDao;
+    ValidatorFactory vFactory;
 
+    @Autowired
+    UserRepository userDao;
+ 
     @Autowired
     AuthGroupRepository authGroupDao;
     
@@ -40,13 +50,26 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public String registerHandler(
-
         Model model,
-        @Valid User newUser,
-        BindingResult bindingResult
+        User newUser
     ){
-        if(bindingResult.hasErrors()){
-            return "register";
+ 
+        Validator validator = vFactory.getValidator();
+
+        Set<ConstraintViolation<User>> violations = validator.validate(newUser);
+
+        if(!violations.isEmpty()){
+            List<String> errors = new ArrayList<String>();
+
+            for( ConstraintViolation<User> v : violations){
+
+                errors.add(v.getMessage());
+                
+            }
+            
+            model.addAttribute("errors", errors);
+            model.addAttribute("User", newUser);
+            return "user/register";
         }
 
         //init the bcrypt encoder 
