@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
@@ -154,10 +155,20 @@ public class RestDogController {
             owner.put("id",dog.getOwner().getEmail());
             JSONArray jsonImages = new JSONArray();
             List<Image> images = dog.getImages();
+            // JSONObject boop = new JSONObject();
+            // JSONArray boops = new JSONArray();
+            Long total = 0L;
             for( Image i : images){
+                for(Boop b : i.getBoops()){
+                    // boop.put("id",b.getId());
+                    // boop.put("userId",b.getUser().getId());
+                    // boops.put(boop);
+                    total ++;
+                }
                 JSONObject img = new JSONObject();
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
+                img.put("totalBoops", total);
                 jsonImages.put(img);
             }
 
