@@ -50,17 +50,6 @@ public class UserController {
         return users.toString();
     }
 
-    @RequestMapping(value="/api/user/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewUser(@ModelAttribute User user){
-            try{
-                userDao.save(user);
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }  
-            return "{ 'message': 'Welcome to Boopr!!' }"; 
-        }
-
     @RequestMapping(value="/api/user/edit", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String editUser(@ModelAttribute User userUpdate){
             try{

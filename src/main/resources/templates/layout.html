@@ -43,7 +43,7 @@
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navCollapse"
                             aria-controls="navCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                            <i class="fas fa-bars"></i>
                     </button>
                 </div>
             </div>
@@ -56,8 +56,8 @@
                         <li class="nav-item ">
                             <a class="nav-link text-muted" href="/">Home</a>
                         </li>
-                        <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <a class="nav-link text-muted" href="/admin">Admin</a>
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link text-muted" href="/breed/edit">Admin</a>
                         </li>
                         <li class="nav-item" sec:authorize="isAuthenticated()">
                             <a class="nav-link text-muted" href="/user/userprofile">Profile</a>

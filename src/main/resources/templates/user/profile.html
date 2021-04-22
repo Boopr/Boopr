@@ -64,6 +64,9 @@
                     <div class="p-2" id="bio" th:text="${dog.bio}" style="height:15rem; overflow-y: auto">
 
                     </div>
+
+                    
+                    
                     <div class="p-2">
                         <div id="boops">
                             <button type="button" class="btn btn-success" id="boopBtn">Boop</button>
@@ -74,6 +77,28 @@
                 </div>
 
             </div>
+
+            <div class="col-12 mt-5">
+                <h2>
+                    Other pics of this good dog
+                </h2>
+                <div class="row justify-content-center mt-2" id="dogImagePanel">
+
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+                    <div class="col-12 col-md-4 p-2 border rounded m-2">
+                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
+                    </div>
+
+                </div>
+            </div>
         </div>
         
     </div>
@@ -83,6 +108,32 @@
 <script layout:fragment="script">
     mapboxgl.accessToken = apiKey;
     let boopDisplay = document.getElementById("boopDisplay");
+
+    let dogImagePanel = document.getElementById("dogImagePanel")
+
+    function getImagesPanel(){
+        axios.get("/api/dogs/"+ id + " /pics").then(res =>{
+            drawImages(res.data)
+        })
+    }
+
+    function drawImages(data){
+        dogImagePanel.innerHTML = "";
+        data.forEach( imgData =>{
+            let imageContainer = document.createElement("div");
+            imageContainer.setAttribute("class","col-12 col-md-4 p-2 border rounded m-2")
+
+            let image = document.createElement("img");
+            image.setAttribute("class","w-100");
+            image.src = imgData.url;
+            image.id = "img-" + imgData.id
+
+            imageContainer.appendChild(image);
+            dogImagePanel.appendChild(imageContainer);
+        })
+    }
+    
+
     let boopTarget = 0;
     let lon = document.getElementById("lon");
     let lat = document.getElementById("lat");
@@ -213,7 +264,7 @@
         window.history.replaceState(nextState, nextTitle, nextURL);
     })
     
-
+    getImagesPanel()
     
     
 </script>

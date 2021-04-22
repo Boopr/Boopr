@@ -30,7 +30,7 @@
                     <div class="p-2">
                     
                         <h5>Name</h5>
-                        <input type="text" class="form-control" th:placeholder="${dog.name}" id="name">
+                        <input type="text" class="form-control" th:value="${dog.name}" id="name">
     
                     </div>
     
@@ -58,7 +58,9 @@
                         <h5>
                             Bio
                         </h5>
-                        <textarea name="bio" id="bio" th:placeholder="${dog.bio}" class="col-12 form-control" rows="4" style="resize: none;"></textarea>
+                        <textarea name="bio" id="bio"  class="col-12 form-control" rows="4" style="resize: none;">
+                        <td th:text="${dog.bio}"></td>
+                        </textarea>
                     </div>
 
                     <div class="m-2 border rounded" style="height: 300px"  id='map'>
@@ -188,7 +190,7 @@
         }
 
         try{
-            axios.post("/api/dogs/add",data).then( res=>{
+            axios.post(`/api/dogs/${id}/edit`,data).then( res=>{
 
                 window.location.href = "/home";
             

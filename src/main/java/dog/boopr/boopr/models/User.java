@@ -9,7 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -41,6 +42,14 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private List<Dog> dogs;
+
+    // @ManyToMany
+    // @JoinTable(
+    //     name="pup_pack",
+    //     joinColumns={@JoinColumn(name="user_id")},
+    //     inverseJoinColumns={@JoinColumn(name="dog_id")}
+    // )
+    // private List<Dog> pupPack;
 
     public User() {
     }
