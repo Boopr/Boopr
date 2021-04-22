@@ -96,6 +96,12 @@
             data = res.data
             drawDogs();
         })
+        
+        axios.get("/api/dogs/13").then(res=>{
+            console.log(res.data)
+            data = res.data
+            console.log(data)
+        })
     }
     function drawDogs(){
         dogList.innerHTML = "";

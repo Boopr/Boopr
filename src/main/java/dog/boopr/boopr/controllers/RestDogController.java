@@ -168,7 +168,7 @@ public class RestDogController {
                 JSONObject img = new JSONObject();
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
-                img.put("totalBoops", total);
+                // img.put("totalBoops", total);
                 jsonImages.put(img);
             }
 
@@ -182,6 +182,7 @@ public class RestDogController {
             jsondog.put("lat",dog.getLat());
             jsondog.put("lon",dog.getLon());
             jsondog.put("images", jsonImages);
+            jsondog.put("totalBoops", total);
             jsondog.put("totalDogs", totalDogs);
 
 
