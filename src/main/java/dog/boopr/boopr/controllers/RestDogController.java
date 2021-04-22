@@ -204,7 +204,8 @@ public class RestDogController {
      * @throws JSONException
      */
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
+        public String postNewDog(
+            @ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
             try{
                 Validator validator = vFactory.getValidator();
 
