@@ -70,7 +70,7 @@
                     <div class="p-2">
                         <div id="boops">
                             <button type="button" class="btn btn-success" id="boopBtn">Boop</button>
-                            <h4>No. of Boops</h4>
+                            <h4 id="boopDisplay">No. of Boops</h4>
                         </div>
                     </div>
 
@@ -133,6 +133,7 @@
     }
     
 
+    let boopDisplay = document.getElementById("boopDisplay");
     let boopTarget = 0;
     let lon = document.getElementById("lon");
     let lat = document.getElementById("lat");
@@ -189,6 +190,7 @@
         
         imagebg.style.backgroundImage = `url(${data.images[0].url})`
         boopTarget = parseInt(data.images[0].id)
+        boopDisplay.innerHTML = "Boops: "+data.images[0].boops;
         image.src = data.images[0].url
         bio.innerHTML = data.bio;
         map.flyTo({
@@ -221,6 +223,12 @@
                 gravity: "bottom",
                 className: "info",
             }).showToast();
+            if(res.status == 200){
+                data = res.data
+                console.log(data.total)
+                boopDisplay.innerHTML = "Boops: "+data.total;
+                console.log(data)
+            }
         })
     })
 
