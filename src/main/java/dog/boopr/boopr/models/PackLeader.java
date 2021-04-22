@@ -57,6 +57,15 @@ public class PackLeader {
     }
 
 
+    public List<Dog> getPack() {
+        return this.pack;
+    }
+
+    public void setPack(List<Dog> pack) {
+        this.pack = pack;
+    }
+
+
 
     
 }

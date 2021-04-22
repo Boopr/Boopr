@@ -27,8 +27,10 @@ import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
+import dog.boopr.boopr.models.PackLeader;
 import dog.boopr.boopr.models.User;
 import dog.boopr.boopr.repositories.DogRepository;
+import dog.boopr.boopr.repositories.PackLeaderRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
 import dog.boopr.boopr.utils.FileUtil;
@@ -50,6 +52,9 @@ public class RestDogController {
 
     @Autowired
     private UserServices userService;
+
+    @Autowired
+    private PackLeaderRepository packLeaderDao;
 
     /**
      * This returns the mapbox api key from application.properties
@@ -363,6 +368,27 @@ public class RestDogController {
                 return response.toString();
             }  
             
+        }
+
+    @RequestMapping(value="/api/dogs/{id}/pack", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String addtoPack(@PathVariable Long id) throws JSONException{
+            try{
+                User user = userService.getCurrentUser();
+                PackLeader packleader = (PackLeader) packLeaderDao.findAllByUser(user).get(0);
+                Dog dog = dogDao.getOne(id);
+                dog.addPackLeader(packleader);
+                
+                dogDao.save(dog);
+
+                JSONObject response = new JSONObject();
+                return response.toString();
+
+            }catch(Exception e){
+                e.printStackTrace();
+                JSONObject response = new JSONObject();
+                response.put("error",e.toString());
+                return response.toString();
+            }
         }
 
     

@@ -39,7 +39,7 @@ public class Dog {
     private List<Breed> breeds;
 
     @ManyToMany(mappedBy="pack")
-    private List<PackLeader> pups;
+    private List<PackLeader> packs;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dog")
     private List<Image> images;
@@ -155,6 +155,18 @@ public class Dog {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public List<PackLeader> getPacks() {
+        return this.packs;
+    }
+
+    public void setPacks(List<PackLeader> packs) {
+        this.packs = packs;
+    }
+
+    public void addPackLeader(PackLeader packleader){
+        this.packs.add(packleader);
     }
     
 
