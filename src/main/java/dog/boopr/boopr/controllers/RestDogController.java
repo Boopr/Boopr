@@ -230,6 +230,7 @@ public class RestDogController {
                 Validator validator = vFactory.getValidator();
 
                 User user = userService.getCurrentUser();
+                PackLeader packLeader = packLeaderDao.findAllByUser(user).get(0);
 
                 //stop if the user is not logged in 
                 if(user == null){
@@ -239,6 +240,7 @@ public class RestDogController {
                 }
 
                 dog.setOwner(user);
+                dog.addPackLeader(packLeader);
 
                 //if there is not image uploaded with the dog skip this block
                 if(!uploadedFile.isEmpty()){
@@ -374,14 +376,19 @@ public class RestDogController {
         public String addtoPack(@PathVariable Long id) throws JSONException{
             try{
                 User user = userService.getCurrentUser();
-                PackLeader packleader = (PackLeader) packLeaderDao.findAllByUser(user).get(0);
+                PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
                 Dog dog = dogDao.getOne(id);
+                for(PackLeader p: dog.getPacks()){
+                    if(p.getPack().contains(dog)){
+                        System.out.println("This means its caught");
+                    return "{ 'message': 'This pup is already part of your pack!' }";
+                    }
+                }
                 dog.addPackLeader(packleader);
                 
                 dogDao.save(dog);
 
-                JSONObject response = new JSONObject();
-                return response.toString();
+                return "{ 'message': 'This pup is already part of your pack!' }";
 
             }catch(Exception e){
                 e.printStackTrace();
