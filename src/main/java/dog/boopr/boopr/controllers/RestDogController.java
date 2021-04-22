@@ -157,6 +157,7 @@ public class RestDogController {
             List<Image> images = dog.getImages();
             // JSONObject boop = new JSONObject();
             // JSONArray boops = new JSONArray();
+            Long allBoops = 0L;
             Long total = 0L;
             for( Image i : images){
                 for(Boop b : i.getBoops()){
@@ -165,7 +166,9 @@ public class RestDogController {
                     // boops.put(boop);
                     total ++;
                 }
+                allBoops += total;
                 JSONObject img = new JSONObject();
+                img.put("boops", total);
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
                 // img.put("totalBoops", total);
@@ -182,7 +185,7 @@ public class RestDogController {
             jsondog.put("lat",dog.getLat());
             jsondog.put("lon",dog.getLon());
             jsondog.put("images", jsonImages);
-            jsondog.put("totalBoops", total);
+            jsondog.put("totalBoops", allBoops);
             jsondog.put("totalDogs", totalDogs);
 
 
