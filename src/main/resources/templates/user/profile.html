@@ -139,6 +139,7 @@
         
         imagebg.style.backgroundImage = `url(${data.images[0].url})`
         boopTarget = parseInt(data.images[0].id)
+        boopDisplay.innerHTML = "Boops: "+data.totalBoops;
         image.src = data.images[0].url
         bio.innerHTML = data.bio;
         map.flyTo({
