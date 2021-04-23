@@ -46,7 +46,7 @@ public class PicturesController {
     public String getPicsByPictureID(@PathVariable Long id) throws JSONException{
 
 
-        // JSONArray pics = new JSONArray();
+        JSONArray pics = new JSONArray();
 
 
         Image i = imageDao.getOne(id);
@@ -65,7 +65,7 @@ public class PicturesController {
             picture.put("boops",boops);
             picture.put("dog_id",i.getDog().getId());
             picture.put("user_id",i.getUser().getId());
-            // pics.put(picture);
+            pics.put(picture);
         
         return picture.toString();
     }

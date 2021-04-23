@@ -65,6 +65,10 @@ public class PackLeader {
         this.pack = pack;
     }
 
+    public void addPup(Dog dog){
+        this.pack.add(dog);
+    }
+
 
 
     

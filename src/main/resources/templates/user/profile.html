@@ -74,6 +74,13 @@
                         </div>
                     </div>
 
+                    <div class="p-2">
+                        <div id="pupPack">
+                            <button type="button" class="btn btn-success" id="pupPackBtn">Pup Pack</button>
+                            <h4 id="pupPackDisplay">No. of Friends</h4>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -134,6 +141,7 @@
     }
     
 
+    
     let boopTarget = 0;
     let lon = document.getElementById("lon");
     let lat = document.getElementById("lat");
@@ -225,8 +233,33 @@
             }).showToast();
             if(res.status == 200){
                 data = res.data
-                console.log(data.total)
-                boopDisplay.innerHTML = "Boops: "+data.total;
+                if(data.total == undefined){
+                    console.log(data)
+                }else{
+                    boopDisplay.innerHTML = "Boops: "+data.total;
+                }
+            }
+        })
+    })
+
+    let pupPack = document.getElementById("pupPackBtn");
+    pupPack.addEventListener("click", ()=>{
+        Toastify({
+        text: "Pup Packed!",
+        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+        gravity: "bottom",
+        className: "info",
+        }).showToast();
+
+        axios.post("/api/dogs/"+id+"/pack").then( res =>{
+            Toastify({
+                text: res.data.message,
+                backgroundColor: "green",
+                gravity: "bottom",
+                className: "info",
+            }).showToast();
+            if(res.status == 200){
+                data = res.data
                 console.log(data)
             }
         })

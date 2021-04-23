@@ -381,14 +381,12 @@ public class RestDogController {
                 for(PackLeader p: dog.getPacks()){
                     if(p.getPack().contains(dog)){
                         System.out.println("This means its caught");
-                    return "{ 'message': 'This pup is already part of your pack!' }";
+                    return "{ 'message': 'This pup is in your pack!' }";
                     }
                 }
-                dog.addPackLeader(packleader);
-                
-                dogDao.save(dog);
-
-                return "{ 'message': 'This pup is already part of your pack!' }";
+                packleader.addPup(dog);
+                packLeaderDao.save(packleader);
+                return "{ 'message': 'Pup has been added to your pack! }";
 
             }catch(Exception e){
                 e.printStackTrace();
