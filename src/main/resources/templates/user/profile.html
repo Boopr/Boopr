@@ -175,8 +175,11 @@
             if(res.status == 200){
                 data = res.data
                 console.log(data.total)
-                boopDisplay.innerHTML = "Boops: "+data.total;
-                console.log(data)
+                if(data.total == undefined){
+                    console.log(data)
+                }else{
+                    boopDisplay.innerHTML = "Boops: "+data.total;
+                }
             }
         })
     })
