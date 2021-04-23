@@ -168,6 +168,10 @@ public class Dog {
     public void addPackLeader(PackLeader packleader){
         this.packs.add(packleader);
     }
+
+    public void removePackLeader(PackLeader packleader){
+        this.packs.remove(packleader);
+    }
     
 
     

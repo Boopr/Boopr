@@ -396,6 +396,34 @@ public class RestDogController {
             }
         }
 
+    @RequestMapping(value="/api/dogs/{id}/pack/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+        public String removeFromPack(@PathVariable Long id) throws JSONException{
+            try{
+                User user = userService.getCurrentUser();
+                PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
+                System.out.println(packleader.getId());
+                Dog dog = dogDao.getOne(id);
+                for(Dog d: packleader.getPack()){
+                    if(d.equals(dog)){
+                    d.removePackLeader(packleader);
+                    packleader.removePup(dog);
+                    dogDao.save(dog);
+                    packLeaderDao.save(packleader);
+                    }
+                    return "{ 'message': 'Pup has been removed from your pack! }";
+                }
+                
+
+                return "{ 'message': 'This pup isn't a part of your pack! }";
+
+            }catch(Exception e){
+                e.printStackTrace();
+                JSONObject response = new JSONObject();
+                response.put("error",e.toString());
+                return response.toString();
+            }
+        }
+
     
 
     
