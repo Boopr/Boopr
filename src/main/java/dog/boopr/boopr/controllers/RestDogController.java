@@ -377,10 +377,10 @@ public class RestDogController {
             try{
                 User user = userService.getCurrentUser();
                 PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
+                System.out.println(packleader.getId());
                 Dog dog = dogDao.getOne(id);
-                for(PackLeader p: dog.getPacks()){
-                    if(p.getPack().contains(dog)){
-                        System.out.println("This means its caught");
+                for(Dog d: packleader.getPack()){
+                    if(d.equals(dog)){
                     return "{ 'message': 'This pup is in your pack!' }";
                     }
                 }
