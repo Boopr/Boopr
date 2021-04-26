@@ -403,18 +403,21 @@ public class RestDogController {
                 PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
                 System.out.println(packleader.getId());
                 Dog dog = dogDao.getOne(id);
+                System.out.println(dog.getId());
                 for(Dog d: packleader.getPack()){
                     if(d.equals(dog)){
                     d.removePackLeader(packleader);
                     packleader.removePup(dog);
+                    dogDao.delete(dog);
                     dogDao.save(dog);
+                    packLeaderDao.delete(packleader);
                     packLeaderDao.save(packleader);
                     }
                     return "{ 'message': 'Pup has been removed from your pack! }";
                 }
                 
 
-                return "{ 'message': 'This pup isn't a part of your pack! }";
+                return "{ 'message': 'This pup isn't a part of your! }";
 
             }catch(Exception e){
                 e.printStackTrace();
