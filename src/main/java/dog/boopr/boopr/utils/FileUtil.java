@@ -25,7 +25,7 @@ public class FileUtil {
     private static ImageRepository imageDao;
     private static String UPLOAD_PATH;
 
-    @Value("${file-upload-path}")
+    @Value("${image-upload-path}")
     private String uploadPath;
     
     @Autowired

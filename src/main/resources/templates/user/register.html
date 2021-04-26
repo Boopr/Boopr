@@ -3,60 +3,36 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout.html}" lang="en">
 <head>
-    <title>Registration</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
 </head>
 <body>
 
 <main layout:fragment="content">
-    <form class="container needs-validation" novalidate th:action="@{/register}" method="POST" th:object="${User}">
-        <div class="card col-12 col-lg-6 col-md-8 mx-auto mt-4">
-            <div class="card-body">
-                <div class="">
+    <div id="form">
+        <h2 class="text-center p-2">Register</h2>
 
-                    <div th:if="${errors}">
-                        <td th:each="error : ${errors}">
-                            <p class="alert alert-danger" th:text="${error}"></p>
-                        </td>
-                    </div>
-    
-                    <div class="col-12">
-                        <h1 class="text-center p-3">
-                            Register
-                        </h1>
-                    </div>
-
-                    <div class="col-12 row pb-3 m-0">
-                        <label class="py-2 font-weight-bold" >Email</label>
-                        <input th:field="*{email}" class="form-control col-12 p-2" placeholder="Email@example.com" required>
-                        <div class="valid-tooltip form-control col-12 p-2">
-                            Looks good!
-                        </div>
-                    </div>
-    
-                    <div class="col-12 row pb-3 m-0">
-                        <label class="py-2 font-weight-bold" >Username</label>
-                        <input th:field="*{username}" class="form-control form-control col-12 p-2" placeholder="Username" required>
-                        <div class="valid-tooltip form-control col-12 p-2">
-                            Looks good!
-                        </div>
-                    </div>
-    
-                    <div class="col-12 row pb-3 m-0">
-                        <label class="py-2 font-weight-bold">Password</label>
-                        <input th:field="*{password}" type="password" class="form-control" placeholder="Password" >
-                        <div class="valid-tooltip">
-                            Looks good!
-                        </div>
-                    </div>
-    
-                    <div class="col-12 row pb-3 m-0 mt-3">
-                        <button class="btn btn-primary p-2 col-12" type="submit">Submit form</button>
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </form>
+    </div>
 </main>
+
 </body>
+<script type="module" layout:fragment="script">
+
+    import FormCreator from '/js/FormCreator.js';
+
+    let form = new FormCreator("form","/api/register", "post" , "/login");
+    
+    form.createLabel("Email", "E-Mail");
+    form.createInput("email","Email@example.com")
+
+    form.createLabel("username", "Username");
+    form.createInput("username","Username");
+
+    form.createLabel("password", "Password");
+    form.createInput("password","password", "password");
+    
+
+</script>
 </html>
