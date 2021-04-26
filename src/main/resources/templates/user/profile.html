@@ -16,92 +16,64 @@
     <input type="hidden" th:value="${dog.id}" id="id" class="invisible">
     <input type="hidden" th:value="${totalDogs}" id="totalDogs" class="invisible">
 
-    <h3 id="back" class="position-absolute" style="left:1em; top:50%; cursor:pointer">
-        <i class="fas fa-chevron-circle-left"></i>
-    </h3>
-    <h3 id="next" class="position-absolute" style="right:1em; top:50%; cursor:pointer">
-        <i class="fas fa-chevron-circle-right"></i>
-    </h3>
     <div class="container">
 
-        <div class="row mt-4">
+        <div id="background-topper" class="position-absolute" style="height:250px ;width:100vw;left:0; z-index:-2; top:0 ;background-color: rgb(204, 165, 113)">
+            
+        </div>
+        <div>
 
-            <div class="col-12 col-md-6 p-2" style="height: 30rem">
+        </div>
 
-                
-                <div class="w-100 m-2 rounded border" id="imagebg" style="background: url('/img/noDog.png'); height:30rem; background-position: 50%; background-size:200%; filter: blur(3px)">
-
+        <div class="row mt-2">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="cropped">
+                    <img th:src="${dog.images[0].url}" alt="">
                 </div>
-                <img id="image" class="position-relative w-100 mx-2 rounded" src="/img/noDog.png" style="top:-31rem; margin-bottom:-30rem;"  alt="">
                 
-                
-                
-
             </div>
+            <div class="col-auto row text-black align-items-center">
+                <div>
+                    <div>
+                        <h3 id="dogName" ju>
+                           <td th:text="${dog.name}"></td> 
+                           <td th:if="${dog.sex}">
+                            Male
+                           </td> 
+                           <td th:if="${!dog.sex}">
+                               Female
+                            </td> 
+                        </h3>
+                    </div>
+                    <h5>
+                        <td th:each="breed : ${dog.breeds}">
+                            <td th:text="${breed}">
 
-            <div class="col-12 col-md-6 p-2" style="height:30rem" >
-
-                <div class="w-100 border rounded m-2 d-flex flex-column justify-content-between" style="height:100%">
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2 id="name" class="p-2" th:text="${dog.name}"></h2>
-
-                        <div class="align-self-end">
-                            <h4 id="sex" class="p-2" th:if="${dog.sex}" >
-                                Male <i class="fas fa-mars"></i>
-                            </h4>
-                            <h4 id="sex" class="p-2" th:if="${!dog.sex}" >
-                                Female <i class="fas fa-venus"></i>
-                            </h4>
-                        </div>
+                            </td>
+                        </td>
                         
-                    </div>
-
-                    <div id="map" style="height: 10rem" >
-                        
-                    </div>
-
-                    <div class="p-2" id="bio" th:text="${dog.bio}" style="height:15rem; overflow-y: auto">
-
-                    </div>
-
-                    
-                    
-                    <div class="p-2">
-                        <div id="boops">
-                            <button type="button" class="btn btn-success" id="boopBtn">Boop</button>
-                            <h4 id="boopDisplay">No. of Boops</h4>
-                        </div>
-                    </div>
-
+                    </h5>
                 </div>
-
-            </div>
-
-            <div class="col-12 mt-5">
-                <h2>
-                    Other pics of this good dog
-                </h2>
-                <div class="row justify-content-center mt-2" id="dogImagePanel">
-
-                    <div class="col-12 col-md-4 p-2 border rounded m-2">
-                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
-                    </div>
-                    <div class="col-12 col-md-4 p-2 border rounded m-2">
-                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
-                    </div>
-                    <div class="col-12 col-md-4 p-2 border rounded m-2">
-                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
-                    </div>
-                    <div class="col-12 col-md-4 p-2 border rounded m-2">
-                        <img class="w-100" src="https://via.placeholder.com/140x100" alt=""> 
-                    </div>
-
-                </div>
+                
             </div>
         </div>
+
+        <div class="row">
+
+            <div id="map" class="bg-dark col-12 col-md-6 mt-4 " style="height:300px">
+            
+            </div>
+    
+            <div id="images" class="bg-primary col-12 col-md-6 mt-4 p-2" style="height:300px">
+                
+            </div>
+
+        </div>
+    
         
     </div>
+
+
     <script src="/js/keys.js"></script>
 </main>
 </body>
