@@ -1,89 +1,123 @@
 package dog.boopr.boopr.controllers;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dog.boopr.boopr.models.Breed;
+import dog.boopr.boopr.models.User;
 import dog.boopr.boopr.repositories.BreedRespository;
+import dog.boopr.boopr.services.UserServices;
 
 
 @RestController
 public class BreedController {
 
     @Autowired
-    private BreedRespository breedDao;
+    private BreedRespository breedRespository;
 
-    //Get breeds
-    @RequestMapping(value="/api/breeds", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    @Autowired
+	private UserServices userDetailsService;
+
+    @GetMapping("/api/breed")
     public String getBreeds() throws JSONException{
 
+        List<Breed> breeds = breedRespository.findAll();
+        JSONArray response = new JSONArray();
 
-        JSONArray breeds = new JSONArray();
-
-        List<Breed> breedData = breedDao.findAll();
-
-        for( Breed b : breedData){
+        for(Breed b : breeds){
 
             JSONObject breed = new JSONObject();
-            breed.put("id", b.getId());
             breed.put("name", b.getBreed());
-
-
-            breeds.put(breed);
+            breed.put("id", b.getId());
+            response.put(breed);
 
         }
         
-        return breeds.toString();
+        return response.toString();
+
+    }
+    
+    @PostMapping("/api/breed")
+    public String addBreed(
+        @RequestParam(required = true, name = "name") String name
+    ) throws JSONException{
+
+        User user = userDetailsService.getCurrentUser();
+
+        if(userDetailsService.userIsRole(user, "admin")){
+
+            Breed breed = new Breed(name); 
+            breedRespository.save(breed);
+            
+            JSONObject response = new JSONObject();
+            response.put("message","Breed added!");
+            return response.toString();
+
+        }
+
+        JSONObject response = new JSONObject();
+        response.put("error","You do not have permissions!");
+        return response.toString();
+
     }
 
-    //Delete Breeds
-    @RequestMapping(value="/api/breed/delete/{id}", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping("/api/breed/{id}")
+    public String editBreed(
+        @RequestParam(required = true, name = "name") String name,
+        @PathVariable Long id
+    ) throws JSONException{
+
+        User user = userDetailsService.getCurrentUser();
+
+        if(userDetailsService.userIsRole(user, "admin")){
+
+            Breed breed = breedRespository.getOne(id);
+            breed.setBreed(name);
+            breedRespository.save(breed);
+            
+            JSONObject response = new JSONObject();
+            response.put("message","Breed edited!");
+            return response.toString();
+
+        }
+
+        JSONObject response = new JSONObject();
+        response.put("error","You do not have permissions!");
+        return response.toString();
+
+    }
+
+    @DeleteMapping("/api/breed/{id}")
     public String deleteBreed(
-        @PathVariable Long id){
-            try{
-                Breed breed = breedDao.getOne(id);
-                breedDao.delete(breed);
-                JSONObject response = new JSONObject();
-                response.put("message","Deleted Breed!");
-                return response.toString();
-            }catch(Exception e){
-                e.printStackTrace();
-                return " { 'error' : '" + e.toString() + " ' }";
-            }      
+        @PathVariable Long id
+    ) throws JSONException{
+
+        User user = userDetailsService.getCurrentUser();
+
+        if(userDetailsService.userIsRole(user, "admin")){
+
+            Breed breed = breedRespository.getOne(id);
+            breedRespository.delete(breed);
+            
+            JSONObject response = new JSONObject();
+            response.put("message","Breed deleted!");
+            return response.toString();
+
         }
         
-    //Add Breeds
-    @RequestMapping(value="/api/breed/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-    public String AddBreed(
-        HttpServletRequest request
-    ) throws JSONException{
-        //TODO: Add validation
-        try{
-
-            String breedName = request.getParameter("breed");
-            
-            Breed breed = new Breed(breedName);
-            breedDao.save(breed);
-            JSONObject response = new JSONObject();
-            response.put("message","New breed added!");
-            return response.toString();
-        }catch(Exception e){
-            e.printStackTrace();
-            JSONObject err = new JSONObject();
-            err.put("error", "Something went wrong" );
-            return err.toString();
-        }
-
+        JSONObject response = new JSONObject();
+        response.put("error","You do not have permissions!");
+        return response.toString();
 
     }
     
