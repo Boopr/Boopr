@@ -55,10 +55,11 @@
 </body>
 <script type="module" layout:fragment="script">
     import TableGenerator from '/js/TableGenerator.js';
-
+    import BreedEditor from '/js/BreedEditor.js';
+    
     let table = new TableGenerator(
         "table", //ID
         ["ID","Name","Edit","Actions"]); //Head
-
+    let breedEditor = new BreedEditor(table, "breedAdd");
 </script>
 </html>
