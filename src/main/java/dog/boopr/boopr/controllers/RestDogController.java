@@ -79,9 +79,19 @@ public class RestDogController {
             for(Breed b: d.getBreeds()){
                 breeds.put(b.getBreed());
             }
+            Long allBoops = 0L;
+            Long total = 0L;
             JSONArray images = new JSONArray();
             for(Image i: d.getImages()){
-                images.put(i.getUrl());
+                JSONObject img = new JSONObject();
+                for(Boop b: i.getBoops()){
+                    total++;
+                }
+                allBoops+=total;
+                img.put("id",i.getId());
+                img.put("url",i.getUrl());
+                img.put("boops",total);
+                images.put(img);
             }
             JSONObject owner = new JSONObject();
             owner.put("id",d.getOwner().getId());
@@ -94,6 +104,7 @@ public class RestDogController {
             dog.put("bio",d.getBio());
             dog.put("breed",breeds);
             dog.put("owner",owner);
+            dog.put("allBoops", allBoops);
             dog.put("sex",d.getSex());
             dog.put("lat",d.getLat());
             dog.put("lon",d.getLon());
