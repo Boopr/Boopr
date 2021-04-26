@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import dog.boopr.boopr.models.Boop;
 import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
@@ -174,10 +175,23 @@ public class RestDogController {
             owner.put("id",dog.getOwner().getEmail());
             JSONArray jsonImages = new JSONArray();
             List<Image> images = dog.getImages();
+            // JSONObject boop = new JSONObject();
+            // JSONArray boops = new JSONArray();
+            Long allBoops = 0L;
+            Long total = 0L;
             for( Image i : images){
+                for(Boop b : i.getBoops()){
+                    // boop.put("id",b.getId());
+                    // boop.put("userId",b.getUser().getId());
+                    // boops.put(boop);
+                    total ++;
+                }
+                allBoops += total;
                 JSONObject img = new JSONObject();
+                img.put("boops", total);
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
+                // img.put("totalBoops", total);
                 jsonImages.put(img);
             }
 
@@ -191,6 +205,7 @@ public class RestDogController {
             jsondog.put("lat",dog.getLat());
             jsondog.put("lon",dog.getLon());
             jsondog.put("images", jsonImages);
+            jsondog.put("totalBoops", allBoops);
             jsondog.put("totalDogs", totalDogs);
   
         return jsondog.toString();
@@ -204,7 +219,8 @@ public class RestDogController {
      * @throws JSONException
      */
     @RequestMapping(value="/api/dogs/add", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
-        public String postNewDog(@ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
+        public String postNewDog(
+            @ModelAttribute Dog dog, @RequestParam(name = "file") MultipartFile uploadedFile) throws JSONException{
             try{
                 Validator validator = vFactory.getValidator();
 

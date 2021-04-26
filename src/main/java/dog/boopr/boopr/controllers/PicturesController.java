@@ -40,6 +40,35 @@ public class PicturesController {
 
     @Autowired
     private UserServices userService;
+
+
+    @RequestMapping(value="/api/pics/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getPicsByPictureID(@PathVariable Long id) throws JSONException{
+
+
+        // JSONArray pics = new JSONArray();
+
+
+        Image i = imageDao.getOne(id);
+
+            JSONObject boop = new JSONObject();
+            JSONArray boops = new JSONArray();
+            for(Boop b : i.getBoops()){
+                boop.put("id",b.getId());
+                boop.put("userId",b.getUser().getId());
+                boops.put(boop);
+            }
+
+            JSONObject picture = new JSONObject();
+            picture.put("id", i.getId());
+            picture.put("url", i.getUrl());
+            picture.put("boops",boops);
+            picture.put("dog_id",i.getDog().getId());
+            picture.put("user_id",i.getUser().getId());
+            // pics.put(picture);
+        
+        return picture.toString();
+    }
     
 
     /**

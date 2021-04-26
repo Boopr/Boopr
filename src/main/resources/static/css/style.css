@@ -1,17 +1,109 @@
-.bg-navbar{
-    background: #FAE0BB;
+/*
+    CSS Author:
+    Jacob Gonzalez
+*/
+:root {
+    --main-color: #ffe3a6;
+
+    --primary: #f5c345;
+    --primary-hover: #b18e35;
+
+    --secondary: #c48383;
+    --secondary-hover: #865757;
+
+    --danger: #c93434;
+    --danger-hover: #721616;
+
+    --warning: #fdfda1;
+    --warning-hover: #e4e48f;
+}
+  
+.bg-main{
+    background-color: var(--main-color);
 }
 
-.zoom{
-    height:300px;
-    background-size:200%;
-    background-position: 50%;
-    transition: all 300ms;
+.bg-primary{
+    background-color: var(--primary);
 }
 
-.dog-section-image{
-    height:300px;
-    background-position: 50%;
-    background-size: 150%;
-    transition: all 300ms;
+.bg-secondary{
+    background-color: var(--secondary);
+}
+
+.bg-danger{
+    background-color: var(--danger);
+}
+
+.bg-warning{
+    background-color: var(--warning);
+}
+
+.text-main{
+    color: var(--main-color);
+}
+
+.text-primary{
+    color: var(--primary);
+}
+
+.text-secondary{
+    color: var(--secondary);
+}
+
+.text-warning{
+    color: var(--warning);
+}
+
+.text-danger{
+    color: var(--danger);
+}
+
+.btn-primary{
+    background-color: var(--primary);
+    border-color: var(--primary-hover);
+}
+
+.btn-primary:hover{
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.btn-secondary{
+    background-color: var(--secondary);
+    border-color: var(--secondary-hover);
+}
+
+.btn-secondary:hover{
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+}
+
+.btn-danger{
+    background-color: var(--danger);
+    border-color: var(--danger-hover);
+}
+
+.btn-danger:hover{
+    background-color: var(--danger-hover);
+    border-color: var(--danger-hover);
+}
+
+.btn-warning{
+    background-color: var(--warning);
+    border-color: var(--warning-hover);
+}
+
+.btn-warning:hover{
+    background-color: var(--warning-hover);
+    border-color: var(--warning-hover);
+}
+
+.admin-card-head{
+    text-shadow: 2px 2px 0px #8f7d4060;
+    background: linear-gradient(180deg, rgb(248, 223, 142) 0%, rgb(253, 216, 95) 100%);
+}
+
+#table{
+    height:70vh;
+    overflow-y: scroll;
 }

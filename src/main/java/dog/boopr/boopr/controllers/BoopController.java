@@ -2,6 +2,8 @@ package dog.boopr.boopr.controllers;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,30 +35,48 @@ public class BoopController {
     public String postNewBoop(@PathVariable Long id){
         try{
             User user = userService.getCurrentUser();
-            List<Boop> imageBoops = boopDao.findByImageId(imageDao.getOne(id));
+            List<Boop> imageBoops = boopDao.findAllByImage(imageDao.getOne(id));
+            System.out.println(imageBoops.size());
             for(Boop b: imageBoops){
                 if(b.getUser().equals(user)){
+                    System.out.println("This means its caught");
                     return "{ 'message': 'You've already Booped this Pup's Pic!' }";
                 }
-            } 
+            }
             Boop boop = new Boop();
             boop.setImage(imageDao.getOne(id));
             boop.setUser(user);
             boopDao.save(boop);
+
+            Image i = imageDao.getOne(id);
+
+            JSONObject boopObj = new JSONObject();
+            JSONArray boops = new JSONArray();
+            Long total = 0L;
+            for(Boop b : i.getBoops()){
+                boopObj.put("id",b.getId());
+                boopObj.put("userId",b.getUser().getId());
+                boops.put(boop);
+                total ++;
+            }
+            boops.put(total);
+            JSONObject picture = new JSONObject();
+            picture.put("total", total);
+            picture.put("boops",boops);
+        
+            return picture.toString();
         }catch(Exception e){
             e.printStackTrace();
             return " { 'error' : '" + e.toString() + " ' }";
         }  
-        return "{ 'message': 'Booped!' }"; 
         }
 
     @RequestMapping(value="/api/pics/{id}/boop/delete", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
         public String deleteBoop(@PathVariable Long id){
             try{
                 User user = userService.getCurrentUser();
-                Image image = imageDao.getOne(id);
                 Boop boop = null;
-                List<Boop> boops = boopDao.findByImageId(image);
+                List<Boop> boops = boopDao.findAllByImage(imageDao.getOne(id));
                 for(Boop b: boops ){
                     if(b.getUser().equals(user)){
                         boop = b;
