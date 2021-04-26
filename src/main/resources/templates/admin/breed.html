@@ -53,5 +53,12 @@
 </main>
 
 </body>
+<script type="module" layout:fragment="script">
+    import TableGenerator from '/js/TableGenerator.js';
 
+    let table = new TableGenerator(
+        "table", //ID
+        ["ID","Name","Edit","Actions"]); //Head
+
+</script>
 </html>
