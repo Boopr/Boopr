@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Dog</title>
+    <script src="/js/keys.js"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+
+<main layout:fragment="content">
+    <div id="form">
+        <h2 class="text-center">Add dog</h2>
+
+    </div>
+    
+</main>
+
+</body>
+<script type="module" layout:fragment="script">
+
+    import FormCreator from '/js/FormCreator.js';
+    import MapBoxForm from '/js/MapBoxForm.js';
+   
+    let form = new FormCreator("form","/api/dog/add", "post", "/api/dog/all");
+    let mapbox = new MapBoxForm(apiKey);
+
+    form.createLabel("name", "Name");
+    form.createInput("name","Doggo")
+
+    form.importForm(mapbox.export());
+    form.importForm(mapbox.exportForm());
+    mapbox.addMarker("dog")
+
+    form.createLabel("Image", "Image");
+    form.createInput("image","","file");
+
+    form.createLabel("sex", "Sex");
+    form.createInput("sex","Male");
+
+    form.createLabel("bio", "Bio");
+    form.createInput("bio","Bio");
+
+    axios.get("/api/breed").then( (res)=>{
+        let obj = {
+            id: "breeds",
+            multiselect: "true",
+            options:[]
+        }
+        res.data.forEach( breed =>{
+            obj.options.push({
+                value: breed.id,
+                text: breed.name
+            })
+        })
+        form.createLabel("breeds", "Breeds")
+        form.createSelect(obj);
+    })
+
+
+</script>
+</html>

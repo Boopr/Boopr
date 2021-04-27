@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+
+<main layout:fragment="content">
+    <input type="hidden" th:value="${id}" id="id">
+    <div id="form">
+        <h2 class="text-center p-2">Edit User</h2>
+
+    </div>
+</main>
+
+</body>
+<script type="module" layout:fragment="script">
+
+    import FormCreator from '/js/FormCreator.js';
+    let id = document.getElementById("id").value;
+    let form = new FormCreator("form","/api/user/edit/" + id, "post" , "/");
+    
+    axios.get("/api/user/" + id).then(res=>{
+        console.log(res.data)
+        form.createLabel("Email", "E-Mail");
+        form.createInput("email","Email@example.com", "text", res.data.email)
+
+        form.createLabel("username", "Username");
+        form.createInput("username","Username", "text", res.data.username);
+
+        form.createLabel("password", "Password");
+        form.createInput("password","password", "password");
+    })
+    
+
+</script>
+</html>
