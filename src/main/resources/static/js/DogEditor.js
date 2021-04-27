@@ -17,7 +17,7 @@ export default class DogEditor{
     getDogs(){
         let self = this;
 
-        axios.get("/api/dog/all").then( res =>{
+        axios.get("/api/dogs").then( res =>{
 
             if(self.debug){
                 console.log(res)
@@ -27,7 +27,7 @@ export default class DogEditor{
                 self.tableGenerator.addRow([
                     dog.id,
                     dog.name,
-                    dog.owner,
+                    dog.owner.username,
                     self.createButtonGroup(dog.id, dog.name)
                 ])
             })

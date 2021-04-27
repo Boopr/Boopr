@@ -23,38 +23,38 @@ public class DogController {
     @Autowired
     private BreedRespository breedDao;
 
-    @GetMapping("/breed/edit")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String breedScreen(
-        Model model
-    ){
+    // @GetMapping("/breed/edit")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // public String breedScreen(
+    //     Model model
+    // ){
 
-        List<Breed> breeds =  breedDao.findAll();
-        model.addAttribute("breeds", breeds);
+    //     List<Breed> breeds =  breedDao.findAll();
+    //     model.addAttribute("breeds", breeds);
 
-        return "breed/edit";
-    }
+    //     return "breed/edit";
+    // }
     
-    @GetMapping("/editprofile/{id}")
-    public String editprofilePage(
-        Model model, 
-        @PathVariable Long id){
-            Dog dog = dogDao.getOne(id);
-            long totalDogs = dogDao.findAll().size()-1;
-            model.addAttribute("dog", dog);
-            model.addAttribute("totalDogs", totalDogs);
-            return "dog/editprofile";
-    }
+    // @GetMapping("/editprofile/{id}")
+    // public String editprofilePage(
+    //     Model model, 
+    //     @PathVariable Long id){
+    //         Dog dog = dogDao.getOne(id);
+    //         long totalDogs = dogDao.findAll().size()-1;
+    //         model.addAttribute("dog", dog);
+    //         model.addAttribute("totalDogs", totalDogs);
+    //         return "dog/editprofile";
+    // }
 
-    @GetMapping("/dog/add")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    public String dogAdd(
-        Model model
-    ){
-        List<Breed> breeds = breedDao.findAll();
-        model.addAttribute("breeds", breeds);
-        return "dog/edit";
-    }
+    // @GetMapping("/dog/add")
+    // @PreAuthorize("hasRole('ROLE_USER')")
+    // public String dogAdd(
+    //     Model model
+    // ){
+    //     List<Breed> breeds = breedDao.findAll();
+    //     model.addAttribute("breeds", breeds);
+    //     return "dog/edit";
+    // }
 
     @GetMapping("/dog/pic/add/{id}")
     public String dogAddpic(
