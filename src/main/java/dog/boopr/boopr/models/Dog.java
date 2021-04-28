@@ -170,7 +170,7 @@ public class Dog {
     }
 
     public void removePackLeader(PackLeader packleader){
-        this.packs.remove(packleader);
+        this.getPacks().remove(packleader);
     }
     
 

@@ -401,23 +401,25 @@ public class RestDogController {
             try{
                 User user = userService.getCurrentUser();
                 PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
-                System.out.println(packleader.getId());
+                // System.out.println(packleader.getId());
                 Dog dog = dogDao.getOne(id);
-                System.out.println(dog.getId());
-                for(Dog d: packleader.getPack()){
-                    if(d.equals(dog)){
-                    d.removePackLeader(packleader);
-                    packleader.removePup(dog);
-                    dogDao.delete(dog);
-                    dogDao.save(dog);
-                    packLeaderDao.delete(packleader);
-                    packLeaderDao.save(packleader);
+                for(PackLeader p : dog.getPacks()){
+                    // System.out.println(p.getId());
+                    if(p.equals(packleader)){
+                        p.removePup(dog);
+                        packLeaderDao.save(p);
+                        dog.removePackLeader(p);
+                        dogDao.save(dog);
+                        System.out.println("successful");
+                        return "{ 'message': 'Pup has been removed from your pack! }";
                     }
-                    return "{ 'message': 'Pup has been removed from your pack! }";
+                    // System.out.println(p.getId());
                 }
+                    // return "{ 'message': 'Pup has been removed from your pack! }";
+                // }
                 
 
-                return "{ 'message': 'This pup isn't a part of your! }";
+                return "{ 'message': 'This pup isn't a part of your pack! }";
 
             }catch(Exception e){
                 e.printStackTrace();

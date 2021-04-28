@@ -70,7 +70,7 @@ public class PackLeader {
     }
 
     public void removePup(Dog dog){
-        this.pack.remove(dog);
+        this.getPack().remove(dog);
     }
 
 
