@@ -1,0 +1,9 @@
+spring.datasource.url=jdbc:mysql://boopr.dog/boopr?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=pon
+spring.datasource.password=yE6rktqU;_KCt/;P
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+spring.devtools.restart.additional-paths=/templates/**
+spring.devtools.livereload.enabled=true
+image-upload-path=images/
+mapbox-key=pk.eyJ1IjoiaGV5bG9va2FzcXVpcnJlbCIsImEiOiJja2lpemlscmowMzA5MnRxY3FrbDFlcmJmIn0.CGcu-JA1me1Eyxu9-LJX1Q 

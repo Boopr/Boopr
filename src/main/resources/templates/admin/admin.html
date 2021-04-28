@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Dogs</title>
+    <title>Admin - Users</title>
 </head>
 <body>
 
@@ -15,10 +15,10 @@
     <div class="container">
 
         <div class="card my-2">
-
+            
             <div class="card-head admin-card-head p-2 border-bottom">
                 <h2>
-                    Dog Editor
+                    User Editor
                 </h2>
             </div>
 
@@ -53,18 +53,7 @@
 
 </body>
 <script type="module" layout:fragment="script">
-    import TableGenerator from '/js/TableGenerator.js';
-    import DogEditor from '/js/DogEditor.js';
-
-    let table = new TableGenerator(
-        "table", //ID
-        ["ID","Name","Total Boops","Owner","Actions"]); //Head
 
 
-    let dogEditor = new DogEditor(table, "breedAdd");
-
-
-
- 
 </script>
 </html>

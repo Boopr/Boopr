@@ -27,6 +27,7 @@ export default class DogEditor{
                 self.tableGenerator.addRow([
                     dog.id,
                     dog.name,
+                    dog.allBoops,
                     dog.owner.username,
                     self.createButtonGroup(dog.id, dog.name)
                 ])
