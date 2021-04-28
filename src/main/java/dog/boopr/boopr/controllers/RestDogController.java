@@ -164,6 +164,7 @@ public class RestDogController {
      * @param id The id of the dog you are retriveing 
      * @throws JSONException
      */
+    
     @RequestMapping(value="/api/dogs/{id}", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
     public String getDogsByID(@PathVariable Long id) throws JSONException{
 
@@ -214,6 +215,55 @@ public class RestDogController {
             jsondog.put("totalDogs", totalDogs);
   
         return jsondog.toString();
+    }
+
+
+    @RequestMapping(value="/api/puppack/owner", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getPupPackByOwner() throws JSONException{
+
+
+        JSONArray dogs = new JSONArray();
+
+        // User user = userDao.findByIdEquals(id).get(0);
+        User user = userService.getCurrentUser();
+        PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
+        System.out.println(packleader.getId());
+        // User user = userService.getCurrentUser();
+        //         PackLeader packleader = packLeaderDao.findAllByUser(user).get(0);
+
+        List<Dog> pack = packleader.getPack();
+
+        for( Dog d : pack){
+            System.out.println(d.getName());
+            JSONArray breeds = new JSONArray();
+            for(Breed b: d.getBreeds()){
+                breeds.put(b.getBreed());
+            }
+            JSONArray images = new JSONArray();
+            for(Image i: d.getImages()){
+                images.put(i.getUrl());
+            }
+            JSONObject owner = new JSONObject();
+            owner.put("id",d.getOwner().getId());
+            owner.put("username",d.getOwner().getUsername());
+            owner.put("id",d.getOwner().getEmail());
+            JSONObject dog = new JSONObject();
+            dog.put("id", d.getId());
+            dog.put("name", d.getName());
+            dog.put("bio",d.getBio());
+            dog.put("images",images);
+            dog.put("breed",breeds);
+            dog.put("owner",owner);
+            dog.put("sex",d.getSex());
+            dog.put("lat",d.getLat());
+            dog.put("lon",d.getLon());
+
+
+            dogs.put(dog);
+
+        }
+        
+        return dogs.toString();
     }
 
     /**
