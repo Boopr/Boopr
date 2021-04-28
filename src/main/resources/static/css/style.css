@@ -124,6 +124,39 @@
     color:white
 }
 
-#mainDogPage{
-  
+.topper{
+    background-color: #c0bdbd;
 }
+
+.boopAnimate{
+
+    -webkit-animation: boopAnimation 1s ;
+   -moz-animation: boopAnimation 1s ;
+   -o-animation: boopAnimation 1s ;
+    animation: boopAnimation 1s ;
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+
+@keyframes boopAnimation {
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }
+  @-o-keyframes boopAnimation{
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }
+  @-moz-keyframes boopAnimation{
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }
+  @-webkit-keyframes boopAnimation{
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }

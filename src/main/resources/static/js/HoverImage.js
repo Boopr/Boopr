@@ -1,5 +1,13 @@
 export default class HoverImage{
 
+    /**
+     * 
+     * @param {*} url link to the image displayed
+     * @param {*} anchor Where the image when clicked will link to
+     * @param {*} width (Optional) Width of the image
+     * @param {*} height (Optional) Height of the image
+     * @returns 
+     */
     constructor(url, anchor, width = "300px", height){
         this.container = document.createElement("div");
         this.container.style.overflow = "hidden"
@@ -9,12 +17,23 @@ export default class HoverImage{
 
         this.element = document.createElement("div");
         //setup anchor tag
-        this.anchor.href = anchor;
+        if(anchor == undefined || anchor == null){
+
+        }else{
+            this.anchor.href = anchor;
+        }
+        
         this.anchor.appendChild(this.element);
         this.container.appendChild(this.anchor)
 
         this.imageContainer = document.createElement("a");
-        this.imageContainer.href = anchor;
+
+        if(anchor == undefined || anchor == null){
+
+        }else{
+            this.imageContainer.href = anchor;
+        }
+        
         this.imageContainer.style.overflow = "hidden"
         this.imageContainer.style.margin = "0px"
 

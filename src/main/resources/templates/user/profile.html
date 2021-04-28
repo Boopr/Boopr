@@ -16,231 +16,42 @@
     <input type="hidden" th:value="${dog.id}" id="id" class="invisible">
     <input type="hidden" th:value="${totalDogs}" id="totalDogs" class="invisible">
 
+    
     <div class="container">
 
-        <div id="background-topper" class="position-absolute" style="height:250px ;width:100vw;left:0; z-index:-2; top:0 ;background-color: rgb(204, 165, 113)">
-            
-        </div>
-        <div>
+        <div class="row topper">
+            <div class="col-12 col-md-4 col-lg-3 m-2" id="profilePicture">
 
-        </div>
-
-        <div class="row mt-2">
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="cropped">
-                    <img th:src="${dog.images[0].url}" alt="">
-                </div>
-                
             </div>
-            <div class="col-auto row text-black align-items-center">
+            <div class="col row align-items-end">
                 <div>
-                    <div>
-                        <h3 id="dogName" ju>
-                           <td th:text="${dog.name}"></td> 
-                           <td th:if="${dog.sex}">
-                            Male
-                           </td> 
-                           <td th:if="${!dog.sex}">
-                               Female
-                            </td> 
-                        </h3>
-                    </div>
-                    <h5>
-                        <td th:each="breed : ${dog.breeds}">
-                            <td th:text="${breed}">
-
-                            </td>
-                        </td>
-                        
-                    </h5>
+                    <h3>
+                        Dog Name
+                    </h3>
+                    <h5>Sex</h5>
                 </div>
-                
-            </div>
-        </div>
-
-        <div class="row">
-
-            <div id="map" class="bg-dark col-12 col-md-6 mt-4 " style="height:300px">
-            
-            </div>
-    
-            <div id="images" class="bg-primary col-12 col-md-6 mt-4 p-2" style="height:300px">
-                
             </div>
 
         </div>
-    
-        
+
+        <div id="images" class="d-flex flex-wrap p-2 m-2">
+
+        </div>
+      
     </div>
 
 
     <script src="/js/keys.js"></script>
 </main>
 </body>
-<script layout:fragment="script">
-    mapboxgl.accessToken = apiKey;
+<script type="module" layout:fragment="script">
 
-    let dogImagePanel = document.getElementById("dogImagePanel")
+    import HoverImage from "/js/HoverImage.js"
+    import BoopImageList from "/js/BoopImageList.js"
+    new HoverImage("http://localhost:8080/images/8.jpg","#").draw("profilePicture");
 
-    function getImagesPanel(){
-        axios.get("/api/dogs/"+ id + " /pics").then(res =>{
-            drawImages(res.data)
-        })
-    }
-
-    function drawImages(data){
-        dogImagePanel.innerHTML = "";
-        data.forEach( imgData =>{
-            let imageContainer = document.createElement("div");
-            imageContainer.setAttribute("class","col-12 col-md-4 p-2 border rounded m-2")
-
-            let image = document.createElement("img");
-            image.setAttribute("class","w-100");
-            image.src = imgData.url;
-            image.id = "img-" + imgData.id
-
-            imageContainer.appendChild(image);
-            dogImagePanel.appendChild(imageContainer);
-        })
-    }
     
-
-    let boopDisplay = document.getElementById("boopDisplay");
-    let boopTarget = 0;
-    let lon = document.getElementById("lon");
-    let lat = document.getElementById("lat");
-    let id = document.getElementById("id").value;
-    let back = document.getElementById("back");
-    let next = document.getElementById("next");
-    let data = null;
-    let totalDogs = document.getElementById("totalDogs").value;
-
-    let name = document.getElementById("name");
-    let sex = document.getElementById("sex");
-    let image = document.getElementById("image");
-    let imagebg = document.getElementById("imagebg");
-    let bio = document.getElementById("bio")
-
-    var map = new mapboxgl.Map({
-        center:[
-        lon.value,
-        lat.value
-        ],
-        container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v11',
-        zoom: 5
-    });
-    let marker = new mapboxgl.Marker({
-        draggable:false
-    }).setLngLat([
-        lon.value,
-        lat.value
-    ]).addTo(map);
-
-    function getDog(indentifer){
-        axios.get("/api/dogs/" + indentifer).then( res =>{
-            if(res.status == 200){
-                id = res.data.id
-                totalDogs = res.data.totalDogs;
-                data = res.data
-                console.log(data)
-                changeDog()
-            }
-        })
-    }
-
-    getDog(id)
-
-    function changeDog(){
-        name.innerHTML = data.name;
-        if(data.sex){
-            sex.innerHTML = 'Male <i class="fas fa-mars"></i>'
-        }else{
-            sex.innerHTML = 'Female <i class="fas fa-venus"></i>'
-        }
-        console.log(data.images[0].url)
-        
-        imagebg.style.backgroundImage = `url(${data.images[0].url})`
-        boopTarget = parseInt(data.images[0].id)
-        boopDisplay.innerHTML = "Boops: "+data.images[0].boops;
-        image.src = data.images[0].url
-        bio.innerHTML = data.bio;
-        map.flyTo({
-            center: [
-                    data.lon,
-                    data.lat
-                ],
-            essential: true,
-            zoom: 2
-        });
-        marker.setLngLat([
-            data.lon,
-            data.lat
-        ]).addTo(map);
-    }
-
-    let boopButton = document.getElementById("boopBtn");
-    boopButton.addEventListener("click", ()=>{
-        Toastify({
-        text: "Boop!",
-        backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
-        gravity: "bottom",
-        className: "info",
-        }).showToast();
-
-        axios.post("/api/pics/"+boopTarget+"/boop").then( res =>{
-            Toastify({
-                text: res.data.message,
-                backgroundColor: "green",
-                gravity: "bottom",
-                className: "info",
-            }).showToast();
-            if(res.status == 200){
-                data = res.data
-                console.log(data.total)
-                if(data.total == undefined){
-                    console.log(data)
-                }else{
-                    boopDisplay.innerHTML = "Boops: "+data.total;
-                }
-            }
-        })
-    })
-
-    next.addEventListener('click',(e)=>{
-        e.preventDefault();
-
-        let nextId = (parseInt(id) + 1)
-        if(nextId > totalDogs+1){
-            nextId = 1;
-        }
-        getDog(nextId)
-
-        let nextURL = '/profile/' + nextId;
-        let nextTitle = 'Dog profile - Dog Name'; 
-        let nextState = { additionalInformation: '/profile/' + nextId };
-
-        window.history.replaceState(nextState, nextTitle, nextURL);
-    })
-
-    back.addEventListener('click',(e)=>{
-        e.preventDefault();
-
-        let nextId = (parseInt(id) - 1)
-        if(nextId < 1){
-            nextId = totalDogs;
-        }
-        getDog(nextId)
-
-        let nextURL = '/profile/' + nextId;
-        let nextTitle = 'Dog profile - Dog Name'; 
-        let nextState = { additionalInformation: '/profile/' + nextId };
-
-        window.history.replaceState(nextState, nextTitle, nextURL);
-    })
-    
-    getImagesPanel()
-    
+    new BoopImageList(26, "images")
     
 </script>
 </html>
