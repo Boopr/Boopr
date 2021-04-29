@@ -77,6 +77,12 @@ public class HomeController {
         return "user/profile";
     }
 
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String admin() {
+        return "admin/admin";
+    }
+
     @GetMapping("/location/{id}")
     public String locationPage(Model model, @PathVariable String id) {
         Dog dog = dogDao.getOne(Long.parseLong(id));

@@ -245,8 +245,8 @@ public class NewDogController {
         @RequestParam(required = false, name = "name") String name,
         @RequestParam(required = false, name = "sex") String sex,
         @RequestParam(required = false, name = "bio") String bio,
-        @RequestParam(required = false, name = "longitude") float longitude,
-        @RequestParam(required = false, name = "latitude") float latitude,
+        @RequestParam(required = false, name = "longitude") String longitude,
+        @RequestParam(required = false, name = "latitude") String latitude,
         @RequestParam(required = false, name = "breeds") List<Long> breeds,
         @RequestParam(required = false, name = "image") MultipartFile image,
         @PathVariable Long id
@@ -281,13 +281,13 @@ public class NewDogController {
                 dog.setBio(bio);
             }
     
-            if(longitude != 0.0f){
-                dog.setLon(longitude);
+            if(longitude.isEmpty()){
+                JSONObject response = new JSONObject();
+                response.put("error","You give your dog a location!");
+                return response.toString();
             }
-    
-            if(latitude != 0.0f){
-                dog.setLat(latitude);
-            }
+            dog.setLon(longitude);
+            dog.setLat(latitude);
 
             if(breeds != null){
                 List<Breed> inputBreeds = new ArrayList<>();
@@ -314,8 +314,8 @@ public class NewDogController {
         @RequestParam(required = false, name = "name") String name,
         @RequestParam(required = false, name = "sex") String sex,
         @RequestParam(required = false, name = "bio") String bio,
-        @RequestParam(required = false, name = "longitude") long longitude,
-        @RequestParam(required = false, name = "latitude") long latitude,
+        @RequestParam(required = false, name = "longitude") String longitude,
+        @RequestParam(required = false, name = "latitude") String latitude,
         @RequestParam(required = false, name = "breeds") List<Long> breeds,
         @RequestParam(required = false, name = "image") MultipartFile image
     ) throws Exception{
@@ -362,7 +362,7 @@ public class NewDogController {
         dog.setBio(bio);
 
         //Location check
-        if(longitude == 0.0f){
+        if(longitude.isEmpty()){
             JSONObject response = new JSONObject();
             response.put("error","You give your dog a location!");
             return response.toString();
