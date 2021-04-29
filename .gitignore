@@ -39,6 +39,7 @@ keys.js
 
 
 #Needed for docker env
+application-integrationtest.properties
 application.properties
 application.yaml
 
