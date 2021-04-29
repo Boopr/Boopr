@@ -46,16 +46,6 @@ public class DogController {
     //         return "dog/editprofile";
     // }
 
-    // @GetMapping("/dog/add")
-    // @PreAuthorize("hasRole('ROLE_USER')")
-    // public String dogAdd(
-    //     Model model
-    // ){
-    //     List<Breed> breeds = breedDao.findAll();
-    //     model.addAttribute("breeds", breeds);
-    //     return "dog/edit";
-    // }
-
     @GetMapping("/dog/pic/add/{id}")
     public String dogAddpic(
         Model model,

@@ -11,61 +11,70 @@
 
 <main layout:fragment="content">
 
-    <input type="hidden" th:value="${#httpServletRequest.requestURI}" id="id" class="invisible">
+    <div class="container ">
+
+
     
-    <div class="container-fluid p-0">
-        <div class="d-flex flex-row topper p-2 justify-content-around">
-            
-            <div class="d-flex align-items-end">
-                <div id="profilePicture">
 
-                </div>
-                <div>
-                    <div class="px-4 py-2">
-                        <h2 id="dogName">Loading</h2>
-                        <h5 id="dogSex">Please Wait</h5>
-                    </div>
-                </div>
-            </div>
-            <div>
-                
-            </div>
-            
-            
-            
-           
+    
+        <div class="col-12 row m-0 my-2 justify-content-between">
 
+            <h2 class="text-center col-12 col-md-3 col-lg-2">My dogs</h2> 
+            <a href="/dog/add" class="btn btn-primary  col-12 col-md-3 col-lg-2">Add dog </a>
         </div>
-    </div>
-
-    <div class="container">
-
-
-        <div style="height:300px" class="col-12 m-2" id="map">
-
+        <div class="d-flex flex-wrap justify-content-lg-start justify-content-center" id="images">
+        
         </div>
+        
 
-        <h2 class="text-center">
-            More of this dog
-        </h2>
 
-        <div id="images" class="col-12 d-flex flex-wrap p-2 m-2">
 
-        </div>
       
     </div>
 
 </main>
 </body>
 <script type="module" layout:fragment="script">
-    import HoverImage from "/js/HoverImage.js"
-    import DogLoader from "/js/DogLoader.js"
-    new HoverImage("http://localhost:8080/img/noDog.png","#").draw("profilePicture");
+    import DogPanel from '/js/DogPanel.js'
 
-    //grabs the URI and gets the value of the dog that way
-    let id = document.getElementById("id").value.split("/")
-    id = id[id.length-1];
+    export default class DogImageList{
 
-    new DogLoader(id);
+        constructor(element){
+
+            this.element = document.getElementById(element);
+            this.dogs = [];
+
+            this.getDogs()
+            return this;
+        }
+        
+        getDogs(){
+            let self = this;
+            this.dogs = [];
+            axios.get("/api/dogs/owner/mydogs").then( res =>{
+                res.data.forEach( dog =>{
+                    //unpretty way of changing links for each dog to edit
+                    let img = new DogPanel(dog);
+                    img.image.anchor.href = "/dog/edit/" + dog.id;
+                    img.image.imageContainer.href = "/dog/edit/" + dog.id;
+                    self.dogs.push(img)
+                })
+                self.drawDogs()  
+            })
+        }
+
+        drawDogs(){
+            //clear area
+            this.element.innerHTML = ""
+            this.dogs.forEach( dog =>{
+                this.element.appendChild(dog.element)
+            })
+        }
+
+    }
+
+    new DogImageList("images")
+
+
 </script>
 </html>

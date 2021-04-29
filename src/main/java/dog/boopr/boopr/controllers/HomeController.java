@@ -69,6 +69,11 @@ public class HomeController {
 
     @GetMapping("/profile/{id}")
     public String profilePages() {
+        return "dog/profile";
+    }
+
+    @GetMapping("/user/profile")
+    public String userProfile() {
         return "user/profile";
     }
 

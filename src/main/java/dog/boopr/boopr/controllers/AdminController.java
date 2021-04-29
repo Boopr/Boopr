@@ -34,8 +34,15 @@ public class AdminController {
     }
     
     @GetMapping("/dog/add")
-    public String register(){
+    public String addDog(){
         return "dog/add";
+    }
+
+    @GetMapping("/dog/edit/{id}")
+    public String dogEditorForm(
+        @PathVariable Long id
+    ){
+        return "dog/edit";
     }
 
 }

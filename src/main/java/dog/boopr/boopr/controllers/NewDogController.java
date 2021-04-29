@@ -255,6 +255,12 @@ public class NewDogController {
         Dog dog = dogRepository.getOne(id);
         User currentUser = userDetailsService.getCurrentUser();
 
+        if(currentUser == null){
+            JSONObject response = new JSONObject();
+            response.put("error","You do not have permissions!");
+            return response.toString();
+        }
+
         //If you are an admin or own the dog
         if(userDetailsService.userIsRole(currentUser, "admin") ||
            dog.getOwner().equals(currentUser)){
@@ -290,14 +296,6 @@ public class NewDogController {
                     inputBreeds.add(breed);
                 }
                 dog.setBreeds(inputBreeds);
-            }
-
-            if(!image.isEmpty()){
-                dogRepository.save(dog);
-                Image i = FileUtil.uploadImage(image, currentUser, dog);
-                List<Image> images = dog.getImages();
-                images.add(i);
-                dog.setImages(images);
             }
 
             dogRepository.save(dog);
