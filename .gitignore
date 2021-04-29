@@ -40,5 +40,6 @@ keys.js
 
 #Needed for docker env
 application.properties
+application.yaml
 
 
