@@ -20,19 +20,19 @@
 </body>
 <script type="module" layout:fragment="script">
 
-    import FormCreator from '/js/FormCreator.js';
+import FormCreator from '/js/FormCreator.js';
 
-    let form = new FormCreator("form","/api/register", "post" , "/login");
-    
-    form.createLabel("Email", "E-Mail");
-    form.createInput("email","Email@example.com")
+let form = new FormCreator("form","/api/register", "post" , "/login");
 
-    form.createLabel("username", "Username");
-    form.createInput("username","Username");
+form.createLabel("Email", "E-Mail");
+form.createInput("email","Email@example.com")
 
-    form.createLabel("password", "Password");
-    form.createInput("password","password", "password");
-    
+form.createLabel("username", "Username");
+form.createInput("username","Username");
+
+form.createLabel("password", "Password");
+form.createInput("password","password", "password");
+
 
 </script>
 </html>
