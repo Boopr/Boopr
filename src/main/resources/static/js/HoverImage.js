@@ -90,6 +90,12 @@ export default class HoverImage{
             self.imageContainer.appendChild(this)
         };
 
+        this.img.addEventListener('click', ()=>{
+            if(anchor){
+                window.location.href = anchor;
+            }
+            
+        })
         
         this.img.src = url;
         this.img.style.position = "relative" 
