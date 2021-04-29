@@ -16,7 +16,7 @@ export default class BoopImageList{
         axios.get("/api/dogs/" + this.id).then(res=>{
             res.data.images.forEach( image =>{
                 let img = new BoopImage(image);
-
+                console.log(image.boops)
                 img.updateCounter(image.boops)
                 //define the action when clicking the image
                 img.boopAction( ()=>{

@@ -19,6 +19,7 @@
         //create the carousel in the id given above
         this.element = document.getElementById(carousel);
         this.id = dogID;
+        this.notfy = new Notyf();
 
         this.carousel = document.createElement("div");
         this.carousel.setAttribute("id","carouselImages")
@@ -70,12 +71,7 @@
         data.set("file", this.file.files[0]);
         let self = this;
         axios.post(`/api/dogs/${this.id}/pics/`, data).then(res =>{
-            Toastify({
-                text: res.data.message,
-                backgroundColor: "green",
-                gravity: "bottom",
-                className: "info",
-            }).showToast();
+            self.toast(res.data)
             self.refreshDogs();
         })
     }
@@ -147,15 +143,30 @@
         let self = this;
         axios.post(`/api/dogs/pics/${pid}/delete`).then(res =>{
             console.log(res)
-            Toastify({
-                text: res.data.message,
-                backgroundColor: "green",
-                gravity: "bottom",
-                className: "info",
-            }).showToast();
+            self.toast(res.data)
             self.refreshDogs();
         })
     }
 
+    toast(data){
+        let self = this;
+        if(data.message){
+            this.notfy.success(data.message)
+            if(this.redirect){
+                setTimeout(function () {
+                    
+                    window.location.href = self.redirect;
+                }, 1000);
+            }
+        }
 
+        if(data.error){
+            this.notfy.error(data.error)
+        }
+
+        if(data.warning){
+            this.notfy.warning(data.warning)
+        }
+
+    }
 }

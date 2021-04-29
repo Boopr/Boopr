@@ -8,6 +8,8 @@ export default class DogLoader{
         this.notfy = new Notyf();
         this.dogName = document.getElementById("dogName");
         this.dogSex = document.getElementById("dogSex");
+        this.dogBio = document.getElementById("dogBio");
+        this.dogBreed = document.getElementById("dogBreed");
         this.currentDog = id;
         let self = this;
         axios.get('/api/dogs/'+id).then( res =>{

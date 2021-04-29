@@ -186,7 +186,7 @@ public class PicturesController {
             return response.toString();
         }  
             JSONObject response = new JSONObject();
-            response.put("message","Image Deleted!");
+            response.put("message","Image added!");
             return response.toString();
         }
 

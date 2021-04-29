@@ -83,17 +83,13 @@ public class RestDogController {
                 breeds.put(breed);
             }
             Long allBoops = 0L;
-            Long total = 0L;
             JSONArray images = new JSONArray();
             for(Image i: d.getImages()){
                 JSONObject img = new JSONObject();
-                for(Boop b: i.getBoops()){
-                    total++;
-                }
-                allBoops+=total;
+                allBoops += i.getBoops().size();
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
-                img.put("boops",total);
+                img.put("boops",i.getBoops().size());
                 images.put(img);
             }
             JSONObject owner = new JSONObject();
@@ -149,13 +145,10 @@ public class RestDogController {
             JSONArray images = new JSONArray();
             for(Image i: d.getImages()){
                 JSONObject img = new JSONObject();
-                for(Boop b: i.getBoops()){
-                    total++;
-                }
-                allBoops+=total;
+                allBoops += i.getBoops().size();
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
-                img.put("boops",total);
+                img.put("boops",i.getBoops().size());
                 images.put(img);
             }
             JSONObject owner = new JSONObject();
@@ -216,13 +209,11 @@ public class RestDogController {
             JSONArray images = new JSONArray();
             for(Image i: d.getImages()){
                 JSONObject img = new JSONObject();
-                for(Boop b: i.getBoops()){
-                    total++;
-                }
                 allBoops+=total;
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
-                img.put("boops",total);
+                img.put("boops", i.getBoops().size());
+                allBoops += i.getBoops().size();
                 images.put(img);
             }
             JSONObject owner = new JSONObject();
@@ -278,15 +269,10 @@ public class RestDogController {
             Long allBoops = 0L;
             Long total = 0L;
             for( Image i : images){
-                for(Boop b : i.getBoops()){
-                    // boop.put("id",b.getId());
-                    // boop.put("userId",b.getUser().getId());
-                    // boops.put(boop);
-                    total ++;
-                }
-                allBoops += total;
+                
+                allBoops += i.getBoops().size();
                 JSONObject img = new JSONObject();
-                img.put("boops", total);
+                img.put("boops", i.getBoops().size());
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
                 // img.put("totalBoops", total);

@@ -18,6 +18,7 @@
 
     <div id="form">
         <h2 class="text-center">Edit dog</h2>
+        <div id="imageUploader"></div>
 
     </div>
     
@@ -32,6 +33,10 @@
 
     import FormCreator from '/js/FormCreator.js';
     import MapBoxForm from '/js/MapBoxForm.js';
+    import ImageCarouselUploader from '/js/ImageCarouselUploader.js'
+
+    new ImageCarouselUploader("imageUploader",id);
+
 
     axios.get("/api/dogs/"+id).then( res =>{
         let form = new FormCreator("form","/api/dog/edit/"+ id, "put", "/user/profile");

@@ -56,7 +56,7 @@ export default class HoverImage{
             self.height = this.height;
             //this.width = "100%"
 
-            console.log(this.style.height)
+           // console.log(this.style.height)
             
             //execute element changes
 
