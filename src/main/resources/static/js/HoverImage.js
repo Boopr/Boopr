@@ -50,6 +50,7 @@ export default class HoverImage{
 
 
         this.img = new Image();
+        this.img.style.cursor = "pointer"
         this.img.onload = function(){
             self.width = this.width;
             self.height = this.height;
