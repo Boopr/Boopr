@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout.html}" lang="en">
 <head>
-    <title th:text="'Dog Profile - ' + ${dog.name}"> </title>
+    <title>Profile </title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
 </head>
@@ -11,47 +11,61 @@
 
 <main layout:fragment="content">
 
-    <input type="hidden" th:value="${dog.lon}" id="lon" class="invisible">
-    <input type="hidden" th:value="${dog.lat}" id="lat" class="invisible">
-    <input type="hidden" th:value="${dog.id}" id="id" class="invisible">
-    <input type="hidden" th:value="${totalDogs}" id="totalDogs" class="invisible">
-
+    <input type="hidden" th:value="${#httpServletRequest.requestURI}" id="id" class="invisible">
     
-    <div class="container">
+    <div class="container-fluid p-0">
+        <div class="d-flex flex-row topper p-2 justify-content-around">
+            
+            <div class="d-flex align-items-end">
+                <div id="profilePicture">
 
-        <div class="row topper">
-            <div class="col-12 col-md-4 col-lg-3 m-2" id="profilePicture">
-
-            </div>
-            <div class="col row align-items-end">
+                </div>
                 <div>
-                    <h3>
-                        Dog Name
-                    </h3>
-                    <h5>Sex</h5>
+                    <div class="px-4 py-2">
+                        <h2 id="dogName">Loading</h2>
+                        <h5 id="dogSex">Please Wait</h5>
+                    </div>
                 </div>
             </div>
+            <div>
+                
+            </div>
+            
+            
+            
+           
+
+        </div>
+    </div>
+
+    <div class="container">
+
+
+        <div style="height:300px" class="col-12 m-2" id="map">
 
         </div>
 
-        <div id="images" class="d-flex flex-wrap p-2 m-2">
+        <h2 class="text-center">
+            More of this dog
+        </h2>
+
+        <div id="images" class="col-12 d-flex flex-wrap p-2 m-2">
 
         </div>
       
     </div>
 
-
-    <script src="/js/keys.js"></script>
 </main>
 </body>
 <script type="module" layout:fragment="script">
-
     import HoverImage from "/js/HoverImage.js"
-    import BoopImageList from "/js/BoopImageList.js"
-    new HoverImage("http://localhost:8080/images/8.jpg","#").draw("profilePicture");
+    import DogLoader from "/js/DogLoader.js"
+    new HoverImage("http://localhost:8080/img/noDog.png","#").draw("profilePicture");
 
-    
-    new BoopImageList(26, "images")
-    
+    //grabs the URI and gets the value of the dog that way
+    let id = document.getElementById("id").value.split("/")
+    id = id[id.length-1];
+
+    new DogLoader(id);
 </script>
 </html>

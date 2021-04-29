@@ -68,9 +68,7 @@ public class HomeController {
     }
 
     @GetMapping("/profile/{id}")
-    public String profilePage(Model model, @PathVariable String id) {
-        Dog dog = dogDao.getOne(Long.parseLong(id));
-        model.addAttribute("dog", dog);
+    public String profilePages() {
         return "user/profile";
     }
 

@@ -58,7 +58,7 @@ public class RestDogController {
     @RequestMapping(path = "/js/keys.js", produces ="application/javascript")
     @ResponseBody
     public String apiKey(){
-        return "const apiKey = `"+mapboxApiKey+"`";
+        return "const apiKey = '"+mapboxApiKey+"' ; export default apiKey";
     }
 
     /**

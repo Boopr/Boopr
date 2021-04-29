@@ -1,4 +1,5 @@
 import HoverImage from './HoverImage.js';
+import apiKey from './keys.js'
 
 export default class DogPanel{
 
