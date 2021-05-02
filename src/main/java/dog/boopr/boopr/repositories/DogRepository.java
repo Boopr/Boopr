@@ -22,4 +22,6 @@ public interface DogRepository extends JpaRepository<Dog, Long>{
 
     List<Dog> findDogsByOwnerId(long parseLong);
 
+    List<Dog> findDogByName(String name);
+
 }
