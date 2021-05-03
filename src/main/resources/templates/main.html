@@ -11,15 +11,227 @@
 
 <main layout:fragment="content">
 
+    <div class="container-fluid p-0 m-0">
+        <div class="row m-0 justify-content-center align-items-center">
+            <div class="col-12 bg-main d-flex flex-column justify-content-center align-items-center" style="height:400px;">
+                <div class="text-center rounded-pill btn-primary p-2">
+                    <a href="/register" class="text-white" style="text-decoration: none;">
+                        <h2 class="px-2">
+                            This is a test
+                        </h2>
+                    </a>
+                </div>
+                <div class="p-2">
+                    <p>
+                        And this test is working properly
+                    </p>
+                </div>
+            </div>
+        </div>
+        <canvas id="frontAni" class="w-100 m-0 p-0" style="height:100px"  height="100px";>
+
+        </canvas>
+    </div>
     <div class="container">
-        <div class="col-12" style="background: url('/img/main.jpg')">
+        <div class="row justify-content-around">
+
+            <div class="col-12 col-md-6 justify-content-center align-items-center d-flex flex-column p-4">
+
+                <div class="rounded-circle d-flex bg-primary text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-paw" style="font-size:5em"></i>
+                </div>
+
+                <div class="text-center">
+                    This is a blurp about a thing we do!
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-6 justify-content-center align-items-center d-flex flex-column p-4">
+
+                <div class="rounded-circle d-flex bg-primary text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-paw" style="font-size:5em"></i>
+                </div>
+
+                <div class="text-center">
+                    This is a blurp about a thing we do!
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-6 justify-content-center align-items-center d-flex flex-column p-4">
+
+                <div class="rounded-circle d-flex bg-primary text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-paw" style="font-size:5em"></i>
+                </div>
+
+                <div class="text-center">
+                    This is a blurp about a thing we do!
+                </div>
+
+            </div>
+
+            <div class="col-12 col-md-6 justify-content-center align-items-center d-flex flex-column p-4">
+
+                <div class="rounded-circle d-flex bg-primary text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-paw" style="font-size:5em"></i>
+                </div>
+
+                <div class="text-center">
+                    This is a blurp about a thing we do!
+                </div>
+
+            </div>
+
+            
+
+            
 
         </div>
+
     </div>
     
 </main>
-<script>
-  
+<script layout:fragment="script">
+  let canvas = document.getElementById("frontAni")
+  canvas.height = 100;
+  canvas.width = window.innerWidth
+  let ctx = canvas.getContext("2d");
+  let bg = null
+  let waveFrame1 = 0
+  let waveFrame2 = 0
+  let waveFrame3 = 0
+  let waveSize = 1000;
+
+    function render(offSet){
+        ctx.clearRect(
+            0,0,
+            canvas.width,
+            canvas.height
+        )
+
+
+        if(waveFrame1 > waveSize){
+            waveFrame1 = 0;
+        }
+        if(waveFrame2 > waveSize){
+            waveFrame2 = 0;
+        }
+        if(waveFrame3 >waveSize){
+            waveFrame3 = 0;
+        }
+        
+
+        bg = "rgba(253, 225, 163, .4)"
+
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.lineTo(
+            canvas.width+50  , -10, //places point to the top right 
+        )
+        ctx.lineTo(
+            canvas.width+50, 50 // Start of right to left drawing for the wave
+        )
+
+        //loop to make the sinewave
+        //let i goes backwards for ease
+        for(let i = canvas.width; i > -waveSize; i -= 1){
+
+            ctx.lineTo(
+                i+waveFrame1/2, 50 + Math.sin(i/(waveSize / 25))*2.5
+            )
+
+        }
+
+        ctx.lineTo(
+            -50 , 50 // end of right to left drawing for the wave
+        )
+        ctx.lineTo(
+            -50  , -10, //End of line
+        )
+        ctx.fill()
+
+        /*
+            Second Wave
+            Starts here
+        */
+
+        bg = "rgba(253, 225, 163, .5)"
+
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.lineTo(
+            canvas.width+50 +offSet , -10, //places point to the top right 
+        )
+        ctx.lineTo(
+            canvas.width+50 +offSet, 50 // Start of right to left drawing for the wave
+        )
+
+        //loop to make the sinewave
+        //let i goes backwards for ease
+        for(let i = canvas.width; i > -waveSize; i -= .6){
+
+            ctx.lineTo(
+                i+waveFrame2/2 + 250, 70 + Math.sin(i/(waveSize / 15.5))*10
+            )
+
+        }
+
+        ctx.lineTo(
+            -50 -offSet, 50 // end of right to left drawing for the wave
+        )
+        ctx.lineTo(
+            -50 -offSet , -10, //End of line
+        )
+        ctx.fill()
+
+        /*
+            Third Wave
+            Starts here
+        */
+
+        bg = "rgba(253, 225, 163, .5)"
+
+        ctx.fillStyle = bg;
+        ctx.beginPath();
+        ctx.lineTo(
+            canvas.width+50 +offSet , -10, //places point to the top right 
+        )
+        ctx.lineTo(
+            canvas.width+50 +offSet, 50 // Start of right to left drawing for the wave
+        )
+
+        //loop to make the sinewave
+        //let i goes backwards for ease
+        for(let i = canvas.width; i > -waveSize; i -= .6){
+
+            ctx.lineTo(
+                i+waveFrame3/2 + 250, 30 + Math.sin(i/(waveSize / 10))*5
+            )
+
+        }
+
+        ctx.lineTo(
+            -50 -offSet, 50 // end of right to left drawing for the wave
+        )
+        ctx.lineTo(
+            -50 -offSet , -10, //End of line
+        )
+        ctx.fill()
+
+        
+        
+        waveFrame1 += .5
+        waveFrame2 += .25
+        waveFrame3 += .125
+
+        requestAnimationFrame(render);
+    }
+
+  render(50)
+  //note under the wire couldnt make this more customizable
+
+
 
 </script>
 </body>
