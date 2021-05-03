@@ -125,8 +125,15 @@
 }
 
 .topper{
-    background-color: #c0bdbd;
+    border-right: solid black 1px;
 }
+
+@media only screen and (max-width: 768px) {
+    .topper{
+        border-right: solid rgba(0, 0, 0, 0) 0px;
+        border-bottom: solid black 1px
+    }
+  }
 
 .boopAnimate{
 

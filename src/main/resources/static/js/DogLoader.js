@@ -18,6 +18,16 @@ export default class DogLoader{
 
             self.dogName.innerHTML = res.data.name;
 
+            console.log(res.data)
+            self.dogBio.innerHTML = res.data.bio
+
+            let strBreed = ""
+            res.data.breed.forEach( breed =>{
+
+                strBreed += breed.name + " ";
+            })
+            self.dogBreed.innerHTML = strBreed
+
             if(res.data.sex ){
                 self.dogSex.innerHTML = `<i class="fas fa-mars"></i> Male`
             }else{
@@ -47,6 +57,10 @@ export default class DogLoader{
 
             self.currentDog = res.data.id;
 
+            res.data.breed.forEach( breed =>{
+                self.dogBreed.innerHTML += breed.name;
+            })
+            
 
             self.dogName.innerHTML = res.data.name;
 

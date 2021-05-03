@@ -249,6 +249,7 @@ public class RestDogController {
     public String getDogsByID(@PathVariable Long id) throws JSONException{
 
         long totalDogs = dogDao.findAll().size()-1;
+        User user = userService.getCurrentUser();
         Dog dog = dogDao.getOne(id);
 
             JSONArray breeds = new JSONArray();
@@ -256,6 +257,7 @@ public class RestDogController {
                 JSONObject breed = new JSONObject();
                 breed.put("name",b.getBreed());
                 breed.put("id",b.getId());
+              
                 breeds.put(breed);
             }
             JSONObject owner = new JSONObject();
@@ -273,11 +275,34 @@ public class RestDogController {
                 allBoops += i.getBoops().size();
                 JSONObject img = new JSONObject();
                 img.put("boops", i.getBoops().size());
+
+                //checks if you booped an image
+                if(i.getBoops().size() == 0){ 
+                    img.put("booped", "false");
+                }
+                if(user == null){
+                    img.put("booped", "false");
+                }else{
+                    List <Boop> boops = i.getBoops();
+                    for( Boop b : boops){
+                        if(b.getUser().equals(user)){
+                            img.put("booped", "true");
+                        }
+                        else{
+                            img.put("booped", "false");
+                        }
+                    }
+                }
+
+                
+
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
                 // img.put("totalBoops", total);
                 jsonImages.put(img);
             }
+
+            
 
             JSONObject jsondog = new JSONObject();
             jsondog.put("id", dog.getId());
