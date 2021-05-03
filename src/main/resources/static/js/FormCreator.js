@@ -117,6 +117,9 @@ export default class formCreator {
             let element = document.createElement("option");
             element.value = option.value;
             element.innerHTML = option.text;
+            if(option.selected){
+                element.selected = true;
+            }
 
             select.appendChild(element);
         })
@@ -155,6 +158,8 @@ export default class formCreator {
                         console.log(res)
                     }
                     self.toast(res.data)
+                }).catch(err =>{
+                    self.notfy.error(err)
                 })
                 break;
             case "put":
@@ -163,6 +168,8 @@ export default class formCreator {
                         console.log(res)
                     }
                     self.toast(res.data)
+                }).catch(err =>{
+                    self.notfy.error(err)
                 })
                 break;
             case "get":
@@ -171,6 +178,8 @@ export default class formCreator {
                         console.log(res)
                     }
                     self.toast(res.data)
+                }).catch(err =>{
+                    self.notfy.error(err)
                 })
                 break;
 
@@ -183,12 +192,13 @@ export default class formCreator {
     }
 
     toast(data){
-
+        let self = this;
         if(data.message){
             this.notfy.success(data.message)
             if(this.redirect){
                 setTimeout(function () {
-                    window.location.href = this.redirect;
+                    
+                    window.location.href = self.redirect;
                 }, 1000);
             }
         }

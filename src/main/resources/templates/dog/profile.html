@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}" lang="en">
+<head>
+    <title>Profile </title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+
+<main layout:fragment="content">
+
+    <input type="hidden" th:value="${#httpServletRequest.requestURI}" id="id" class="invisible">
+    
+    <div class="container">
+
+        <div class="row">
+
+
+            <div class="col-12 topper col-md-6 col-lg-4 col-xl-4">
+
+                <div class="m-auto p-3 px-lg-1" id="profilePicture">
+    
+                </div>
+                <div>
+                    <div class="px-4 py-2">
+                        <h2>
+                            <span id="dogName">
+                            </span>
+                            <span id="dogSex">
+                            </span>
+                        </h2>
+                        <div>
+                            <h5>
+                                <span id="dogBreed">
+                                </span>
+                            </h5>
+                        </div>
+                        
+                        <p id="dogBio"></p>
+                        
+                    </div>
+                    <div class="px-4 py-2">
+                        
+                        
+                    </div>
+                </div>
+    
+            </div>
+    
+            <div class="col">
+    
+                <h3 class="text-center p-2">Where am I?</h3>
+                <div style="height:300px" class="w-100 m-2" id="map">
+    
+                </div>
+
+                <h2 class="text-center p-2">
+                    How I Look
+                </h2>
+                <div id="images" class="d-flex flex-wrap  justify-content-center">
+    
+                </div>
+    
+            </div>
+
+        </div>
+
+        
+
+    </div>
+
+
+
+    <!-- <div class="container-fluid p-0">
+        <div class="d-flex flex-row topper p-2 justify-content-around">
+            
+            <div class="d-flex align-items-end">
+                <div id="profilePicture">
+
+                </div>
+                <div>
+                    <div class="px-4 py-2">
+                        <h2 id="dogName">Loading</h2>
+                        <h5 id="dogSex">Please Wait</h5>
+                    </div>
+                    <div class="px-4 py-2">
+                        <h2 id="dogBio"></h2>
+                        <h5 id="dogBreeds"></h5>
+                    </div>
+                </div>
+            </div>
+            <div>
+                
+            </div>
+            
+            
+        
+        </div>
+    </div>
+
+    <div class="container">
+
+
+        <div style="height:300px" class="col-12 m-2" id="map">
+
+        </div>
+
+        <h2 class="text-center">
+            More of this dog
+        </h2>
+
+        <div id="images" class="col-12 d-flex flex-wrap p-2 m-2">
+
+        </div>
+      
+    </div> -->
+
+</main>
+</body>
+<script type="module" layout:fragment="script">
+    import HoverImage from "/js/HoverImage.js"
+    import DogLoader from "/js/DogLoader.js"
+    new HoverImage("http://localhost:8080/img/noDog.png","#").draw("profilePicture");
+
+    //grabs the URI and gets the value of the dog that way
+    let id = document.getElementById("id").value.split("/")
+    id = id[id.length-1];
+
+    new DogLoader(id);
+</script>
+</html>

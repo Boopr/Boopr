@@ -58,7 +58,7 @@ public class RestDogController {
     @RequestMapping(path = "/js/keys.js", produces ="application/javascript")
     @ResponseBody
     public String apiKey(){
-        return "const apiKey = `"+mapboxApiKey+"`";
+        return "const apiKey = '"+mapboxApiKey+"' ; export default apiKey";
     }
 
     /**
@@ -77,11 +77,20 @@ public class RestDogController {
 
             JSONArray breeds = new JSONArray();
             for(Breed b: d.getBreeds()){
-                breeds.put(b.getBreed());
+                JSONObject breed = new JSONObject();
+                breed.put("name",b.getBreed());
+                breed.put("id",b.getId());
+                breeds.put(breed);
             }
+            Long allBoops = 0L;
             JSONArray images = new JSONArray();
             for(Image i: d.getImages()){
-                images.put(i.getUrl());
+                JSONObject img = new JSONObject();
+                allBoops += i.getBoops().size();
+                img.put("id",i.getId());
+                img.put("url",i.getUrl());
+                img.put("boops",i.getBoops().size());
+                images.put(img);
             }
             JSONObject owner = new JSONObject();
             owner.put("id",d.getOwner().getId());
@@ -94,6 +103,7 @@ public class RestDogController {
             dog.put("bio",d.getBio());
             dog.put("breed",breeds);
             dog.put("owner",owner);
+            dog.put("allBoops", allBoops);
             dog.put("sex",d.getSex());
             dog.put("lat",d.getLat());
             dog.put("lon",d.getLon());
@@ -125,11 +135,21 @@ public class RestDogController {
 
             JSONArray breeds = new JSONArray();
             for(Breed b: d.getBreeds()){
-                breeds.put(b.getBreed());
+                JSONObject breed = new JSONObject();
+                breed.put("name",b.getBreed());
+                breed.put("id",b.getId());
+                breeds.put(breed);
             }
+            Long allBoops = 0L;
+            Long total = 0L;
             JSONArray images = new JSONArray();
             for(Image i: d.getImages()){
-                images.put(i.getUrl());
+                JSONObject img = new JSONObject();
+                allBoops += i.getBoops().size();
+                img.put("id",i.getId());
+                img.put("url",i.getUrl());
+                img.put("boops",i.getBoops().size());
+                images.put(img);
             }
             JSONObject owner = new JSONObject();
             owner.put("id",d.getOwner().getId());
@@ -142,6 +162,72 @@ public class RestDogController {
             dog.put("images",images);
             dog.put("breed",breeds);
             dog.put("owner",owner);
+            dog.put("allBoops", allBoops);
+            dog.put("sex",d.getSex());
+            dog.put("lat",d.getLat());
+            dog.put("lon",d.getLon());
+
+
+            dogs.put(dog);
+
+        }
+        
+        return dogs.toString();
+    }
+
+    /**
+     * This route gives back a list of all dogs in the database under a owner/user
+     * @param id The id of the owner/user you are reciving all dogs about
+     * @throws JSONException
+     */
+    @RequestMapping(value="/api/dogs/owner/mydogs", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
+    public String getSelfDogs() throws JSONException{
+
+
+        JSONArray dogs = new JSONArray();
+
+        User user = userService.getCurrentUser();
+        if(user == null){
+            JSONObject response = new JSONObject();
+            response.put("error","You are not logged in!");
+            return response.toString();
+        }
+
+        List<Dog> userDogs = user.getDogs();
+
+        for( Dog d : userDogs){
+
+            JSONArray breeds = new JSONArray();
+            for(Breed b: d.getBreeds()){
+                JSONObject breed = new JSONObject();
+                breed.put("name",b.getBreed());
+                breed.put("id",b.getId());
+                breeds.put(breed);
+            }
+            Long allBoops = 0L;
+            Long total = 0L;
+            JSONArray images = new JSONArray();
+            for(Image i: d.getImages()){
+                JSONObject img = new JSONObject();
+                allBoops+=total;
+                img.put("id",i.getId());
+                img.put("url",i.getUrl());
+                img.put("boops", i.getBoops().size());
+                allBoops += i.getBoops().size();
+                images.put(img);
+            }
+            JSONObject owner = new JSONObject();
+            owner.put("id",d.getOwner().getId());
+            owner.put("username",d.getOwner().getUsername());
+            owner.put("id",d.getOwner().getEmail());
+            JSONObject dog = new JSONObject();
+            dog.put("id", d.getId());
+            dog.put("name", d.getName());
+            dog.put("bio",d.getBio());
+            dog.put("images",images);
+            dog.put("breed",breeds);
+            dog.put("owner",owner);
+            dog.put("allBoops", allBoops);
             dog.put("sex",d.getSex());
             dog.put("lat",d.getLat());
             dog.put("lon",d.getLon());
@@ -163,11 +249,16 @@ public class RestDogController {
     public String getDogsByID(@PathVariable Long id) throws JSONException{
 
         long totalDogs = dogDao.findAll().size()-1;
+        User user = userService.getCurrentUser();
         Dog dog = dogDao.getOne(id);
 
             JSONArray breeds = new JSONArray();
             for(Breed b: dog.getBreeds()){
-                breeds.put(b.getBreed());
+                JSONObject breed = new JSONObject();
+                breed.put("name",b.getBreed());
+                breed.put("id",b.getId());
+              
+                breeds.put(breed);
             }
             JSONObject owner = new JSONObject();
             owner.put("id",dog.getOwner().getId());
@@ -180,20 +271,38 @@ public class RestDogController {
             Long allBoops = 0L;
             Long total = 0L;
             for( Image i : images){
-                for(Boop b : i.getBoops()){
-                    // boop.put("id",b.getId());
-                    // boop.put("userId",b.getUser().getId());
-                    // boops.put(boop);
-                    total ++;
-                }
-                allBoops += total;
+                
+                allBoops += i.getBoops().size();
                 JSONObject img = new JSONObject();
-                img.put("boops", total);
+                img.put("boops", i.getBoops().size());
+
+                //checks if you booped an image
+                if(i.getBoops().size() == 0){ 
+                    img.put("booped", "false");
+                }
+                if(user == null){
+                    img.put("booped", "false");
+                }else{
+                    List <Boop> boops = i.getBoops();
+                    for( Boop b : boops){
+                        if(b.getUser().equals(user)){
+                            img.put("booped", "true");
+                        }
+                        else{
+                            img.put("booped", "false");
+                        }
+                    }
+                }
+
+                
+
                 img.put("id",i.getId());
                 img.put("url",i.getUrl());
                 // img.put("totalBoops", total);
                 jsonImages.put(img);
             }
+
+            
 
             JSONObject jsondog = new JSONObject();
             jsondog.put("id", dog.getId());

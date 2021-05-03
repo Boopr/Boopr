@@ -3,7 +3,7 @@
     Jacob Gonzalez
 */
 :root {
-    --main-color: #ffe3a6;
+    --main-color: #fde1a3;
 
     --primary: #f5c345;
     --primary-hover: #b18e35;
@@ -22,7 +22,7 @@
     background-color: var(--main-color);
 }
 
-.bg-primary{
+.bg-primary2{
     background-color: var(--primary);
 }
 
@@ -107,3 +107,63 @@
     height:70vh;
     overflow-y: scroll;
 }
+
+.text-outline{
+    text-shadow: rgb(0, 0, 0) 2px 0px 0px, rgb(0, 0, 0) 1.75517px 0.958851px 0px, rgb(0, 0, 0) 1.0806px 1.68294px 0px, rgb(0, 0, 0) 0.141474px 1.99499px 0px, rgb(0, 0, 0) -0.832294px 1.81859px 0px, rgb(0, 0, 0) -1.60229px 1.19694px 0px, rgb(0, 0, 0) -1.97998px 0.28224px 0px, rgb(0, 0, 0) -1.87291px -0.701566px 0px, rgb(0, 0, 0) -1.30729px -1.5136px 0px, rgb(0, 0, 0) -0.421592px -1.95506px 0px, rgb(0, 0, 0) 0.567324px -1.91785px 0px, rgb(0, 0, 0) 1.41734px -1.41108px 0px, rgb(0, 0, 0) 1.92034px -0.558831px 0px;
+}
+
+.btn-male{
+    background-color: #45a3fb;
+    border-color: #2282db;
+    color:white
+}
+
+.btn-female{
+    background-color: #f8acff;
+    border-color: #eb77ff;
+    color:white
+}
+
+.topper{
+    border-right: solid black 1px;
+}
+
+@media only screen and (max-width: 768px) {
+    .topper{
+        border-right: solid rgba(0, 0, 0, 0) 0px;
+        border-bottom: solid black 1px
+    }
+  }
+
+.boopAnimate{
+
+    -webkit-animation: boopAnimation 1s ;
+   -moz-animation: boopAnimation 1s ;
+   -o-animation: boopAnimation 1s ;
+    animation: boopAnimation 1s ;
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+
+@keyframes boopAnimation {
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }
+  @-o-keyframes boopAnimation{
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }
+  @-moz-keyframes boopAnimation{
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }
+  @-webkit-keyframes boopAnimation{
+    0%   { opacity:0; visibility: visible;}
+    50%  { opacity:1; visibility: visible;}
+    100% { opacity:0; visibility: visible;}
+  }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.FilterChain;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,34 +31,38 @@ public class DogFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String url = ((HttpServletRequest)request).getRequestURI().toString();
-        User user = userService.getCurrentUser();
-        if(user == null){
-            //if the user is not logged in, do not worry about requests
-            filterChain.doFilter(request, response);
-            return;
-        }
-        //content for said page
-        if(
-        url.equals("/dog/add") ||
-        url.equals("/js/keys.js") ||
-        url.equals("/css/style.css") ||
-        url.equals("/img/Logo.svg") ||
-        url.equals("/favicon.ico") ||
-        url.equals("/api/dogs/add")){
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        //we get the dogs the current user has;
-        List<Dog> dogs = dogDao.findAllByOwner(user);   
-        if(dogs.isEmpty() && !url.equals("/dog/add")){
-            response.sendRedirect("/dog/add?first");
-            return;
-        }   
-        
 
         filterChain.doFilter(request, response);
+
+        // String url = ((HttpServletRequest)request).getRequestURI().toString();
+        // User user = userService.getCurrentUser();
+        // if(user == null){
+        //     //if the user is not logged in, do not worry about requests
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+        // //content for said page
+        // if(
+        // url.equals("/dog/add") ||
+        // url.equals("/js/keys.js") ||
+        // url.equals("/css/style.css") ||
+        // url.equals("/img/Logo.svg") ||
+        // url.equals("/favicon.ico") ||
+        // url.equals("/api/dogs/add")){
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+
+        // //we get the dogs the current user has;
+        // List<Dog> dogs = dogDao.findAllByOwner(user);   
+        // if(dogs.isEmpty() && !url.equals("/dog/add")){
+        //     RequestDispatcher view = request.getRequestDispatcher("/dog/add?first");
+        //     view.forward(request, response);
+        //     return;
+        // }   
+        
+
+        // filterChain.doFilter(request, response);
     }
     
 }

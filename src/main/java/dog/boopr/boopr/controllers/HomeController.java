@@ -43,12 +43,6 @@ public class HomeController {
     @GetMapping("/home")
     public String homePage(Model model) {
 
-        //we're pull from the dog repo
-        List<Dog> dogs = dogDao.findAll();
-        User user = userService.getCurrentUser();
-        //and pushing to the frontend
-        model.addAttribute("user", user);
-        model.addAttribute("dogs", dogs);
         return "home";
     }
 
@@ -74,10 +68,19 @@ public class HomeController {
     }
 
     @GetMapping("/profile/{id}")
-    public String profilePage(Model model, @PathVariable String id) {
-        Dog dog = dogDao.getOne(Long.parseLong(id));
-        model.addAttribute("dog", dog);
+    public String profilePages() {
+        return "dog/profile";
+    }
+
+    @GetMapping("/user/profile")
+    public String userProfile() {
         return "user/profile";
+    }
+
+    @GetMapping("/admin")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String admin() {
+        return "admin/admin";
     }
 
     @GetMapping("/location/{id}")

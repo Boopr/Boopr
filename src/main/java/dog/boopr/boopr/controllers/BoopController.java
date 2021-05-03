@@ -34,37 +34,40 @@ public class BoopController {
     @RequestMapping(value="/api/pics/{id}/boop", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public String postNewBoop(@PathVariable Long id){
         try{
+
             User user = userService.getCurrentUser();
-            List<Boop> imageBoops = boopDao.findAllByImage(imageDao.getOne(id));
-            System.out.println(imageBoops.size());
-            for(Boop b: imageBoops){
-                if(b.getUser().equals(user)){
-                    System.out.println("This means its caught");
-                    return "{ 'message': 'You've already Booped this Pup's Pic!' }";
-                }
+            if(user == null){
+                JSONObject response = new JSONObject();
+                response.put("error","You are not logged in!");
+                return response.toString();
             }
+
+            List<Boop> imageBoops = boopDao.findAllByImage(imageDao.getOne(id));
+
+            for(int i = 0; i < imageBoops.size();i++){
+
+                if(imageBoops.get(i).getUser().equals(user)){
+
+                    boopDao.delete(imageBoops.get(i));
+                    
+                    JSONObject response = new JSONObject();
+                    response.put("message","Boop removed!");
+                    response.put("totalBoops",imageBoops.size()-1);
+                    return response.toString();
+                }
+
+            }
+
             Boop boop = new Boop();
             boop.setImage(imageDao.getOne(id));
             boop.setUser(user);
             boopDao.save(boop);
 
-            Image i = imageDao.getOne(id);
-
-            JSONObject boopObj = new JSONObject();
-            JSONArray boops = new JSONArray();
-            Long total = 0L;
-            for(Boop b : i.getBoops()){
-                boopObj.put("id",b.getId());
-                boopObj.put("userId",b.getUser().getId());
-                boops.put(boop);
-                total ++;
-            }
-            boops.put(total);
-            JSONObject picture = new JSONObject();
-            picture.put("total", total);
-            picture.put("boops",boops);
+            JSONObject response = new JSONObject();
+            response.put("totalBoops", imageBoops.size()+1);
+            response.put("message","Booped!");
         
-            return picture.toString();
+            return response.toString();
         }catch(Exception e){
             e.printStackTrace();
             return " { 'error' : '" + e.toString() + " ' }";

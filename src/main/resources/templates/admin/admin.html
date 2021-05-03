@@ -6,32 +6,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Admin</title>
 </head>
 <body>
 
 <main layout:fragment="content">
-    <div id="form">
-        <h2 class="text-center p-2">Register</h2>
 
+    <div class="container justify-content-center">
+        <a href="/admin/dogs" class="btn btn-primary">
+            Dog Editor
+        </a>
+        <a href="/admin/users" class="btn btn-primary">
+            User Editor
+        </a>
+        <a href="/admin/breeds" class="btn btn-primary">
+            Breed Editor
+        </a>
     </div>
 </main>
 
 </body>
 <script type="module" layout:fragment="script">
-
-import FormCreator from '/js/FormCreator.js';
-
-let form = new FormCreator("form","/api/register", "post" , "/login");
-
-form.createLabel("Email", "E-Mail");
-form.createInput("email","Email@example.com")
-
-form.createLabel("username", "Username");
-form.createInput("username","Username");
-
-form.createLabel("password", "Password");
-form.createInput("password","password", "password");
 
 
 </script>
