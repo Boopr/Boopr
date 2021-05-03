@@ -66,7 +66,7 @@ export default class DogPanel{
         let endpoint = "mapbox.places"
         let dog = this.dog;
         let self = this;
-        axios.get("http://api.mapbox.com" + `/geocoding/v5/${endpoint}/${dog.lon},${dog.lat}.json` + "?access_token=" + apiKey).then( res=>{
+        axios.get("https://api.mapbox.com" + `/geocoding/v5/${endpoint}/${dog.lon},${dog.lat}.json` + "?access_token=" + apiKey).then( res=>{
             //console.log(res.data.features[4].place_name)
             self.dogLocation.innerHTML = res.data.features[4].place_name
         })

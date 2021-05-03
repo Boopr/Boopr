@@ -51,10 +51,10 @@ public class Dog {
     private String bio;
 
     @Column
-    private float lon;
+    private String lon;
 
     @Column 
-    private float lat;
+    private String lat;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -130,22 +130,6 @@ public class Dog {
         this.bio = bio;
     }
 
-    public float getLon() {
-        return this.lon;
-    }
-
-    public void setLon(float lon) {
-        this.lon = lon;
-    }
-
-    public float getLat() {
-        return this.lat;
-    }
-
-    public void setLat(float lat) {
-        this.lat = lat;
-    }
-
     public User getOwner() {
         return this.owner;
     }
@@ -154,6 +138,22 @@ public class Dog {
         this.owner = owner;
     }
     
+
+    public String getLon() {
+        return this.lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public String getLat() {
+        return this.lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
 
     
 }

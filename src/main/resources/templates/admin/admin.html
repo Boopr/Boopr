@@ -6,49 +6,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Users</title>
+    <title>Admin</title>
 </head>
 <body>
 
 <main layout:fragment="content">
 
-    <div class="container">
-
-        <div class="card my-2">
-            
-            <div class="card-head admin-card-head p-2 border-bottom">
-                <h2>
-                    User Editor
-                </h2>
-            </div>
-
-            <div class="card-body" id="table">
-                
-            </div>
-           
-        </div>
-
+    <div class="container justify-content-center">
+        <a href="/admin/dogs" class="btn btn-primary">
+            Dog Editor
+        </a>
+        <a href="/admin/users" class="btn btn-primary">
+            User Editor
+        </a>
+        <a href="/admin/breeds" class="btn btn-primary">
+            Breed Editor
+        </a>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Confirm Delete</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete <span class="fw-bold" id="breedValue"></span>
-            </div>
-            <div class="modal-footer">
-            <button type="button" id="deleteConfirm" class="btn btn-secondary" data-bs-dismiss="modal">Delete</button>
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-        </div>
-    </div>
-    
 </main>
 
 </body>

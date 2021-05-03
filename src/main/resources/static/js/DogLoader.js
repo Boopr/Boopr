@@ -8,6 +8,8 @@ export default class DogLoader{
         this.notfy = new Notyf();
         this.dogName = document.getElementById("dogName");
         this.dogSex = document.getElementById("dogSex");
+        this.dogBio = document.getElementById("dogBio");
+        this.dogBreed = document.getElementById("dogBreed");
         this.currentDog = id;
         let self = this;
         axios.get('/api/dogs/'+id).then( res =>{
@@ -15,6 +17,16 @@ export default class DogLoader{
             document.getElementById("profilePicture").innerHTML = "";
 
             self.dogName.innerHTML = res.data.name;
+
+            console.log(res.data)
+            self.dogBio.innerHTML = res.data.bio
+
+            let strBreed = ""
+            res.data.breed.forEach( breed =>{
+
+                strBreed += breed.name + " ";
+            })
+            self.dogBreed.innerHTML = strBreed
 
             if(res.data.sex ){
                 self.dogSex.innerHTML = `<i class="fas fa-mars"></i> Male`
@@ -45,6 +57,10 @@ export default class DogLoader{
 
             self.currentDog = res.data.id;
 
+            res.data.breed.forEach( breed =>{
+                self.dogBreed.innerHTML += breed.name;
+            })
+            
 
             self.dogName.innerHTML = res.data.name;
 

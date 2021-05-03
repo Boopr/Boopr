@@ -26,7 +26,7 @@ export default class HoverImage{
         this.anchor.appendChild(this.element);
         this.container.appendChild(this.anchor)
 
-        this.imageContainer = document.createElement("a");
+        this.imageContainer = document.createElement("div");
 
         if(anchor == undefined || anchor == null){
 
@@ -35,7 +35,10 @@ export default class HoverImage{
         }
         
         this.imageContainer.style.overflow = "hidden"
-        this.imageContainer.style.margin = "0px"
+        this.imageContainer.style.width = "300px"
+        this.imageContainer.style.height = "300px"
+        this.imageContainer.style.position = "relative"
+        this.imageContainer.style.top = "-300px"
 
         this.width;
         this.height;
@@ -47,9 +50,14 @@ export default class HoverImage{
 
 
         this.img = new Image();
+        this.img.style.cursor = "pointer"
         this.img.onload = function(){
             self.width = this.width;
             self.height = this.height;
+            //this.width = "100%"
+
+           // console.log(this.style.height)
+            
             //execute element changes
 
             self.container.height = height || width;
@@ -64,16 +72,31 @@ export default class HoverImage{
             self.element.style.height = height || width;
 
             let halfHeight = width.slice(0,-2)*2;
-            self.img.style.top = `-${width}`
-            self.img.style.width = width
+            //self.img.style.top = `-${width}`
+            let m = this.height / this.width
+            console.log(m)
+            if(m > 1){
+                this.style.height = "300px"
+                this.style.left = `5px`
+            }else{
+                this.style.width = "100%"
+                //strange ratio 
+                this.style.top = `${m*78}px`
+            }
 
-            this.style.marginBottom = `-${width}`
+            //this.style.marginBottom = `-${width}`
 
             self.export.style.height = height || width;
             self.export.style.width =  width;
             self.imageContainer.appendChild(this)
         };
 
+        this.img.addEventListener('click', ()=>{
+            if(anchor){
+                window.location.href = anchor;
+            }
+            
+        })
         
         this.img.src = url;
         this.img.style.position = "relative" 

@@ -55,8 +55,9 @@
                 res.data.forEach( dog =>{
                     //unpretty way of changing links for each dog to edit
                     let img = new DogPanel(dog);
-                    img.image.anchor.href = "/dog/edit/" + dog.id;
-                    img.image.imageContainer.href = "/dog/edit/" + dog.id;
+                    img.image.img.addEventListener('click', ()=>{
+                        window.location.href = "/dog/edit/" + dog.id;
+                    })
                     self.dogs.push(img)
                 })
                 self.drawDogs()  
