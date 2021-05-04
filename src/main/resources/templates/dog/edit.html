@@ -16,9 +16,9 @@
 
     <input type="hidden" th:value="${#httpServletRequest.requestURI}" id="id" class="invisible">
 
-    <div id="form">
-        <h2 class="text-center">Edit dog</h2>
-        <div id="imageUploader"></div>
+    <div id="form" class="justify-content-center align-items-center d-flex flex-column">
+        <h2 class="text-center p-2 mt-4">Edit dog</h2>
+        <div class="col-12 col-lg-6 col-md-8 px-2" id="imageUploader"></div>
 
     </div>
     
@@ -52,14 +52,20 @@
         form.importForm(mapbox.exportForm());
         mapbox.addMarker("dog")
 
-        form.createLabel("sex", "Sex");
+        
         if(dog.sex){
-            form.createInput("sex","Male","text","Male");
+            form.createLabel("sex", "Male");
+            form.createRadio("sex","male","checked" )
+            form.createLabel("sex", "Female");
+            form.createRadio("sex","female")
+        
         }else{
-            form.createInput("sex","Male","text","Female");
+            form.createLabel("sex", "Male");
+            form.createRadio("sex","male" )
+            form.createLabel("sex", "Female");
+            form.createRadio("sex","female","checked")
         }
         
-
         form.createLabel("bio", "Bio");
         form.createInput("bio","Bio","text",dog.bio);
 

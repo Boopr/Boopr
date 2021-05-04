@@ -52,15 +52,22 @@
         this.carousel.appendChild(backward);
         this.carousel.appendChild(forward);
 
+        this.controlsContainer = document.createElement("div");
+        this.controlsContainer.setAttribute("class","row m-0")
+
         this.file = document.createElement("input");
         this.file.setAttribute("type","file");
+        this.file.setAttribute("class","form-control col-6 mt-2");
         this.button = document.createElement("button");
-        this.button.setAttribute("class","btn btn-primary")
+        this.button.setAttribute("class","btn btn-primary col-6 m-auto my-2")
         this.button.innerHTML = "Upload Image"
 
+        this.controlsContainer.appendChild(this.file)
+        this.controlsContainer.appendChild(this.button)
+
         this.element.appendChild(this.carousel);
-        this.element.appendChild(this.file);
-        this.element.appendChild(this.button);
+        this.element.appendChild(this.controlsContainer);
+        
 
         this.button.addEventListener('click', ()=>{this.uploadImage()})
         this.refreshDogs()
@@ -73,6 +80,8 @@
         axios.post(`/api/dogs/${this.id}/pics/`, data).then(res =>{
             self.toast(res.data)
             self.refreshDogs();
+        }).catch(err=>{
+            self.toast({error: "Invalid image type/size!"})
         })
     }
 
@@ -91,6 +100,8 @@
     }
 
     newImage(picture , i ){
+        
+
         let item = document.createElement("div");
         if(i == 0){
             item.setAttribute("class","carousel-item active");
@@ -116,13 +127,14 @@
 
         let caption = document.createElement("div")
         caption.setAttribute("class","carousel-caption d-flex justify-content-between align-items-end")
-        
+
         let boops = document.createElement("div");
-        if(picture.boops.length == undefined){
+        if(picture.boops == undefined){
             boops.innerHTML = "Total boops: 0"
         }else{
-            boops.innerHTML = "Total boops: " + picture.boops.length
+            boops.innerHTML = "Total boops: " + picture.boops
         }
+        boops.setAttribute("class","text-outline text-white")
 
         let button = document.createElement("button");
         button.setAttribute("class","btn btn-danger")

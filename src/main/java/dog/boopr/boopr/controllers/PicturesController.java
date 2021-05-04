@@ -122,16 +122,11 @@ public class PicturesController {
 
         for( Image i : images){
 
-            JSONObject boops = new JSONObject();
-            for(Boop b : i.getBoops()){
-                boops.put("id",b.getId());
-                boops.put("userId",b.getUser().getId());
-            }
 
             JSONObject picture = new JSONObject();
             picture.put("id", i.getId());
             picture.put("url", i.getUrl());
-            picture.put("boops",boops);
+            picture.put("boops",i.getBoops().size());
             picture.put("dog_id",i.getDog().getId());
             picture.put("user_id",i.getUser().getId());
             pics.put(picture);

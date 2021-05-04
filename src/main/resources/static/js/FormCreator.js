@@ -58,6 +58,28 @@ export default class formCreator {
 
     }
 
+    createRadio(formName, value, checked){
+
+        if(formName == undefined){
+            console.error("You must specify a form name!");
+        }
+
+        let form = document.createElement("input");
+        form.type = "radio"
+        form.setAttribute("class","form-check-input mx-auto p-0");
+        form.style.marginBottom = "-50px"
+        form.style.position = "relative"
+        form.style.top = "-30px"
+        if(checked){
+            form.checked = true
+        }
+        form.id = value;
+        form.name = formName;
+        form.value = value;
+
+        this.form.appendChild(form);
+    }
+
 
 
     /**
@@ -141,6 +163,12 @@ export default class formCreator {
             }
             if(element.type == "file"){
                 data.append( element.id, element.files[0]);
+            }
+            
+            if(element.type == "radio"){
+                if(element.checked){
+                    data.append( element.name, element.value);
+                }
             }
             if(element.tagName != "LABEL"){
                 data.append( element.id, element.value);
