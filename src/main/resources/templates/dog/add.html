@@ -14,7 +14,7 @@
 
 <main layout:fragment="content">
     <div id="form">
-        <h2 class="text-center">Add dog</h2>
+        <h2 class="text-center mt-4 p2">Add dog</h2>
 
     </div>
     
@@ -39,8 +39,10 @@
     form.createLabel("Image", "Image");
     form.createInput("image","","file");
 
-    form.createLabel("sex", "Sex");
-    form.createInput("sex","Male");
+    form.createLabel("sex", "Male");
+    form.createRadio("sex","male","checked" )
+    form.createLabel("sex", "Female");
+    form.createRadio("sex","female")
 
     form.createLabel("bio", "Bio");
     form.createInput("bio","Bio");
