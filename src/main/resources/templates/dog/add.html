@@ -13,8 +13,14 @@
 <body>
 
 <main layout:fragment="content">
-    <div id="form">
-        <h2 class="text-center mt-4 p2">Add dog</h2>
+    <div  class="justify-content-center align-items-center row m-0">
+
+        <h2 class="text-center p-2 mt-4">New Dog</h2>
+        <div class="border rounded bg-white col-12 col-md-8 col-lg-6 p-2 my-2" id="form">
+            <h4 class="text-center">
+                Add Details
+            </h4>
+        </div>
 
     </div>
     
@@ -29,9 +35,10 @@
     let form = new FormCreator("form","/api/dog/add", "post", "/home");
     let mapbox = new MapBoxForm();
 
-    form.createLabel("name", "Name");
-    form.createInput("name","Doggo")
+    form.createLabel("name", "Dog Name");
+    form.createInput("name","Dog Name")
 
+    form.createLabel("dogLocation", "Set Dog Location");
     form.importForm(mapbox.export());
     form.importForm(mapbox.exportForm());
     mapbox.addMarker("dog")
@@ -39,13 +46,24 @@
     form.createLabel("Image", "Image");
     form.createInput("image","","file");
 
-    form.createLabel("sex", "Male");
-    form.createRadio("sex","male","checked" )
-    form.createLabel("sex", "Female");
-    form.createRadio("sex","female")
+    let obj = {
+            title: "Sex",
+            name: "sex",
+            options:[
+                {
+                value: "male",
+                label: "Male"
+                },
+                {
+                value: "female",
+                label: "Female"
+                }
+            ]
+        }
+    form.createRadioGroup(obj)
 
-    form.createLabel("bio", "Bio");
-    form.createInput("bio","Bio");
+    form.createLabel("bio", "Bio", );
+    form.createTextArea("bio","Insert Bio Here!", 300);
 
     axios.get("/api/breed").then( (res)=>{
         let obj = {
