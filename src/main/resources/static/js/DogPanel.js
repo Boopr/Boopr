@@ -34,17 +34,17 @@ export default class DogPanel{
         this.overlay.appendChild(this.sex)
 
         this.bottom = document.createElement("div");
-        this.bottom.setAttribute("class","row p-2")
+        this.bottom.setAttribute("class","row p-2 d-flex flex-column")
         this.bottom.style.position = "relative"
         this.bottom.style.top = `-50px`
 
         this.dogName = document.createElement("h4");
-        this.dogName.setAttribute("class","col-12")
+        this.dogName.setAttribute("class","")
         this.dogName.style.width = "300px"
         this.dogName.innerHTML = dog.name;
 
         this.dogLocation = document.createElement("div");
-        this.dogLocation.setAttribute("class","col-12")
+        this.dogLocation.setAttribute("class","")
         this.dogLocation.style.width = "300px"
         
 
