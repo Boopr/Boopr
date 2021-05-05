@@ -40,10 +40,12 @@ export default class DogPanel{
 
         this.dogName = document.createElement("h4");
         this.dogName.setAttribute("class","col-12")
+        this.dogName.style.width = "300px"
         this.dogName.innerHTML = dog.name;
 
         this.dogLocation = document.createElement("div");
         this.dogLocation.setAttribute("class","col-12")
+        this.dogLocation.style.width = "300px"
         
 
         this.bottom.appendChild(this.dogName);
