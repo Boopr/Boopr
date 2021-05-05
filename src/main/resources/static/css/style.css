@@ -17,6 +17,10 @@
     --warning: #fdfda1;
     --warning-hover: #e4e48f;
 }
+
+body{
+    background-image: url("/img/pattern.png");
+}
   
 .bg-main{
     background-color: var(--main-color);

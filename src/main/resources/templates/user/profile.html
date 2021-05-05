@@ -52,6 +52,25 @@
             let self = this;
             this.dogs = [];
             axios.get("/api/dogs/owner/mydogs").then( res =>{
+
+                if(res.data.length == 0){
+
+                    let container = document.createElement("div");
+                    container.setAttribute("class","d-flex flex-column justify-content-center align-items-center text-center")
+                    container.style.height = "70vh";
+
+                    let h1 = document.createElement("h1");
+                    h1.innerHTML = "No Dogs Found!"
+                    let h2 = document.createElement("h3");
+                    h2.innerHTML = "Please add one by clicking the add button above!"
+
+                    container.appendChild(h1);
+                    container.appendChild(h2);
+
+                    this.element.appendChild(container);
+
+                    return;
+                }
                 res.data.forEach( dog =>{
                     //unpretty way of changing links for each dog to edit
                     let img = new DogPanel(dog);

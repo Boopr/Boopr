@@ -53,17 +53,23 @@
         this.carousel.appendChild(forward);
 
         this.controlsContainer = document.createElement("div");
-        this.controlsContainer.setAttribute("class","row m-0")
+        this.controlsContainer.setAttribute("class","row m-0 justify-content-between")
+
+        this.fileContainer = document.createElement("div");
+        this.fileContainer.setAttribute("class","col-7 col-sm-6")
 
         this.file = document.createElement("input");
         this.file.setAttribute("type","file");
         this.file.setAttribute("class","form-control col-6 mt-2");
+        this.fileContainer.appendChild(this.file);
+
         this.button = document.createElement("button");
-        this.button.setAttribute("class","btn btn-primary col-6 m-auto my-2")
+        this.button.setAttribute("class","btn btn-primary col my-2 ms-2")
         this.button.innerHTML = "Upload Image"
 
-        this.controlsContainer.appendChild(this.file)
+        
         this.controlsContainer.appendChild(this.button)
+        this.controlsContainer.appendChild(this.fileContainer)
 
         this.element.appendChild(this.carousel);
         this.element.appendChild(this.controlsContainer);

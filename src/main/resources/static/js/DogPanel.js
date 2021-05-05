@@ -9,7 +9,7 @@ export default class DogPanel{
         let width = "300px"
         this.element = document.createElement("div")
         this.image = new HoverImage(dog.images[0].url, "/profile/" + dog.id, width , height);
-        this.element.setAttribute("class","m-2 border rounded")
+        this.element.setAttribute("class","m-2 border rounded bg-white")
 
         this.overlay = document.createElement("div");
         this.overlay.style.position = "relative"

@@ -16,9 +16,19 @@
 
     <input type="hidden" th:value="${#httpServletRequest.requestURI}" id="id" class="invisible">
 
-    <div id="form" class="justify-content-center align-items-center d-flex flex-column">
-        <h2 class="text-center p-2 mt-4">Edit dog</h2>
-        <div class="col-12 col-lg-6 col-md-8 px-2" id="imageUploader"></div>
+    <div  class="justify-content-center align-items-center row m-0">
+        <h2 class="text-center p-2 mt-4">Dog Editor</h2>
+        <div class="border rounded bg-white col-12 col-lg-6 col-md-8 p-2" id="imageUploader">
+            <h4 class="text-center">
+                Image Manager
+            </h4>
+
+        </div>
+        <div class="border rounded bg-white col-12 col-md-8 col-lg-6 p-2 my-2" id="form">
+            <h4 class="text-center">
+                Change Details
+            </h4>
+        </div>
 
     </div>
     
@@ -45,29 +55,33 @@
         
         let dog = res.data
 
-        form.createLabel("name", "Name", );
+        form.createLabel("name", "Dog Name", );
         form.createInput("name","Dog Name","text" , dog.name)
 
+        form.createLabel("dogLocation", "Set Dog Location");
         form.importForm(mapbox.export());
         form.importForm(mapbox.exportForm());
         mapbox.addMarker("dog")
 
-        
-        if(dog.sex){
-            form.createLabel("sex", "Male");
-            form.createRadio("sex","male","checked" )
-            form.createLabel("sex", "Female");
-            form.createRadio("sex","female")
-        
-        }else{
-            form.createLabel("sex", "Male");
-            form.createRadio("sex","male" )
-            form.createLabel("sex", "Female");
-            form.createRadio("sex","female","checked")
+
+        let obj = {
+            title: "Sex",
+            name: "sex",
+            options:[
+                {
+                value: "male",
+                label: "Male"
+                },
+                {
+                value: "female",
+                label: "Female"
+                }
+            ]
         }
+        form.createRadioGroup(obj)
         
-        form.createLabel("bio", "Bio");
-        form.createInput("bio","Bio","text",dog.bio);
+        form.createLabel("bio", "Bio", );
+        form.createTextArea("bio","Insert Bio Here!", 300, dog.bio);
 
         axios.get("/api/breed").then( (res)=>{
             let obj = {
