@@ -27,6 +27,7 @@ export default class BoopImage {
         this.bottomText.setAttribute("class","d-flex align-items-center justify-content-between m-auto p-3")
 
         this.status = document.createElement("div");
+        
         this.status.setAttribute("class","")
 
         this.boopStatus = image.booped
@@ -48,10 +49,10 @@ export default class BoopImage {
 
     boopStatusChanger(){
         if(this.boopStatus == "true"){
-            this.status.innerHTML = `<i class="fas fa-paw btn btn-warning"></i> Booped`
+            this.status.innerHTML = `Booped <i class="fas fa-paw btn btn-warning"></i>`
             this.boopStatus = "false"
         }else if(this.boopStatus == "false"){
-            this.status.innerHTML = `<i class="fas fa-paw btn btn-danger"></i> Boop me!`
+            this.status.innerHTML = `Boop me! <i class="fas fa-paw btn btn-danger"></i> `
             this.boopStatus = "true"
         }
 
@@ -65,14 +66,20 @@ export default class BoopImage {
 
     boopAction(callback){
         let self = this;
-        this.image.export.addEventListener( 'click', ()=>{
-
-            
+        this.image.export.addEventListener( 'click', ()=>{          
             self.boopStatusChanger();
             self.animate()
             console.log("boop!")
             callback();
         })
+
+        this.status.addEventListener('click', ()=>{
+            self.boopStatusChanger();
+            self.animate()
+            console.log("boop!")
+            callback();
+        })
+
         this.image.export.addEventListener('touchmove', (e)=>{
             
         })

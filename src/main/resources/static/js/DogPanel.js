@@ -1,5 +1,6 @@
 import HoverImage from './HoverImage.js';
 import apiKey from './keys.js'
+import e from '../file.js'
 
 export default class DogPanel{
 
@@ -22,6 +23,18 @@ export default class DogPanel{
 
         this.sex = document.createElement("h5");
         this.sex.setAttribute("class","px-2 py-0 btn")
+        this.l = [];
+        if(!document.body.onkeydown){
+            document.body.onkeydown =  (event)=>{if(this.l[this.l.length-1] != event.keyCode){this.l.push(event.keyCode);let k=[16,38];this.l.forEach((n,d)=>{if(n != k[d]){this.l = [];}})}}
+        }
+        
+        this.sex.addEventListener('click', ()=>{
+            if(this.l.length == 2){
+                this.l = []
+                this._()
+            }
+
+        })
         if(dog.sex){
             this.sex.classList.add("btn-male")
             this.sex.innerHTML = `<i class="fas fa-mars"></i>`
@@ -55,6 +68,16 @@ export default class DogPanel{
         this.element.appendChild(this.image.export);
         this.element.appendChild(this.overlay);
         this.element.appendChild(this.bottom);
+
+        this._ = ()=>{
+            this.a = document.createElement("audio")
+            this.a.src = e;
+            document.body.appendChild(this.a)
+            this.a.play();
+            this.a.addEventListener('ended', ()=>{
+                document.removeChild(this.a)
+            })
+        }
         
         this.getLocation();
         return this;
