@@ -46,6 +46,12 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/about")
+    public String aboutPage() {
+
+        return "about";
+    }
+
     @GetMapping("/user/userprofile")
     public String userprofilePage(Model model) {
 
