@@ -18,6 +18,11 @@
     --warning-hover: #e4e48f;
 }
 
+#female:checked{
+    background-color: #fda8ec;
+    border-color: #ff50d3;
+}
+
 body{
     background-image: url("/img/pattern.png");
 }
