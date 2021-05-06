@@ -28,6 +28,7 @@ import dog.boopr.boopr.models.Breed;
 import dog.boopr.boopr.models.Dog;
 import dog.boopr.boopr.models.Image;
 import dog.boopr.boopr.models.User;
+import dog.boopr.boopr.repositories.BoopRepository;
 import dog.boopr.boopr.repositories.DogRepository;
 import dog.boopr.boopr.repositories.UserRepository;
 import dog.boopr.boopr.services.UserServices;
@@ -41,6 +42,9 @@ public class RestDogController {
 
     @Autowired
     private DogRepository dogDao;
+
+    @Autowired
+    private BoopRepository boopDao;
 
     @Autowired
     private UserRepository userDao;
@@ -194,6 +198,18 @@ public class RestDogController {
         }
 
         List<Dog> userDogs = user.getDogs();
+
+        //checks if user is new
+        if(userDogs == null || userDogs.size() == 0){
+            List<Boop> boops = boopDao.findAllByUser(user);
+            if(boops.size() != 0){
+                JSONObject firstTime = new JSONObject();
+                firstTime.put("notNew","true");
+                dogs.put(firstTime);
+                return dogs.toString();
+            }
+            
+        }
 
         for( Dog d : userDogs){
 
