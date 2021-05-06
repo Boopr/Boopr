@@ -233,6 +233,9 @@ export default class formCreator {
             let radio = document.createElement("input");
             radio.setAttribute("class","form-check-input")
             radio.type = "radio";
+            if(input.checked){
+                radio.checked = true;
+            }
             radio.id = input.value;
             radio.value = input.value;
             radio.name = obj.name;
@@ -283,6 +286,12 @@ export default class formCreator {
                                 throw("Error");
                             }
                             data.append(elm.id, elm.value)
+                        }
+
+                        if(elm.type == "radio"){
+                            if(elm.checked){
+                                data.append( elm.name, elm.value);
+                            }
                         }
                         
                     })

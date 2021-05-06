@@ -15,6 +15,7 @@ export default class MapBoxForm{
         this.element.setAttribute("class","w-100 mb-2")
         this.element.style.height = height;
         this.element.style.width = "100%";
+        this.notfy = new Notyf();
 
         mapboxgl.accessToken = apiKey;
 
@@ -27,6 +28,41 @@ export default class MapBoxForm{
             container: this.element,
             zoom: 3
         }
+        this.values.container = this.element;
+        this.button = document.createElement("button")
+        this.button.setAttribute("class","btn btn-primary my-2")
+        this.button.innerHTML = "Get My Location"
+        this.button.style.position = "relative";
+        this.button.style.zIndex = "100";
+
+        this.button.addEventListener('click', (e)=>{
+            e.preventDefault();
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition((pos) =>{
+                    //success
+                    this.markers.get(this.currentMarker).setLngLat(
+                        [
+                            pos.coords.longitude,
+                            pos.coords.latitude
+                        ]
+                    )
+                    this.map.flyTo({
+                        center: [
+                            pos.coords.longitude,
+                            pos.coords.latitude
+                        ]
+                    })
+                }, ()=>{
+                    //error
+                    this.notfy.error("Unable to get your location")
+                })
+                
+            }
+            
+        })
+
+        this.element.appendChild(this.button)
+
         this.map = new mapboxgl.Map(this.values);
         this.markers = new Map();
         this.hidden = document.createElement("input");
@@ -48,11 +84,15 @@ export default class MapBoxForm{
         return this.hidden;
     }
 
-    addMarker(id){
+    addMarker(id, cords){
         let marker = new mapboxgl.Marker({
             draggable: true   
         })
-        marker.setLngLat(this.map.getCenter()).addTo(this.map);
+        if(cords){
+            marker.setLngLat(cords).addTo(this.map);
+        }else{
+            marker.setLngLat(this.map.getCenter()).addTo(this.map);
+        }   
         marker.on('drag', (e)=>{
             this._call();
         })
