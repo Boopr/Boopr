@@ -54,6 +54,11 @@ export default class MapBoxForm{
                             pos.coords.latitude
                         ]
                     })
+
+                    this.hidden.value = [
+                        pos.coords.longitude,
+                        pos.coords.latitude
+                    ]
                 }, ()=>{
                     //error
                     this.notfy.error("Unable to get your location")
