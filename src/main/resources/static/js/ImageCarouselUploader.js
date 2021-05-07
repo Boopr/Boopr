@@ -145,6 +145,7 @@
         let button = document.createElement("button");
         button.setAttribute("class","btn btn-danger position-relative")
         button.style.top = "-110px";
+        button.style.zIndex = "200";
         button.style.right = "-30px";
         button.innerHTML = `<i class="fas fa-trash-alt"></i>`;
         button.addEventListener('click', ()=>{ this.delete(picture.id)})

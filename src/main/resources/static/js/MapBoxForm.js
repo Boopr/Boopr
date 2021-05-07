@@ -30,9 +30,10 @@ export default class MapBoxForm{
         }
         this.values.container = this.element;
         this.button = document.createElement("button")
-        this.button.setAttribute("class","btn btn-primary my-2")
+        this.button.setAttribute("class","btn btn-primary my-2 rounded")
         this.button.innerHTML = "Get My Location"
         this.button.style.position = "relative";
+
         this.button.style.top = "5px"
         this.button.style.zIndex = "100";
 
