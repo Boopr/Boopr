@@ -17,4 +17,5 @@ public class ImageConfig implements WebMvcConfigurer{
                 .addResourceLocations("file:" + uploadPath);
     }
 
+  
 }
