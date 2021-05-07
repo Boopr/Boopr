@@ -1,5 +1,6 @@
 import HoverImage from './HoverImage.js';
 import apiKey from './keys.js'
+import e from '../file.js'
 
 export default class DogPanel{
 
@@ -9,7 +10,7 @@ export default class DogPanel{
         let width = "300px"
         this.element = document.createElement("div")
         this.image = new HoverImage(dog.images[0].url, "/profile/" + dog.id, width , height);
-        this.element.setAttribute("class","m-2 border rounded")
+        this.element.setAttribute("class","m-2 border rounded bg-white")
 
         this.overlay = document.createElement("div");
         this.overlay.style.position = "relative"
@@ -22,6 +23,18 @@ export default class DogPanel{
 
         this.sex = document.createElement("h5");
         this.sex.setAttribute("class","px-2 py-0 btn")
+        this.l = [];
+        if(!document.body.onkeydown){
+            document.body.onkeydown =  (event)=>{if(this.l[this.l.length-1] != event.keyCode){this.l.push(event.keyCode);let k=[16,38];this.l.forEach((n,d)=>{if(n != k[d]){this.l = [];}})}}
+        }
+        
+        this.sex.addEventListener('click', ()=>{
+            if(this.l.length == 2){
+                this.l = []
+                this._()
+            }
+
+        })
         if(dog.sex){
             this.sex.classList.add("btn-male")
             this.sex.innerHTML = `<i class="fas fa-mars"></i>`
@@ -34,16 +47,18 @@ export default class DogPanel{
         this.overlay.appendChild(this.sex)
 
         this.bottom = document.createElement("div");
-        this.bottom.setAttribute("class","row p-2")
+        this.bottom.setAttribute("class","row p-2 d-flex flex-column")
         this.bottom.style.position = "relative"
         this.bottom.style.top = `-50px`
 
         this.dogName = document.createElement("h4");
-        this.dogName.setAttribute("class","col-12")
+        this.dogName.setAttribute("class","")
+        this.dogName.style.width = "300px"
         this.dogName.innerHTML = dog.name;
 
         this.dogLocation = document.createElement("div");
-        this.dogLocation.setAttribute("class","col-12")
+        this.dogLocation.setAttribute("class","")
+        this.dogLocation.style.width = "300px"
         
 
         this.bottom.appendChild(this.dogName);
@@ -53,6 +68,16 @@ export default class DogPanel{
         this.element.appendChild(this.image.export);
         this.element.appendChild(this.overlay);
         this.element.appendChild(this.bottom);
+
+        this._ = ()=>{
+            this.a = document.createElement("audio")
+            this.a.src = e;
+            document.body.appendChild(this.a)
+            this.a.play();
+            this.a.addEventListener('ended', ()=>{
+                document.removeChild(this.a)
+            })
+        }
         
         this.getLocation();
         return this;

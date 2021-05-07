@@ -12,16 +12,47 @@
 
 <main layout:fragment="content">
 
-    <div class="container justify-content-center">
-        <a href="/admin/dogs" class="btn btn-primary">
-            Dog Editor
-        </a>
-        <a href="/admin/users" class="btn btn-primary">
-            User Editor
-        </a>
-        <a href="/admin/breeds" class="btn btn-primary">
-            Breed Editor
-        </a>
+    <div class="container justify-content-center align-items-center" >
+        <h2 class="text-center p-2">
+            Admin dashboard
+        </h2>
+        <div class="d-flex flex-wrap justify-content-around align-items-center pt-4" style="height:70vh">
+
+            <div class="py-2 col-12 col-md-4 d-flex flex-column justify-content-center align-items-center">
+                <div class="rounded-circle d-flex bg-primary2 text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-dog" style="font-size:5em"></i>
+                </div>
+
+                <a href="/admin/dogs" class="btn btn-primary">
+                    Dog Editor
+                </a>
+            </div>
+
+            <div class="py-2 col-12 col-md-4 d-flex flex-column justify-content-center align-items-center">
+                <div class="rounded-circle d-flex bg-primary2 text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-users" style="font-size:5em"></i>
+                </div>
+
+                <a href="/admin/users" class="btn btn-primary">
+                    User Editor
+                </a>
+            </div>
+
+            <div class="py-2 col-12 col-md-4 d-flex flex-column justify-content-center align-items-center">
+                <div class="rounded-circle d-flex bg-primary2 text-center justify-content-center align-items-center m-2" style="width:128px;height:128px">
+                    <i class="fas fa-paw" style="font-size:5em"></i>
+                </div>
+
+                <a href="/admin/breeds" class="btn btn-primary">
+                    Breed Editor
+                </a>
+            </div>
+
+            
+            
+           
+        </div>
+        
     </div>
 </main>
 

@@ -8,6 +8,8 @@ export default class BoopImageList{
         this.notfy = new Notyf();
         this.images = [];
         this.getImages()
+
+        
         return this;
     }
 

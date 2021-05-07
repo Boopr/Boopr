@@ -81,7 +81,7 @@ export default class BreedEditor{
 
     createButtonGroup(id, name){
         let buttonGroup = document.createElement("td");
-        buttonGroup.setAttribute("class","btn-group w-100");
+        buttonGroup.setAttribute("class","d-flex flex-row justify-content-space");
         buttonGroup.setAttribute("role","group");
 
         let editButton = document.createElement("button");
@@ -89,7 +89,7 @@ export default class BreedEditor{
         editButton.innerHTML = "Edit"
         
         let deleteButton = document.createElement("button");
-        deleteButton.setAttribute("class","btn btn-danger");
+        deleteButton.setAttribute("class","btn btn-danger mx-2");
         deleteButton.setAttribute("data-bs-toggle","modal");
         deleteButton.setAttribute("data-bs-target","#staticBackdrop");
         deleteButton.innerHTML = "Delete"

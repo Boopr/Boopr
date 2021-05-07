@@ -28,10 +28,12 @@ public class User {
 
     @NotBlank(message = "You must enter a username")
     @Size(min = 5, message = "Username must be between 5-16 characters")
+    @Column(unique=true)
     private String username;
 
     @Email(message = "Not a valid email address")
     @NotBlank(message = "You must enter an email")
+    @Column(unique=true)
     private String email;
 
     @NotBlank(message = "You must enter a password")

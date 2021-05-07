@@ -74,7 +74,7 @@ export default class HoverImage{
             let halfHeight = width.slice(0,-2)*2;
             //self.img.style.top = `-${width}`
             let m = this.height / this.width
-            console.log(m)
+            //console.log(m)
             if(m > 1){
                 this.style.height = "300px"
                 this.style.left = `5px`

@@ -17,6 +17,19 @@
     --warning: #fdfda1;
     --warning-hover: #e4e48f;
 }
+
+#female:checked{
+    background-color: #fda8ec;
+    border-color: #ff50d3;
+}
+
+#map{
+    border-radius: 5px;
+}
+
+body{
+    background-image: url("/img/pattern.png");
+}
   
 .bg-main{
     background-color: var(--main-color);

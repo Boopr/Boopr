@@ -16,7 +16,7 @@ export default class formCreator {
         this.redirect = redirect;
         this.url = url;
         this.form = document.createElement("div");
-        this.form.setAttribute("class","row p-2 col-12 col-lg-6 col-md-8 mx-auto mt-4")
+        this.form.setAttribute("class","row p-4 mx-auto mt-4")
 
         this.button = document.createElement("button");
         this.button.setAttribute("class","btn btn-primary order-last mt-2")
@@ -58,6 +58,84 @@ export default class formCreator {
 
     }
 
+    createTextArea(id, placeholder, limit, value){
+        if(id == undefined){
+            console.error("You must specify an ID for this TextArea!");
+        }
+
+        let container = document.createElement("div");
+        container.setAttribute("class","form-floating p-0")
+        
+        let textArea = document.createElement("textArea");
+        
+        
+        textArea.setAttribute("class","form-control mb-2");
+        textArea.id = id
+        textArea.style.height = "150px";
+        textArea.style.resize = "none";
+
+        container.appendChild(textArea)
+        if(placeholder){
+            let label = document.createElement("label");
+            label.innerHTML = placeholder;
+            label.setAttribute("class","mx-2 my-0")
+            label.setAttribute("for", id)
+            container.appendChild(label)
+        }
+        if(limit){
+
+            if(typeof limit != "number"){
+                console.error("Limit must be a number!");
+            }
+
+            let counter = document.createElement("div")
+            counter.classList.add("text-end")
+            counter.innerHTML = "0/"+ limit
+
+            textArea.addEventListener('input', ()=>{
+                console.log("test")
+                counter.innerHTML = textArea.value.length + "/" + limit
+                if(textArea.value.length > limit){
+                    counter.style.color = "red"
+                }else{
+                    counter.style.color = "inherit"
+                }
+
+            })
+            
+            container.appendChild(counter)
+        }
+
+        if(value){
+            textArea.value = value;
+        }
+        
+        this.form.appendChild(container);
+    }
+
+
+    createRadio(formName, value, checked){
+
+        if(formName == undefined){
+            console.error("You must specify a form name!");
+        }
+
+        let form = document.createElement("input");
+        form.type = "radio"
+        form.setAttribute("class","form-check-input mx-auto p-0");
+        form.style.marginBottom = "-50px"
+        form.style.position = "relative"
+        form.style.top = "-30px"
+        if(checked){
+            form.checked = true
+        }
+        form.id = value;
+        form.name = formName;
+        form.value = value;
+
+        this.form.appendChild(form);
+    }
+
 
 
     /**
@@ -65,7 +143,7 @@ export default class formCreator {
      * @param {String} item Specify the id the label is for
      * @param {String} text The label text displayed to the user
      */
-    createLabel(item, text){
+    createLabel(item, text, noStyling){
         if(item == undefined){
             console.error("You must specify what this label is for!");
         }
@@ -75,7 +153,10 @@ export default class formCreator {
         }
 
         let label = document.createElement("label");
-        label.setAttribute("class","fw-bold mb-2 ps-0");
+        if(!noStyling){
+            label.setAttribute("class","fw-bold mb-2 ps-0");
+        }
+        
         label.for = item;
         label.innerHTML = text;
         this.form.appendChild(label);
@@ -127,6 +208,64 @@ export default class formCreator {
         this.form.appendChild(select);
     }
 
+    createRadioGroup(options){
+
+        let obj = options || {
+
+            title: "Title",
+            name: "test",
+            options:[
+                {
+                value: "1",
+                label: "Please input"
+                },
+                {
+                value: "2",
+                label: "an options object"
+                }
+            ]
+
+        }
+
+        let container = document.createElement("div")
+        container.setAttribute("class","d-flex w-100 justify-content-center")
+        let radios = []
+        obj.options.forEach( input =>{
+            let radio = document.createElement("input");
+            radio.setAttribute("class","form-check-input")
+            radio.type = "radio";
+            if(input.checked){
+                radio.checked = true;
+            }
+            radio.id = input.value;
+            radio.value = input.value;
+            radio.name = obj.name;
+            radios.push(radio);
+        })
+
+        let labels = [];
+
+        obj.options.forEach( input =>{
+            let label = document.createElement("label");
+            label.setAttribute("class","form-check-label px-2");
+            label.setAttribute("for",input.value)
+            label.innerHTML = input.label
+            labels.push(label);
+        })
+
+        for(let i = 0; i < radios.length ; i++){
+            container.appendChild(labels[i])
+            container.appendChild(radios[i])
+        }
+
+        let h2 = document.createElement("h4");
+        h2.setAttribute("class","text-center")
+        h2.innerHTML = obj.title;
+        this.form.appendChild(h2);
+        this.form.appendChild(container);
+
+    }
+
     submit(){
         let data = new FormData();
         Array.from(this.form.children).forEach( element => {
@@ -136,11 +275,41 @@ export default class formCreator {
                 data.append("longitude",cords[0].toString())
                 data.append("latitude",cords[1].toString())
             }
+
             if(element.tagName == "DIV"){
+                if(element.children){
+
+                    //this gets text areas
+                    Array.from(element.children).forEach( elm =>{
+                        if(elm.tagName == "TEXTAREA"){
+                            if(elm.value.length > 300){
+                                this.notfy.error("Bio too long!")
+                                throw("Error");
+                            }
+                            data.append(elm.id, elm.value)
+                        }
+
+                        if(elm.type == "radio"){
+                            if(elm.checked){
+                                data.append( elm.name, elm.value);
+                            }
+                        }
+                        
+                    })
+
+                }
+                
+
                 return;
             }
             if(element.type == "file"){
                 data.append( element.id, element.files[0]);
+            }
+            
+            if(element.type == "radio"){
+                if(element.checked){
+                    data.append( element.name, element.value);
+                }
             }
             if(element.tagName != "LABEL"){
                 data.append( element.id, element.value);

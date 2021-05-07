@@ -21,9 +21,9 @@
 <body>
     <header>
         <nav class="nav bg-main navbar-expand-md">
-            <div class="container">
+            <div class="container p-1">
                
-                <div class="d-flex d-md-none flex-row justify-content-between m-auto col-12 p-2">
+                <div class="d-flex d-md-none flex-row justify-content-between m-auto col-12 py-2 m-0">
                     <a class="col-3" href="/">
                         <img class="w-100" src="/img/Logo.svg" alt="">
                     </a>
@@ -50,6 +50,11 @@
                         <li class="nav-item text-dark">
                             <a href="/admin" class="nav-link text-dark" sec:authorize="hasRole('ADMIN')">
                                 <i class="fas fa-users-cog"></i> Admin
+                            </a>        
+                        </li>
+                        <li class="nav-item text-dark">
+                            <a href="/about" class="nav-link text-dark">
+                                <i class="fas fa-code"></i> About Us
                             </a>        
                         </li>
                         <li class="nav-item text-dark px-2" sec:authorize="isAuthenticated()">
@@ -79,6 +84,11 @@
                             <li class="nav-item text-dark">
                                 <a href="/admin" class="nav-link text-dark" sec:authorize="hasRole('ADMIN')">
                                     <i class="fas fa-users-cog"></i> Admin
+                                </a>        
+                            </li>
+                            <li class="nav-item text-dark">
+                                <a href="/about" class="nav-link text-dark" sec:authorize="!hasRole('ADMIN')">
+                                    <i class="fas fa-code"></i> About Us
                                 </a>        
                             </li>
                         </ul>

@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout.html}" lang="en">
 <head>
-    <title>Profile </title>
+    <title>Profile</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
 </head>
@@ -18,7 +18,7 @@
         <div class="row">
 
 
-            <div class="col-12 topper col-md-6 col-lg-4 col-xl-4">
+            <div class="col-12  topper  col-md-6 col-lg-4 col-xl-4 bg-white">
 
                 <div class="m-auto p-3 px-lg-1" id="profilePicture">
     
@@ -38,7 +38,7 @@
                             </h5>
                         </div>
                         
-                        <p id="dogBio"></p>
+                        <div id="dogBio" style="max-width:300px"></div>
                         
                     </div>
                     <div class="px-4 py-2">
@@ -52,7 +52,7 @@
             <div class="col">
     
                 <h3 class="text-center p-2">Where am I?</h3>
-                <div style="height:300px" class="w-100 m-2" id="map">
+                <div style="height:300px" class="col-12 m-auto" id="map">
     
                 </div>
 

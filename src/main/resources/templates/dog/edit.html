@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Dog</title>
+    <title>Edit Dog</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
 </head>
@@ -16,9 +16,19 @@
 
     <input type="hidden" th:value="${#httpServletRequest.requestURI}" id="id" class="invisible">
 
-    <div id="form">
-        <h2 class="text-center">Edit dog</h2>
-        <div id="imageUploader"></div>
+    <div  class="justify-content-center align-items-center row m-0">
+        <h2 class="text-center p-2 mt-4">Dog Editor</h2>
+        <div class="border rounded bg-white col-12 col-md-8 p-2" id="imageUploader">
+            <h4 class="text-center">
+                Image Manager
+            </h4>
+
+        </div>
+        <div class="border rounded bg-white col-12 col-md-8 p-2 my-2" id="form">
+            <h4 class="text-center">
+                Change Details
+            </h4>
+        </div>
 
     </div>
     
@@ -40,28 +50,54 @@
 
     axios.get("/api/dogs/"+id).then( res =>{
         let form = new FormCreator("form","/api/dog/edit/"+ id, "put", "/user/profile");
-        let mapbox = new MapBoxForm();
+        let dog = res.data
+        let mapOptions = {
+            center:[
+                dog.lon,
+                dog.lat
+            ],
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            zoom: 3
+        }
+        
+        let mapbox = new MapBoxForm("300px", mapOptions);
 
         
-        let dog = res.data
 
-        form.createLabel("name", "Name", );
+        form.createLabel("name", "Dog Name", );
         form.createInput("name","Dog Name","text" , dog.name)
 
+        form.createLabel("dogLocation", "Set Dog Location");
         form.importForm(mapbox.export());
         form.importForm(mapbox.exportForm());
         mapbox.addMarker("dog")
 
-        form.createLabel("sex", "Sex");
-        if(dog.sex){
-            form.createInput("sex","Male","text","Male");
-        }else{
-            form.createInput("sex","Male","text","Female");
-        }
-        
 
-        form.createLabel("bio", "Bio");
-        form.createInput("bio","Bio","text",dog.bio);
+        let obj = {
+            title: "Sex",
+            name: "sex",
+            options:[
+                {
+                value: "male",
+                label: "Male"
+                },
+                {
+                value: "female",
+                label: "Female"
+                }
+            ]
+        }
+
+        if(dog.sex){
+            obj.options[0].checked = true;
+        }else{
+            obj.options[1].checked = true;
+        }
+
+        form.createRadioGroup(obj)
+        
+        form.createLabel("bio", "Bio", );
+        form.createTextArea("bio","Insert Bio Here!", 300, dog.bio);
 
         axios.get("/api/breed").then( (res)=>{
             let obj = {

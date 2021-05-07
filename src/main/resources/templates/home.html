@@ -8,13 +8,98 @@
 <body>
 
 <main layout:fragment="content">
-
-    <h1 class="text-center p-3">
-        Dog in your area
-    </h1>
-    <div class="container">
-        <div id="mainDogPage" class="d-flex flex-wrap m-auto col-12 justify-content-center justify-content-md-start" >
     
+    <div class="row m-0">
+        
+        <h1 class="text-center p-3">
+            Dogs in your area
+        </h1>
+        
+        
+        
+    </div>
+    
+
+    
+    
+    <div class="container-fluid container-xl">
+        <button type="button" class="btn btn-primary position-relative align-self-end ms-5 " style="top:-3.5em; width:3em" data-bs-toggle="modal" data-bs-target="#help">
+            <i class="far fa-question-circle"></i>
+        </button>
+        <div id="mainDogPage" class="d-flex flex-wrap m-auto col-12 justify-content-center " >
+            
+    
+        </div>
+    </div>
+
+    <div class="modal fade" id="help" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div  class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Help</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+                    <div id="helpBody" class="carousel slide" data-bs-interval="false" data-bs-ride="carousel">
+
+                        <div class="d-none pb-4" id="helpHeader">
+                            Our site is made for looking a cute pictures of pups! Please use this guide to get you started.
+                        </div>
+                        
+                        <div class="carousel-inner">
+                          <div class="carousel-item active">
+
+                            <img src="/img/help/newDog.gif" class="d-block w-100" alt="add dog">
+                            <div class="mt-4">
+                                <h4 class="text-center">Add a New Dog</h4>
+                                <div>
+                                    You can add a new dog by clicking the profile button in the Navigation bar. Then click the <span class="fw-bold">Add Dog</span> button to enter the information of your dog.
+                                </div>
+                            </div>
+
+                            
+                          </div>
+                          <div class="carousel-item">
+                            <img src="/img/help/editDog.gif" class="d-block w-100" alt="edit dog">
+
+                            <div class="mt-4">
+                                <h4 class="text-center">Edit existing dogs / Add Images to Dog</h4>
+                                <div>
+                                    You can edit an existing dog you own by clicking the profile button in the Navigation bar. Then click the <span class="fw-bold">Dog image</span> of the dog you want to change or add images to.
+                                </div>
+                            </div>
+                          </div>
+                          <div class="carousel-item">
+                            <img src="/img/help/boopDog.gif" class="d-block w-100" alt="Boop dog">
+                            <div class="mt-4">
+                                <h4 class="text-center">Boop dogs!</h4>
+                                <div>
+                                    Clicking any dog image on the main page will bring you to a dogs profile, there you can click on images on the <span class="fw-bold">How I Look</span> section to Boop! <i class="fas fa-paw"></i> or "like" an image. 
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="text-dark">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#helpBody" data-bs-slide="prev">
+                                <i class="fs-3 text-outline fas fa-arrow-circle-left"></i>
+                                <span class="visually-hidden">Previous</span>
+                              </button>
+                              <button class="carousel-control-next" type="button" data-bs-target="#helpBody" data-bs-slide="next">
+                                <i class="fs-3 text-outline fas fa-arrow-circle-right"></i>
+                                <span class="visually-hidden">Next</span>
+                              </button>
+                        </div>
+                        
+                       
+                      </div>
+
+                
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
    
@@ -25,6 +110,17 @@
 <script type="module" layout:fragment="script">
     import DogImageList from '/js/DogImageList.js';
     new DogImageList("mainDogPage")
+
+    axios.get("/api/dogs/owner/mydogs").then(res =>{
+        let help = new bootstrap.Modal(document.getElementById('help'))
+        if(res.data.length == 0){
+            let title = document.getElementById("staticBackdropLabel")
+            let helptext = document.getElementById("helpHeader")
+            title.innerHTML = "Welcome to Booper!"
+            helptext.classList.toggle("d-none");
+            help.show()
+        }
+    })
 </script>
 </html>
 
