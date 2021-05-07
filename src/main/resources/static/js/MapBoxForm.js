@@ -33,6 +33,7 @@ export default class MapBoxForm{
         this.button.setAttribute("class","btn btn-primary my-2")
         this.button.innerHTML = "Get My Location"
         this.button.style.position = "relative";
+        this.button.style.top = "5px"
         this.button.style.zIndex = "100";
 
         this.button.addEventListener('click', (e)=>{

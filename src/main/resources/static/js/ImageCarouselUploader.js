@@ -143,8 +143,10 @@
         boops.setAttribute("class","text-outline text-white")
 
         let button = document.createElement("button");
-        button.setAttribute("class","btn btn-danger")
-        button.innerHTML = "Delete";
+        button.setAttribute("class","btn btn-danger position-relative")
+        button.style.top = "-110px";
+        button.style.right = "-30px";
+        button.innerHTML = `<i class="fas fa-trash-alt"></i>`;
         button.addEventListener('click', ()=>{ this.delete(picture.id)})
 
         caption.appendChild(boops);

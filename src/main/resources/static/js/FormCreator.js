@@ -64,7 +64,7 @@ export default class formCreator {
         }
 
         let container = document.createElement("div");
-        container.setAttribute("class","form-floating")
+        container.setAttribute("class","form-floating p-0")
         
         let textArea = document.createElement("textArea");
         
@@ -89,6 +89,7 @@ export default class formCreator {
             }
 
             let counter = document.createElement("div")
+            counter.classList.add("text-end")
             counter.innerHTML = "0/"+ limit
 
             textArea.addEventListener('input', ()=>{
