@@ -23,7 +23,7 @@
 
         this.carousel = document.createElement("div");
         this.carousel.setAttribute("id","carouselImages")
-        this.carousel.setAttribute("class","carousel slide");
+        this.carousel.setAttribute("class","carousel slide  m-2");
         this.carousel.setAttribute("data-bs-ride","carousel");
 
         this.carouselInner = document.createElement("div");
@@ -60,16 +60,16 @@
 
         this.file = document.createElement("input");
         this.file.setAttribute("type","file");
-        this.file.setAttribute("class","form-control col-6 mt-2");
+        this.file.setAttribute("class","form-control col-6 mt-2 ms-0");
         this.fileContainer.appendChild(this.file);
 
         this.button = document.createElement("button");
-        this.button.setAttribute("class","btn btn-primary col my-2 ms-2")
+        this.button.setAttribute("class","btn btn-primary col my-2 me-2")
         this.button.innerHTML = "Upload Image"
 
-        
-        this.controlsContainer.appendChild(this.button)
         this.controlsContainer.appendChild(this.fileContainer)
+        this.controlsContainer.appendChild(this.button)
+        
 
         this.element.appendChild(this.carousel);
         this.element.appendChild(this.controlsContainer);

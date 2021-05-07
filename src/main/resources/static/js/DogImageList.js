@@ -15,6 +15,7 @@ export default class DogImageList{
         let self = this;
         this.dogs = [];
         axios.get("/api/dogs").then( res =>{
+            res.data.reverse();
             res.data.forEach( dog =>{
                 self.dogs.push(new DogPanel(dog))
             })

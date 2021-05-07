@@ -52,7 +52,7 @@ export default class BoopImage {
             this.status.innerHTML = `Booped <i class="fas fa-paw btn btn-warning"></i>`
             this.boopStatus = "false"
         }else if(this.boopStatus == "false"){
-            this.status.innerHTML = `Boop me! <i class="fas fa-paw btn btn-danger"></i> `
+            this.status.innerHTML = `Boop me! <i class="fas fa-paw btn btn-primary"></i> `
             this.boopStatus = "true"
         }
 
