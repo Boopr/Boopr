@@ -1,5 +1,7 @@
 # Boopr
 
+![screenshot](https://github.com/Boopr/Boopr/blob/main/gitimages/001.jpg?raw=true)
+
 [Find Live Site here!](https://boopr.dog)
 
 Boopr is a post-human social media platform that allows dog owners to consume adorable pet content in a social media  
